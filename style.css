@@ -1,4 +1,4 @@
-/* ===== VARIABLES ===== */
+
 :root {
   --primary-purple: #7e4bff;
   --light-purple: #f9f5ff;
@@ -15,7 +15,6 @@ body {
   line-height: 1.5;
   color: var(--text-color);
   background-color: var(--light-purple);
-  box-sizing: border-box;
 }
 
 
@@ -30,7 +29,7 @@ header {
 }
 
 .logo {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   color: var(--primary-purple);
   text-decoration: none;
@@ -44,9 +43,6 @@ header {
 .nav a {
   text-decoration: none;
   color: var(--text-color);
-  font-weight: 500;
-  font-size: 16px;
-  position: relative;
   padding: 5px 0;
 }
 
@@ -79,14 +75,8 @@ header {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  font-size: 14px;
   background-color: #e9e0ff;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  color: var(--primary-purple);
-  text-decoration: none;
-  position: relative;
   transition: transform 0.3s ease;
 }
 
@@ -106,16 +96,27 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  gap: 15px;
 }
 .hero h1{
-    font: 32px;
+    font-size: 64px;
     color: var(--primary-purple );
+    text-align: center;
+    margin: 0;
 }
-
+.hero h1::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: var(--primary-purple);
+    margin: 15px auto 0;
+}
 .hero p {
   font-size: 24px;
-  line-height: 1.4;
+  text-align: center;
+  color: var(--primary-purple);
+  margin: 0;
 }
 .intro{
     font-size: 16px;
@@ -133,6 +134,7 @@ header {
     color: white;
     border-radius: 30px;
     font-weight: 500;
+    text-align: center;
 }
 
 
@@ -309,6 +311,12 @@ footer {
 
 .contact p {
     font-size: 18px;
+}
+button{
+    background-color: var(--light-purple);
+    color: var(--primary-purple);
+    padding: 10px;
+    border-radius: 20px;
 }
 
 /* ===== SECTION TITLE ===== */
