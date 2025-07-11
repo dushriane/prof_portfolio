@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Dashboard</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@400;700&family=Poppins:wght@400;600&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
+        <script src="main.js" defer></script>
+    </head>
+    <body>
+        <header>
+            <div class="logo">DUSH</div>
+            <div class="nav">
+                <a href="index.html">HOME</a>
+                <a href="blog.html">BLOG</a>
+                <a href="dashboard.html" class="active">DASHBOARD</a>
+            </div>
+            <div class="social-icons">
+                <a href="https://linkedin.com/in/ariane-dushime" class="social-icon" target="_blank" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://github.com/dushriane" class="social-icon" target="_blank" aria-label="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="mailto:arianedushime941@gmail.com" class="social-icon" aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+        
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="nav">
+                <a href="index.html">HOME</a>
+                <a href="blog.html">BLOG</a>
+                <a href="dashboard.html" class="active">DASHBOARD</a>
+            </div>
+            <div class="social-icons">
+                <a href="https://linkedin.com/in/ariane-dushime" class="social-icon" target="_blank" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://github.com/dushriane" class="social-icon" target="_blank" aria-label="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="mailto:arianedushime941@gmail.com" class="social-icon" aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+
+        <main class="dashboard">
+            <div class="dashboard-header section">
+                <div>
+                    <h1 class="dashboard-title">Blog Dashboard</h1>
+                    <p>Manage your blog posts and analytics</p>
+                </div>
+                <div>
+                    <button class="new-post-btn" onclick="createNewPost()">+ New Post</button>
+                </div>
+            </div>
+
+            <div class="dashboard-stats section">
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Total Posts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1.2k</div>
+                    <div class="stat-label">Total Views</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Categories</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Engagement Rate</div>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="posts-section section">
+                    <div class="posts-header">
+                        <h2 class="posts-title">Recent Posts</h2>
+                        <div class="post-filters">
+                            <select id="categoryFilter" onchange="filterPosts()">
+                                <option value="all">All Categories</option>
+                                <option value="engineering">Engineering</option>
+                                <option value="philosophy">Philosophy</option>
+                                <option value="systems">Systems</option>
+                                <option value="design">Design</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="posts-list">
+                        <div class="post-item" onclick="openPost('building-systems')">
+                            <h3 class="post-item-title">Building Systems That Last</h3>
+                            <div class="post-item-meta">
+                                <span>Jan 15, 2025</span>
+                                <span>Engineering</span>
+                                <span>103 views</span>
+                            </div>
+                            <p class="post-item-excerpt">
+                                Why reliability isn't just optional-it's essential. A deep dive into creating software that stands the test of time.
+                            </p>
+                        </div>
+                        
+                        <div class="post-item" onclick="openPost('emotions-feel-good')">
+                            <h3 class="post-item-title">Emotions feel good.</h3>
+                            <div class="post-item-meta">
+                                <span>Jan 15, 2025</span>
+                                <span>Philosophy</span>
+                                <span>56 views</span>
+                            </div>
+                            <p class="post-item-excerpt">
+                                We were made to feel. What makes things resonate.
+                            </p>
+                        </div>
+                        
+                        <div class="post-item" onclick="openPost('design-battle')">
+                            <h3 class="post-item-title">Design is 50% of the battle.</h3>
+                            <div class="post-item-meta">
+                                <span>Jan 15, 2025</span>
+                                <span>Design</span>
+                                <span>43 views</span>
+                            </div>
+                            <p class="post-item-excerpt">
+                                It may look good but does it work? It may work but does it look good? Design is 50% of the battle.
+                            </p>
+                        </div>
+                        
+                        <div class="post-item" onclick="openPost('open-source')">
+                            <h3 class="post-item-title">Not so open, open source.</h3>
+                            <div class="post-item-meta">
+                                <span>Jun 26, 2025</span>
+                                <span>Software</span>
+                                <span>56 views</span>
+                            </div>
+                            <p class="post-item-excerpt">
+                                Modern day open sourced is not what it used to be. Open sourced is bad.
+                            </p>
+                        </div>
+                        
+                        <div class="post-item" onclick="openPost('objective-truth')">
+                            <h3 class="post-item-title">Objective truth</h3>
+                            <div class="post-item-meta">
+                                <span>Jun 29, 2025</span>
+                                <span>Philosophy</span>
+                                <span>43 views</span>
+                            </div>
+                            <p class="post-item-excerpt">
+                                You are both objectively right and wrong at the same time.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar section">
+                    <h3 class="sidebar-title">Quick Actions</h3>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn" onclick="createNewPost()">
+                            📝 Create New Post
+                        </button>
+                        <button class="quick-action-btn" onclick="viewAnalytics()">
+                            📊 View Analytics
+                        </button>
+                        <button class="quick-action-btn" onclick="manageCategories()">
+                            🏷️ Manage Categories
+                        </button>
+                        <button class="quick-action-btn" onclick="exportData()">
+                            📤 Export Data
+                        </button>
+                    </div>
+
+                    <h3 class="sidebar-title" style="margin-top: 2rem;">Recent Activity</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-time">2 hours ago</div>
+                            <div class="activity-text">Post "Building Systems That Last" published</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-time">1 day ago</div>
+                            <div class="activity-text">Updated "Emotions feel good" post</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-time">3 days ago</div>
+                            <div class="activity-text">New category "Design" added</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script>
+            function createNewPost() {
+                alert('New post creation feature coming soon!');
+            }
+
+            function openPost(postId) {
+                window.location.href = `post-${postId}.html`;
+            }
+
+            function viewAnalytics() {
+                alert('Analytics dashboard coming soon!');
+            }
+
+            function manageCategories() {
+                alert('Category management coming soon!');
+            }
+
+            function exportData() {
+                alert('Data export feature coming soon!');
+            }
+
+            function filterPosts() {
+                const filter = document.getElementById('categoryFilter').value;
+                const posts = document.querySelectorAll('.post-item');
+                
+                posts.forEach(post => {
+                    const category = post.querySelector('.post-item-meta span:nth-child(2)').textContent.toLowerCase();
+                    if (filter === 'all' || category === filter) {
+                        post.style.display = 'block';
+                    } else {
+                        post.style.display = 'none';
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

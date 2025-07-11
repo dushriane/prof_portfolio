@@ -5,6 +5,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@400;700&family=Poppins:wght@400;600&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
+        <script src="main.js" defer></script>
     </head>
     <body>
         <header>
@@ -24,9 +26,33 @@
                     <i class="fas fa-envelope"></i>
                 </a>
             </div>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </header>
+        
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="nav">
+                <a href="index.html">HOME</a>
+                <a href="blog.html" class="active">BLOG</a>
+                <a href="dashboard.html">DASHBOARD</a>
+            </div>
+            <div class="social-icons">
+                <a href="https://linkedin.com" class="social-icon" target="_blank" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://github.com" class="social-icon" target="_blank" aria-label="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="mailto:example@example.com" class="social-icon" aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
         <main>
-            <div class="hero">
+            <section class="hero section">
                 <h1>THOUGHTS</h1>
                 <p class="intro">
                     Just some thoughts. I love opinions and think that sharing them is important to grow in understanding.
@@ -44,8 +70,8 @@
             </div>
         
         
-        <div class="thoughts-grid">
-            <div class="thought-card">
+        <section class="thoughts-grid section">
+            <div class="thought-card" onclick="window.location.href='post-building-systems.html'">
                 <div class="thought-date">Jan 15, 2025</div>
                 <h2 class="thought-title">Building Systems That Last</h2>
                 <p class="thought-description">
@@ -56,10 +82,10 @@
                     <span>Philosophy</span>
                     <span>Systems</span>
                 </div>
-                <a href="#" class="read-more">READ MORE →</a>
+                <a href="post-building-systems.html" class="read-more">READ MORE →</a>
             </div>
             
-            <div class="thought-card">
+            <div class="thought-card" onclick="window.location.href='post-emotions-feel-good.html'">
                 <div class="thought-date">Jan 15, 2025</div>
                 <h2 class="thought-title">Emotions feel good.</h2>
                 <p class="thought-description">
@@ -69,7 +95,7 @@
                     <span>Philosophy</span>
                     <span>Emotion</span>
                 </div>
-                <a href="#" class="read-more">READ MORE →</a>
+                <a href="post-emotions-feel-good.html" class="read-more">READ MORE →</a>
             </div>
             
             <div class="thought-card">
@@ -112,9 +138,7 @@
                 <a href="#" class="read-more">READ MORE →</a>
             </div>
         </div>
-    </main>
-
-        
+    </main> 
     </body>
 </html>
 

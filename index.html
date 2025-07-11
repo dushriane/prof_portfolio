@@ -4,7 +4,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@400;700&family=Poppins:wght@400;600&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
         <title>Portfolio</title>
+        <script src="main.js" defer></script>
     </head>
     <body>
             <header>
@@ -24,9 +26,34 @@
                     <i class="fas fa-envelope"></i>
                 </a>
             </div>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+        
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="nav">
+                <a href="index.html" class="active">HOME</a>
+                <a href="blog.html">BLOG</a>
+                <a href="dashboard.html">DASHBOARD</a>
+            </div>
+            <div class="social-icons">
+                <a href="https://linkedin.com/in/ariane-dushime" class="social-icon" target="_blank" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://github.com/dushriane" class="social-icon" target="_blank" aria-label="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="mailto:arianedushime941@gmail.com" class="social-icon" aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
             </header>
             
-        <div class="hero">
+        <section class="hero section">
             <h1>MURAHO</h1>
             <p>I’M ARIANE DUSHIME, AN ASPIRING SOFTWARE ENGINEER WHO CARES ABOUT</p>
             <div class="hero-section-tags">
@@ -35,8 +62,9 @@
                 <span>DESIGN</span>
             </div>
         </div>
+        </section>
             <!-- Projects Section -->
-        <section class="projects-section">
+        <section class="projects-section section">
             <h2 class="section-title">PROJECTS</h2>
             <div class="projects-grid">
                     <div class="project-card">
@@ -61,19 +89,19 @@
             </div>
         </section>
 
-            <section class="tech">
+            <section class="tech section">
                  <h2 class="section-title">TECH STACK</h2>
                  <div class="tech-stack">
-                     <div class="tech-category">
-                <h3>Languages</h3>
-                <ul>
-                    <li>JavaScript</li>
-                    <li>Python</li>
-                    <li>Java</li>
-                    <li>HTML</li>
-                    <li>CSS</li>
-                </ul>
-            </div>
+                    <div class="tech-category">
+                    <h3>Languages</h3>
+                    <ul>
+                        <li>JavaScript</li>
+                        <li>Python</li>
+                        <li>Java</li>
+                        <li>HTML</li>
+                        <li>CSS</li>
+                    </ul>
+                </div>
             <div class="tech-category">
                 <h3>Frameworks & Runtimes</h3>
                 <ul>
@@ -103,11 +131,21 @@
         </section>
             
         
-        <footer>
-    
+        <footer class="section">
             <div class="contact">
                 <h2>LET'S BUILD SOMETHING <br>AMAZING TOGETHER</h2>
-                <button>Let's Connect</button>
+                <form class="contact-form" action="#" method="POST">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
             </div>
             <p>&copy; 2023 DUSH. All rights reserved.</p>
         </footer>
