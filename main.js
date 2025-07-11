@@ -151,6 +151,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Dashboard category filter logic
+    // (This code will only run if the dashboard filter exists on the page)
+    document.addEventListener('DOMContentLoaded', function () {
+      const filterTags = document.querySelectorAll('.dashboard-filter-tag');
+      const posts = document.querySelectorAll('.dashboard-post');
+
+      if (filterTags.length && posts.length) {
+        filterTags.forEach(tag => {
+          tag.addEventListener('click', function () {
+            // Remove active from all
+            filterTags.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            const category = this.getAttribute('data-category');
+            posts.forEach(post => {
+              if (category === 'all' || post.getAttribute('data-category') === category) {
+                post.style.display = '';
+              } else {
+                post.style.display = 'none';
+              }
+            });
+          });
+        });
+      }
+    });
+
     // Add loading animation
     window.addEventListener('load', () => {
         document.body.classList.add('loaded');
