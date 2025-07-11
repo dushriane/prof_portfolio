@@ -95,6 +95,8 @@ header {
   top: 70px;
   left: 0;
   right: 0;
+  width: 100%;
+  max-width: 100vw;
   background-color: white;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   padding: 20px;
@@ -102,20 +104,25 @@ header {
   transition: transform 0.3s ease;
   z-index: 999;
   border-radius: 0 0 12px 12px;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .mobile-menu.active {
   transform: translateY(0);
+  display: block;
 }
 
 .mobile-menu .nav {
   flex-direction: column;
   gap: 20px;
+  display: flex;
 }
 
 .mobile-menu .social-icons {
   margin-top: 20px;
   justify-content: center;
+  display: flex;
 }
 
 .logo {
