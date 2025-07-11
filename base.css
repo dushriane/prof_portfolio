@@ -25,6 +25,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
+  color: var(--primary-purple);
 }
 
 /* ===== UTILITY CLASSES ===== */
@@ -179,7 +180,7 @@ header {
   transition: transform 0.3s ease;
   z-index: 999;
   border-radius: 0 0 12px 12px;
-  overflow-x: hidden;
+  overflow: hidden;
   box-sizing: border-box;
 }
 
@@ -215,7 +216,7 @@ header {
   }
   
   .mobile-menu {
-    display: block;
+    top: 70px;
   }
 }
 
