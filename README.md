@@ -30,10 +30,10 @@ A modern portfolio website with a Node.js backend, MongoDB database, and secure 
    - Edit `config.env` file with your settings:
    ```
    PORT=3000
-   MONGODB_URI=mongodb://localhost:27017/portfolio
-   JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-   ADMIN_USERNAME=admin
-   ADMIN_PASSWORD=admin123
+   MONGODB_URI=your_db
+   JWT_SECRET=your-super-secret-jwt-key
+   ADMIN_USERNAME=your_username
+   ADMIN_PASSWORD=your_password
    NODE_ENV=development
    ```
 
@@ -66,7 +66,6 @@ A modern portfolio website with a Node.js backend, MongoDB database, and secure 
 - **Username**: admin
 - **Password**: admin123
 
-⚠️ **Important**: Change these credentials in production!
 
 ### API Endpoints
 
