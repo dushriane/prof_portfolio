@@ -62,6 +62,7 @@
                 </div>
                 <div>
                     <button class="new-post-btn" onclick="createNewPost()">+ New Post</button>
+                    <button class="logout-btn" onclick="logout()" style="margin-left: 10px; background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Logout</button>
                 </div>
             </div>
 
@@ -147,6 +148,92 @@
         </main>
 
         <script>
+            // Check authentication on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                checkAuth();
+                loadDashboardData();
+            });
+
+            function checkAuth() {
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                // Verify token with server
+                fetch('/api/auth/me', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        localStorage.removeItem('authToken');
+                        localStorage.removeItem('user');
+                        window.location.href = '/login.html';
+                    }
+                })
+                .catch(error => {
+                    console.error('Auth check failed:', error);
+                    window.location.href = '/login.html';
+                });
+            }
+
+            function logout() {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('user');
+                window.location.href = '/login.html';
+            }
+
+            async function loadDashboardData() {
+                try {
+                    const token = localStorage.getItem('authToken');
+                    
+                    // Load stats
+                    const statsResponse = await fetch('/api/dashboard/stats', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const stats = await statsResponse.json();
+                    
+                    // Update stats display
+                    document.querySelector('.stat-card:nth-child(1) .stat-number').textContent = stats.totalPosts;
+                    document.querySelector('.stat-card:nth-child(2) .stat-number').textContent = stats.totalViews;
+                    document.querySelector('.stat-card:nth-child(3) .stat-number').textContent = '8'; // Categories
+                    document.querySelector('.stat-card:nth-child(4) .stat-number').textContent = '95%'; // Engagement
+                    
+                    // Load posts
+                    const postsResponse = await fetch('/api/dashboard/posts', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const postsData = await postsResponse.json();
+                    
+                    // Update posts display
+                    const postsContainer = document.getElementById('dashboardPosts');
+                    postsContainer.innerHTML = '';
+                    
+                    postsData.posts.forEach(post => {
+                        const postElement = document.createElement('div');
+                        postElement.className = 'dashboard-post';
+                        postElement.setAttribute('data-category', post.category.toLowerCase());
+                        postElement.innerHTML = `
+                            <h3>${post.title}</h3>
+                            <p>Category: ${post.category}</p>
+                            <p>Status: ${post.published ? 'Published' : 'Draft'}</p>
+                            <p>Views: ${post.views}</p>
+                        `;
+                        postsContainer.appendChild(postElement);
+                    });
+                    
+                } catch (error) {
+                    console.error('Error loading dashboard data:', error);
+                }
+            }
+
             function createNewPost() {
                 alert('New post creation feature coming soon!');
             }
