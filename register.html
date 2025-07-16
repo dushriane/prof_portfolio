@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Blog</title>
+    <link rel="stylesheet" href="base.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@400;700&family=Poppins:wght@400;600&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
+    <style>
+        .register-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        .register-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .register-header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+        .register-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .register-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .register-btn:hover {
+            transform: translateY(-2px);
+        }
+        .register-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        .success-message {
+            color: #27ae60;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+        .profile-pic-preview {
+            display: block;
+            margin: 0 auto 10px auto;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-card">
+            <div class="register-header">
+                <h1>User Registration</h1>
+                <p>Fill the form to create your account</p>
+            </div>
+            <form id="registerForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="bio">Bio (optional)</label>
+                    <textarea id="bio" name="bio" rows="2" placeholder="Tell us about yourself..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="profilePicture">Profile Picture (optional)</label>
+                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+                    <img id="profilePicPreview" class="profile-pic-preview" style="display:none;" />
+                </div>
+                <button type="submit" class="register-btn" id="registerBtn">Register</button>
+            </form>
+            <div id="message"></div>
+            <div class="back-link">
+                <a href="login.html">Already have an account? Login</a>
+            </div>
+            <div class="back-link">
+                <a href="index.html">← Back to Portfolio</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        const registerForm = document.getElementById('registerForm');
+        const registerBtn = document.getElementById('registerBtn');
+        const messageDiv = document.getElementById('message');
+        const profilePictureInput = document.getElementById('profilePicture');
+        const profilePicPreview = document.getElementById('profilePicPreview');
+
+        profilePictureInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                profilePicPreview.src = URL.createObjectURL(file);
+                profilePicPreview.style.display = 'block';
+            } else {
+                profilePicPreview.style.display = 'none';
+            }
+        });
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            registerBtn.disabled = true;
+            registerBtn.textContent = 'Registering...';
+            messageDiv.innerHTML = '';
+
+            const formData = new FormData(registerForm);
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    messageDiv.innerHTML = '<div class="success-message">Registration successful! Redirecting...</div>';
+                    setTimeout(() => {
+                        window.location.href = '/blog.html';
+                    }, 1200);
+                } else {
+                    messageDiv.innerHTML = `<div class="error-message">${data.error}</div>`;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = '<div class="error-message">Network error. Please try again.</div>';
+            } finally {
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Register';
+            }
+        });
+    </script>
+</body>
+</html> 
