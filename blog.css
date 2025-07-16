@@ -126,6 +126,24 @@
   transform: translateX(5px);
 }
 
+.blog-interactions{
+  display: flex;
+  gap: 20px;
+  border-top: 1px solid var(--primary-purple);
+}
+.likes, .comments{
+  display: flex;
+  color: var(--text-color);
+  font-size: 16px;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.blog-image :hover{
+  /* width: 100%; */
+  opacity: 0.1;
+}
 /* ===== BLOG POST PAGE ===== */
 .blog-post {
   max-width: 800px;
@@ -141,6 +159,8 @@
 }
 
 .blog-post-header {
+  display: flex;
+  flex-direction: column;
   text-align: center;
   margin-bottom: 30px;
   position: static;
