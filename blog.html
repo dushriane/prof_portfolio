@@ -18,8 +18,7 @@
                 <a href="blog.html" class="active">BLOG</a>
                 <a href="dashboard.html" >DASHBOARD</a>
             </div>
-            </div>
-                <div class="auth-buttons">
+            <div class="auth-buttons" id="authButtons">
                 <div class="auth-button login">
                     <a href="login.html">Login</a>
                 </div>
@@ -71,10 +70,14 @@
         
         <section class="thoughts-grid section">
             <!-- make each blog post card clickable -->
-            <div class="thought-card" onclick="window.location.href='post-building-systems.html'">
+            <div class="thought-card clickable" onclick="window.location.href='post-building-systems.html'">
                 <div class="thought-date">Jan 15, 2025</div>
                 <div class="post-image">
                     <img src="./images/blogone.jpeg">
+                </div>
+                <div class="author-info">
+                    <img src="./images/profiles/default.png" class="author-pic" alt="Author">
+                    <span class="author-name">John Doe</span>
                 </div>
                 <h2 class="thought-title">Building Systems That Last</h2>
                 <p class="thought-description">
@@ -85,28 +88,32 @@
                     <span>Philosophy</span>
                     <span>Systems</span>
                 </div>
-                <!-- I have to add a feature to add the likes and comments of each post -->
                 <div class="blog-interactions">
                     <div class="likes">
                         <i class="far fa-heart"></i>
                         <p>Likes</p>
                         <span>0</span>
                     </div>
-                    
                     <div class="comments">
                         <i class="far fa-comment"></i>
                         <p>Comments</p>
                         <span>0</span>
                     </div>
-                    
+                    <div class="bookmark" onclick="event.stopPropagation(); toggleBookmark(this);">
+                        <i class="far fa-bookmark"></i>
+                    </div>
                 </div>
                 <a href="post-building-systems.html" class="read-more">READ MORE →</a>
             </div>
             
-            <div class="thought-card" onclick="window.location.href='post-emotions-feel-good.html'">
+            <div class="thought-card clickable" onclick="window.location.href='post-emotions-feel-good.html'">
                 <div class="thought-date">Jan 15, 2025</div>
                 <div class="post-image">
                     <img src="./images/blogtwo.jpg">
+                </div>
+                <div class="author-info">
+                    <img src="./images/profiles/default.png" class="author-pic" alt="Author">
+                    <span class="author-name">Jane Smith</span>
                 </div>
                 <h2 class="thought-title">Emotions feel good.</h2>
                 
@@ -123,13 +130,14 @@
                         <p>Likes</p>
                         <span>0</span>
                     </div>
-                    
                     <div class="comments">
                         <i class="far fa-comment"></i>
                         <p>Comments</p>
                         <span>0</span>
                     </div>
-                    
+                    <div class="bookmark" onclick="event.stopPropagation(); toggleBookmark(this);">
+                        <i class="far fa-bookmark"></i>
+                    </div>
                 </div>
                 <a href="post-emotions-feel-good.html" class="read-more">READ MORE →</a>
             </div>
@@ -231,6 +239,30 @@
     </main> 
     
     </body>
+    <script>
+        // Show/hide auth buttons based on login status
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('authToken');
+            const authButtons = document.getElementById('authButtons');
+            if (token) {
+                authButtons.style.display = 'none';
+            } else {
+                authButtons.style.display = 'flex';
+            }
+        });
+        // Bookmark toggle logic
+        function toggleBookmark(el) {
+            el.classList.toggle('bookmarked');
+            const icon = el.querySelector('i');
+            if (el.classList.contains('bookmarked')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+            }
+        }
+    </script>
 </html>
 
 

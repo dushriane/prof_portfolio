@@ -143,69 +143,108 @@
   line-height: 1.5;
 }
 
+/* Sidebar styles */
 .sidebar {
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  padding: 30px;
+  width: 250px;
+  background: var(--primary-purple);
+  color: #fff;
+  position: relative;
+  min-height: 100vh;
+  padding: 2rem 1rem 1rem 1rem;
+  transition: width 0.3s;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
-
-.sidebar-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 18px;
-  color: var(--primary-purple);
-  margin: 0 0 20px 0;
+.sidebar.collapsed {
+  width: 60px;
 }
-
+.sidebar .sidebar-toggle {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  align-self: flex-end;
+}
+.sidebar .sidebar-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
 .quick-actions {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 0.5rem;
 }
-
 .quick-action-btn {
-  padding: 15px 20px;
-  background-color: var(--light-purple);
+  background: #333;
+  color: #fff;
   border: none;
-  border-radius: 8px;
-  color: var(--primary-purple);
-  font-family: 'Poppins', sans-serif;
-  font-weight: 500;
+  padding: 0.75rem 1rem;
+  border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease;
   text-align: left;
+  font-size: 1rem;
+  transition: background 0.2s;
 }
-
 .quick-action-btn:hover {
-  background-color: var(--primary-purple);
-  color: white;
-  transform: translateX(5px);
+  background: #444;
 }
-
+.logout-btn {
+  background: #e74c3c !important;
+  color: #fff !important;
+}
 .activity-list {
-  margin-top: 20px;
+  margin-top: 1rem;
 }
-
 .activity-item {
-  padding: 15px 0;
-  border-bottom: 1px solid #eee;
+  background: #292929;
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
 }
-
-.activity-item:last-child {
-  border-bottom: none;
-}
-
 .activity-time {
-  font-family: 'Source Code Pro', monospace;
-  font-size: 12px;
-  color: #666;
-  margin-bottom: 5px;
+  color: #aaa;
+  font-size: 0.85rem;
 }
-
-.activity-text {
-  font-family: 'Lato', sans-serif;
-  font-size: 14px;
-  color: var(--text-color);
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+.dashboard {
+  flex: 1;
+  padding: 2rem;
+  background: #f8f8f8;
+  min-height: 100vh;
+}
+.sidebar.collapsed .sidebar-title,
+.sidebar.collapsed .quick-actions,
+.sidebar.collapsed .activity-list,
+.sidebar.collapsed h3 {
+  display: none;
+}
+.sidebar.collapsed {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+@media (max-width: 900px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    min-height: unset;
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem;
+  }
+  .dashboard {
+    padding: 1rem;
+  }
 }
 
 .dashboard-filter {

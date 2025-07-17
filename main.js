@@ -177,6 +177,33 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
 
+    // Make dashboard posts clickable
+    if (document.getElementById('dashboardPosts')) {
+      document.getElementById('dashboardPosts').addEventListener('click', function(e) {
+        let post = e.target.closest('.dashboard-post');
+        if (post && post.dataset.id) {
+          window.location.href = `post-${post.dataset.id}.html`;
+        }
+      });
+    }
+    // Dashboard filter by category
+    if (document.getElementById('dashboardFilterTags')) {
+      document.getElementById('dashboardFilterTags').addEventListener('click', function(e) {
+        if (e.target.classList.contains('dashboard-filter-tag')) {
+          document.querySelectorAll('.dashboard-filter-tag').forEach(btn => btn.classList.remove('active'));
+          e.target.classList.add('active');
+          const category = e.target.dataset.category;
+          document.querySelectorAll('.dashboard-post').forEach(post => {
+            if (category === 'all' || post.dataset.category === category) {
+              post.style.display = '';
+            } else {
+              post.style.display = 'none';
+            }
+          });
+        }
+      });
+    }
+
     // Add loading animation
     window.addEventListener('load', () => {
         document.body.classList.add('loaded');
