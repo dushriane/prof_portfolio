@@ -1,8 +1,8 @@
 // Scroll Animation Observer
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
+// const observerOptions = {
+//     threshold: 0.1,
+//     rootMargin: '0px 0px -50px 0px'
+// };
 
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -223,33 +223,3 @@ function animateOnScroll(element, animation) {
     observer.observe(element);
 }
 
-// Add CSS for loading state
-const style = document.createElement('style');
-style.textContent = `
-    body:not(.loaded) {
-        opacity: 0;
-        transition: opacity 0.5s ease;
-    }
-    
-    body.loaded {
-        opacity: 1;
-    }
-    
-    .section {
-        opacity: 1;
-        transform: none;
-        transition: none;
-    }
-    
-    .section.visible {
-        opacity: 1;
-        transform: none;
-    }
-    
-    @media (prefers-reduced-motion: reduce) {
-        .section {
-            transition: none;
-        }
-    }
-`;
-document.head.appendChild(style);

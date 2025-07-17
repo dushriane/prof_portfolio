@@ -31,7 +31,7 @@
 
 .hero p {
   font-family: 'Lato', sans-serif;
-  font-size: 28px;
+  font-size: 24px;
   text-align: center;
   color: var(--primary-purple);
   margin: 0;
@@ -69,6 +69,43 @@
 
 .hero-section-tags span:hover {
   transform: translateY(-2px);
+}
+
+.hero-glow-bg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90vw;
+  height: 350px;
+  background: radial-gradient(circle at 50% 40%, #a259ff 0%, #6c63ff 60%, transparent 100%);
+  filter: blur(60px);
+  opacity: 0.2;
+  z-index: 0;
+  pointer-events: none;
+}
+.hero.section{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.hero.section > *:not(.hero-glow-bg){
+  position: relative;
+  z-index: 1;
+}
+
+
+.social-icons{
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
 }
 
 /* ===== TECH STACK ===== */
@@ -470,7 +507,7 @@ button:hover {
     color: #666;
 }
 
-.date {
+.timeline-content > .date {
     float: right;
 }
 
@@ -536,7 +573,7 @@ button:hover {
     margin-bottom: 5px;
 }
 
-.date {
+.education-details > .date {
     display: block;
     font-size: 14px;
     color: #666;
