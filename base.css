@@ -11,7 +11,8 @@
 
 html {
   box-sizing: border-box;
-  font-size: 16px;
+  font-size: 14px; /* Smaller base font size */
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 body {
@@ -20,6 +21,7 @@ body {
   font-family: 'Montserrat', 'Lato', 'Poppins', sans-serif;
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 h1, h3{
@@ -58,12 +60,123 @@ a:hover{
 
 /* ===== NAVBAR ===== */
 header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: var(--card-bg);
+  color: var(--text-color);
   display: flex;
-}
-.hamburger {
-  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(126, 75, 255, 0.12);
+  box-sizing: border-box;
 }
 
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-purple);
+  z-index: 101;
+}
+
+/* Desktop navigation - hidden on mobile */
+header > .nav {
+  display: none;
+}
+
+/* Mobile hamburger menu */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  z-index: 101;
+  padding: 0.5rem;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: var(--primary-purple);
+  margin: 3px 0;
+  transition: 0.3s;
+  border-radius: 2px;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+
+/* Mobile menu */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100vh;
+  background: var(--card-bg);
+  z-index: 100;
+  transition: left 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  padding: 5rem 2rem 2rem 2rem;
+  box-sizing: border-box;
+}
+
+.mobile-menu.active {
+  left: 0;
+}
+
+.mobile-menu .nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.mobile-menu .nav a {
+  color: var(--text-color);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+  font-size: 1.1rem;
+}
+
+.mobile-menu .nav a.active, 
+.mobile-menu .nav a:hover {
+  background: var(--primary-purple);
+  color: var(--text-color);
+}
+
+.mobile-menu .social-icons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: auto;
+}
+
+.mobile-menu .social-icon {
+  color: var(--primary-purple);
+  font-size: 1.5rem;
+  transition: color 0.2s;
+}
+
+.mobile-menu .social-icon:hover {
+  color: var(--accent-purple);
+}
+
+/* Button styles with proper spacing using padding instead of margin */
 button, .btn {
   background: var(--primary-purple);
   color: var(--text-color);
@@ -77,11 +190,30 @@ button, .btn {
   box-shadow: var(--shadow);
   transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
+
 button:hover, .btn:hover {
   background: var(--accent-purple);
   color: var(--text-color);
   box-shadow: 0 8px 32px rgba(126, 75, 255, 0.28);
   transform: translateY(-2px) scale(1.03);
+}
+
+/* Login button style - border only */
+.login-btn {
+  background: transparent !important;
+  border: 2px solid var(--primary-purple) !important;
+  color: var(--primary-purple) !important;
+}
+
+.login-btn:hover {
+  background: var(--primary-purple) !important;
+  color: var(--text-color) !important;
+}
+
+/* Register button style - solid background */
+.register-btn {
+  background: var(--primary-purple) !important;
+  color: var(--text-color) !important;
 }
 
 input, textarea, select {
@@ -100,6 +232,7 @@ input, textarea, select {
   box-shadow: var(--shadow);
   padding: 2rem;
 }
+
 .section {
   padding: 2rem;
 }
@@ -111,64 +244,27 @@ hr {
 
 /* Responsive breakpoints: mobile first */
 @media (min-width: 375px) {
+  html { font-size: 15px; }
+}
+
+@media (min-width: 425px) {
   html { font-size: 16px; }
 }
-@media (min-width: 425px) {
-  html { font-size: 17px; }
-}
+
 @media (min-width: 768px) {
-  html { font-size: 18px; }
+  html { font-size: 17px; }
   .card, .section { padding: 2.5rem; }
-  header {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    background: var(--card-bg);
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 2rem;
-    z-index: 100;
-    box-shadow: 0 2px 12px rgba(126, 75, 255, 0.12);
-  }
-  header > .nav {
-    display: none;
-    /* gap: 1.5rem; */
-  }
-  .nav a {
-    color: var(--text-color);
-    font-weight: 600;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    transition: background 0.2s, color 0.2s;
-  }
-  .nav a.active, .nav a:hover {
-    background: var(--primary-purple);
-    color: var(--text-color);
-  }
-}
-@media (min-width: 1024px) {
-  html { font-size: 19px; }
-  .card, .section { padding: 3rem; }
-  header {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    background: var(--card-bg);
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 2rem;
-    z-index: 100;
-    box-shadow: 0 2px 12px rgba(126, 75, 255, 0.12);
-  }
+  
+  /* Show desktop navigation, hide hamburger */
   header > .nav {
     display: flex;
     gap: 1.5rem;
   }
+  
+  .hamburger {
+    display: none;
+  }
+  
   .nav a {
     color: var(--text-color);
     font-weight: 600;
@@ -177,16 +273,163 @@ hr {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
   }
+  
   .nav a.active, .nav a:hover {
     background: var(--primary-purple);
     color: var(--text-color);
   }
-  .hamburger{
-    display: none;
-  }
+}
+
+@media (min-width: 1024px) {
+  html { font-size: 18px; }
+  .card, .section { padding: 3rem; }
+  header { padding: 1rem 2rem; }
 }
 
 @media (max-width: 374px) {
-  html { font-size: 15px; }
+  html { font-size: 13px; }
   .card, .section { padding: 1rem; }
+  header { padding: 0.75rem; }
+  .mobile-menu { padding: 4rem 1rem 1rem 1rem; }
+}
+
+/* ===== LOGIN & REGISTER PAGES ===== */
+.login-container, .register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.login-card, .register-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+.login-header, .register-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-header h1, .register-header h1 {
+  color: var(--primary-purple);
+  margin: 0 0 0.5rem 0;
+  font-size: 1.8rem;
+}
+
+.login-header p, .register-header p {
+  color: var(--text-color);
+  opacity: 0.8;
+  margin: 0;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group input[type="file"] {
+  background: transparent;
+  border: 2px dashed var(--accent-purple);
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.form-group input[type="file"]:hover {
+  border-color: var(--primary-purple);
+}
+
+.profile-pic-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 1rem;
+  border: 2px solid var(--primary-purple);
+}
+
+.back-link {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.back-link a {
+  color: var(--accent-purple);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.back-link a:hover {
+  color: var(--primary-purple);
+  text-decoration: underline;
+}
+
+.success-message {
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.error-message {
+  background: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+/* Password reset link styling */
+a[href*="reset-password"] {
+  color: var(--accent-purple);
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: block;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+a[href*="reset-password"]:hover {
+  color: var(--primary-purple);
+  text-decoration: underline;
+}
+
+/* Responsive adjustments for login/register */
+@media (max-width: 374px) {
+  .login-card, .register-card {
+    padding: 1.5rem;
+  }
+  
+  .login-header h1, .register-header h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .login-card, .register-card {
+    padding: 3rem;
+  }
 }
