@@ -6,6 +6,7 @@
   --card-bg: #231a3a;
   --danger: #e74c3c;
   --shadow: 0 4px 24px rgba(126, 75, 255, 0.18);
+  --light-purple: #f0e7ff;
 }
 
 html {
@@ -108,8 +109,6 @@ hr {
   border-top: 2px solid var(--accent-purple);
 }
 
-
-
 /* Responsive breakpoints: mobile first */
 @media (min-width: 375px) {
   html { font-size: 16px; }
@@ -149,7 +148,6 @@ hr {
     background: var(--primary-purple);
     color: var(--text-color);
   }
-  
 }
 @media (min-width: 1024px) {
   html { font-size: 19px; }
@@ -188,7 +186,6 @@ hr {
   }
 }
 
-/* 320px - main focus for small mobile screens */
 @media (max-width: 374px) {
   html { font-size: 15px; }
   .card, .section { padding: 1rem; }
