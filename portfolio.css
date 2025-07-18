@@ -42,7 +42,7 @@
 .hero-section-tags {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 20px;
   flex-wrap: nowrap;
   overflow-x: auto;
   padding: 8px 0;
@@ -58,10 +58,10 @@
 .hero-section-tags span {
   padding: 8px 15px;
   background-color: var(--primary-purple);
-  color: white;
+  color: var(--light-purple);
   border-radius: 30px;
-  font-weight: 500;
-  font-size: 14px;
+  font-weight: 600;
+  font-size: 16px;
   text-align: center;
   white-space: nowrap;
   flex-shrink: 0;
@@ -100,14 +100,6 @@
 }
 
 
-.social-icons{
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-}
-
 /* ===== TECH STACK ===== */
 .tech {
   padding: 60px 30px;
@@ -137,8 +129,8 @@
 }
 
 .tech-category:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(126, 75, 255, 0.15);
+  transform: translateY(-12px);
+  box-shadow: 0 12px 25px rgba(126, 75, 255, 0.15);
 }
 
 .tech-category h3 {
@@ -172,7 +164,7 @@
 
 .tech-category li:hover {
   background-color: var(--primary-purple);
-  color: white;
+  color: var(--light-purple);
   transform: scale(1.05);
 }
 
@@ -184,14 +176,14 @@
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
-  margin: 40px auto 0;
+  gap: 35px;
+  margin: 35px auto 0;
   max-width: 1200px;
 }
 
 .project-card {
   background-color: white;
-  padding: 40px;
+  padding: 25px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(126, 75, 255, 0.1);
   transition: all 0.3s ease;
@@ -207,7 +199,7 @@
   font-family: 'Montserrat', sans-serif;
   color: var(--primary-purple);
   font-size: 24px;
-  margin: 0 0 20px 0;
+  margin: 0;
   font-weight: 600;
 }
 
@@ -229,7 +221,7 @@
   text-decoration: none;
   color: var(--light-purple);
   border-radius: 8px;
-  padding: 12px 24px;
+  padding: 10px 20px;
   font-weight: 500;
   transition: all 0.3s ease;
   font-size: 14px;
@@ -245,7 +237,7 @@
 footer {
   padding: 60px 30px;
   text-align: center;
-  background-color: var(--dark-purple);
+  background-color: #18102b;
   color: var(--light-purple);
 }
 
@@ -453,7 +445,7 @@ button:hover {
 /* ===== Experience Section ===== */
 .experience {
     padding: 60px 20px;
-    background-color: white;
+    background-color: #18102b;
 }
 
 .timeline {
@@ -519,12 +511,14 @@ button:hover {
 .responsibilities li {
     margin-bottom: 8px;
     line-height: 1.5;
+    color: var(--text-color);
 }
 
 /* ===== Education Section ===== */
 .education {
     padding: 60px 20px;
-    background-color: #f9f5ff;
+    background-color: #18102b;
+    
 }
 
 .education-grid {
@@ -571,6 +565,7 @@ button:hover {
     display: block;
     font-weight: 500;
     margin-bottom: 5px;
+    
 }
 
 .education-details > .date {

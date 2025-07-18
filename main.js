@@ -69,15 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Parallax effect for hero section
-    const hero = document.querySelector('.hero');
-    if (hero) {
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const rate = scrolled * -0.5;
-            hero.style.transform = `translateY(${rate}px)`;
-        });
-    }
 
     // Add hover effects to interactive elements
     const interactiveElements = document.querySelectorAll('.project-card, .thought-card, .tech-category, .social-icon');
