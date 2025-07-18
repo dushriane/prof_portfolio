@@ -217,12 +217,50 @@ async function createUser(userData) {
                         "The best time to plant a tree was 20 years ago. The second best time is now. The same applies to building reliable systems."
                     </blockquote>
                 </div>
+
+                <button class="like-btn" data-post-id="POST_ID">
+                    ❤️ Like <span class="like-count">0</span>
+                </button>
+
+                <button class="bookmark-btn" data-post-id="POST_ID">
+                    🔖 Bookmark
+                </button>
+
+                <!-- Comments Section -->
+                <div class="comments-section" data-post-id="POST_ID">
+                    <h3>Comments</h3>
+                    <form class="add-comment-form">
+                    <textarea placeholder="Add a comment..."></textarea>
+                    <button type="submit">Post Comment</button>
+                    </form>
+                    <ul class="comments-list">
+                    <!-- Example comment -->
+                    <li class="comment">
+                        <div class="comment-author">
+                        <img src="images/profiles/default.png" alt="Profile" class="profile-pic" />
+                        <span class="author-name">Author Name</span>
+                        </div>
+                        <div class="comment-content">This is a comment.</div>
+                        <button class="reply-btn">Reply</button>
+                        <!-- Nested replies -->
+                        <ul class="replies-list">
+                        <li class="comment reply">
+                            <div class="comment-author">
+                            <img src="images/profiles/default.png" alt="Profile" class="profile-pic" />
+                            <span class="author-name">Another User</span>
+                            </div>
+                            <div class="comment-content">This is a reply.</div>
+                        </li>
+                        </ul>
+                    </li>
+                    </ul>
+                </div>
                 
                 <div class="author-section">
                     <img src="./images/profiles/default.png" alt="John Doe" class="author-avatar">
                     <div class="author-details">
-                        <h4>John Doe</h4>
-                        <p>Senior Software Engineer with 8+ years of experience building scalable systems. Passionate about clean architecture, system design, and mentoring developers. When not coding, you can find him hiking or reading about emerging technologies.</p>
+                        <h4 class="author-name">John Doe</h4>
+                        <p class="author-bio">Senior Software Engineer with 8+ years of experience building scalable systems. Passionate about clean architecture, system design, and mentoring developers. When not coding, you can find him hiking or reading about emerging technologies.</p>
                     </div>
                 </div>
             </article>

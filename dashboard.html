@@ -59,8 +59,6 @@
                     </button>
                     <button class="quick-action-btn logout-btn" onclick="logout()" style="background: #e74c3c; color: white;">Logout</button>
                 </div>
-                
-                
             </aside>
             
             <main class="dashboard">
@@ -112,6 +110,20 @@
                 </div>
                 <div class="dashboard-posts" id="dashboardPosts">
                     <!-- User's posts will be loaded here -->
+                    <h2>Recent Posts</h2>
+                    <ul>
+                      <li>
+                        <a href="post-url.html">Post Title</a>
+                        <span class="post-date">2024-06-01</span>
+                      </li>
+                      <!-- More posts dynamically -->
+                       <!-- For each comment/post in admin view -->
+                        <button class="delete-comment-btn" data-comment-id="COMMENT_ID">Delete</button>
+                        <button class="hide-comment-btn" data-comment-id="COMMENT_ID">Hide</button>
+                        <!-- For posts -->
+                        <button class="delete-post-btn" data-post-id="POST_ID">Delete</button>
+                        <button class="hide-post-btn" data-post-id="POST_ID">Hide</button>
+                    </ul>
                 </div>
             </main>
         </div>

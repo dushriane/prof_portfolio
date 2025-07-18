@@ -133,8 +133,8 @@ hr {
     box-shadow: 0 2px 12px rgba(126, 75, 255, 0.12);
   }
   header > .nav {
-    display: flex;
-    gap: 1.5rem;
+    display: none;
+    /* gap: 1.5rem; */
   }
   .nav a {
     color: var(--text-color);
