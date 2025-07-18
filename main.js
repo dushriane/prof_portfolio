@@ -26,12 +26,26 @@ document.addEventListener('click', function(event) {
     const hamburger = document.querySelector('.hamburger');
     const mobileMenu = document.getElementById('mobileMenu');
     
-    if (!hamburger.contains(event.target) && !mobileMenu.contains(event.target)) {
+    if (hamburger && mobileMenu && !hamburger.contains(event.target) && !mobileMenu.contains(event.target)) {
         hamburger.classList.remove('active');
         mobileMenu.classList.remove('active');
     }
 });
 
+// Close mobile menu when clicking on nav links
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileNavLinks = document.querySelectorAll('.mobile-menu .nav a');
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (hamburger && mobileMenu) {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            }
+        });
+    });
+});
 // Initialize animations when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Add section class to all major sections (but don't animate them)
@@ -144,10 +158,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (filter === 'all' || cardTags.includes(filter)) {
                     card.style.display = 'block';
                     card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
                 } else {
                     card.style.display = 'none';
                 }
             });
+            
+            // Add animation to visible cards
+            setTimeout(() => {
+                thoughtCards.forEach((card, index) => {
+                    if (card.style.display !== 'none') {
+                        card.style.animationDelay = `${index * 0.1}s`;
+                        card.classList.add('fade-in');
+                    }
+                });
+            }, 50);
         });
     });
 
@@ -208,6 +233,12 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('load', () => {
         document.body.classList.add('loaded');
     });
+    
+    // Initialize filter tags
+    const firstFilterTag = document.querySelector('.filter-tags span');
+    if (firstFilterTag && !document.querySelector('.filter-tags span.active')) {
+        firstFilterTag.classList.add('active');
+    }
 });
 
 // Utility function for smooth animations
@@ -246,9 +277,28 @@ style.textContent = `
         transform: none;
     }
     
+    .fade-in {
+        animation: fadeInUp 0.6s ease forwards;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
     @media (prefers-reduced-motion: reduce) {
         .section {
             transition: none;
+        }
+        
+        .fade-in {
+            animation: none;
         }
     }
 `;

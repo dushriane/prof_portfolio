@@ -75,7 +75,20 @@
                     </div>
                 </div>
             </aside>
+            
             <main class="dashboard">
+                <!-- Mobile Sidebar Filter -->
+                <div class="mobile-sidebar-filter">
+                    <h3>Quick Actions</h3>
+                    <div class="mobile-quick-actions">
+                        <a href="createpost.html" class="mobile-quick-action-btn">📝 Create Post</a>
+                        <button class="mobile-quick-action-btn" onclick="viewAnalytics()">📊 Analytics</button>
+                        <button class="mobile-quick-action-btn" onclick="manageCategories()">🏷️ Categories</button>
+                        <button class="mobile-quick-action-btn" onclick="exportData()">📤 Export</button>
+                        <button class="mobile-quick-action-btn" onclick="logout()" style="background: #e74c3c; color: white;">Logout</button>
+                    </div>
+                </div>
+                
                 <div class="dashboard-header section">
                     <div>
                         <h1 class="dashboard-title">Blog Dashboard</h1>
