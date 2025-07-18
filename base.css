@@ -1,1 +1,195 @@
+:root {
+  --primary-purple: #7e4bff;
+  --dark-purple: #18102b;
+  --accent-purple: #a259ff;
+  --text-color: #f3f3fa;
+  --card-bg: #231a3a;
+  --danger: #e74c3c;
+  --shadow: 0 4px 24px rgba(126, 75, 255, 0.18);
+}
 
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+body {
+  background: var(--dark-purple);
+  color: var(--text-color);
+  font-family: 'Montserrat', 'Lato', 'Poppins', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+h1, h3{
+  color: var(--primary-purple);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+}
+
+p, ul, ol, li, label, input, textarea, select, button {
+  font-family: inherit;
+  color: var(--text-color);
+  font-size: 1rem;
+  margin: 0;
+}
+
+ul, ol {
+  padding-left: 1.5rem;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  border-radius: 10px;
+}
+
+a {
+  color: var(--primary-purple);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover{
+  color: var(--accent-purple);
+  text-decoration: underline;
+}
+
+/* ===== NAVBAR ===== */
+header {
+  display: flex;
+}
+.hamburger {
+  display: flex;
+}
+
+button, .btn {
+  background: var(--primary-purple);
+  color: var(--text-color);
+  border: none;
+  border-radius: 8px;
+  padding: 0.75em 1.5em;
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+button:hover, .btn:hover {
+  background: var(--accent-purple);
+  color: var(--text-color);
+  box-shadow: 0 8px 32px rgba(126, 75, 255, 0.28);
+  transform: translateY(-2px) scale(1.03);
+}
+
+input, textarea, select {
+  background: var(--card-bg);
+  border: 1.5px solid var(--accent-purple);
+  border-radius: 8px;
+  padding: 0.75em 1em;
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 2rem;
+}
+.section {
+  padding: 2rem;
+}
+
+hr {
+  border: none;
+  border-top: 2px solid var(--accent-purple);
+}
+
+
+
+/* Responsive breakpoints: mobile first */
+@media (min-width: 375px) {
+  html { font-size: 16px; }
+}
+@media (min-width: 425px) {
+  html { font-size: 17px; }
+}
+@media (min-width: 768px) {
+  html { font-size: 18px; }
+  .card, .section { padding: 2.5rem; }
+  header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: var(--card-bg);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(126, 75, 255, 0.12);
+  }
+  header > .nav {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .nav a {
+    color: var(--text-color);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav a.active, .nav a:hover {
+    background: var(--primary-purple);
+    color: var(--text-color);
+  }
+  
+}
+@media (min-width: 1024px) {
+  html { font-size: 19px; }
+  .card, .section { padding: 3rem; }
+  header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: var(--card-bg);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(126, 75, 255, 0.12);
+  }
+  header > .nav {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .nav a {
+    color: var(--text-color);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav a.active, .nav a:hover {
+    background: var(--primary-purple);
+    color: var(--text-color);
+  }
+  .hamburger{
+    display: none;
+  }
+}
+
+/* 320px - main focus for small mobile screens */
+@media (max-width: 374px) {
+  html { font-size: 15px; }
+  .card, .section { padding: 1rem; }
+}
