@@ -451,16 +451,54 @@ body, .dashboard-container, .dashboard {
 }
 
 
-
-
 /* RESPONSIVE DESIGN */
 
-/* MAX WIDTH 375PX */
+@media (min-width: 768px) {
+  /* Navigation (Sidebar/Header) */
+  .sidebar { width: 260px; padding: 2.5rem 1.5rem 1.5rem 1.5rem; }
+  .sidebar .sidebar-title { font-size: 1.2rem; }
+  .dashboard-header { flex-direction: row; align-items: center; padding: 32px 32px 24px 32px; }
+  .dashboard-title { font-size: 2.2rem; }
 
-/* MAX WIDTH 425PX */
+  /* Cards/Grids */
+  .dashboard-stats { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 40px; }
+  .stat-card { padding: 40px; font-size: 1.1rem; }
+  .dashboard-content { grid-template-columns: 1fr 350px; gap: 60px; }
+  .posts-section, .dashboard-posts { padding: 2.5rem 2rem; }
+  .dashboard-post { padding: 2rem; font-size: 1.1rem; }
 
+  /* Forms */
+  .login-card, .register-card, .contact-form, .reset-card { max-width: 500px; padding: 2.5rem; }
+  .form-group input, .form-group textarea, .form-group select { font-size: 1.1rem; padding: 1.1em 1.2em; }
 
-/* MAX WIDTH 768PX */ 
+  /* Buttons */
+  button, .btn, .quick-action-btn, .submit-btn { font-size: 1.1rem; padding: 1em 2em; }
+  .quick-actions { gap: 1.5rem; }
 
+  /* Dashboard Post Content */
+  .dashboard-post h3 { font-size: 1.3rem; }
+  .dashboard-post p { font-size: 1.05rem; }
+  .dashboard-post .admin-actions { gap: 12px; }
 
-/* MAX WIDTH 1024PX */
+  /* General Layout */
+  .section, .card { padding: 3rem; }
+}
+
+@media (min-width: 1024px) {
+  .sidebar { width: 300px; padding: 3rem 2rem 2rem 2rem; }
+  .dashboard-header { padding: 40px 48px 32px 48px; }
+  .dashboard-title { font-size: 2.5rem; }
+  .dashboard-stats { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 48px; }
+  .stat-card { padding: 48px; font-size: 1.15rem; }
+  .dashboard-content { grid-template-columns: 1fr 400px; gap: 80px; }
+  .posts-section, .dashboard-posts { padding: 3rem 3rem; }
+  .dashboard-post { padding: 2.5rem; font-size: 1.15rem; }
+  .login-card, .register-card, .contact-form, .reset-card { max-width: 600px; padding: 3rem; }
+  .form-group input, .form-group textarea, .form-group select { font-size: 1.15rem; padding: 1.2em 1.4em; }
+  button, .btn, .quick-action-btn, .submit-btn { font-size: 1.15rem; padding: 1.2em 2.5em; }
+  .quick-actions { gap: 2rem; }
+  .dashboard-post h3 { font-size: 1.5rem; }
+  .dashboard-post p { font-size: 1.1rem; }
+  .dashboard-post .admin-actions { gap: 16px; }
+  .section, .card { padding: 4rem; }
+}

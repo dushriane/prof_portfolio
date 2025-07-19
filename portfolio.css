@@ -561,12 +561,90 @@ footer .contact-form {
 
 /* RESPONSIVE DESIGN */
 
-/* MAX WIDTH 375PX */
+/* MIN WIDTH 768PX */
+@media (min-width: 768px) {
+  /* Navigation */
+  header { padding: 1.5rem 3rem; }
+  .mobile-menu { display: none !important; }
+  header > .nav { display: flex !important; gap: 2.5rem; }
+  .hamburger { display: none !important; }
+  .nav a { font-size: 1.1rem; padding: 0.7rem 1.5rem; }
 
-/* MAX WIDTH 425PX */
+  /* Cards/Grids */
+  .projects-grid, .thoughts-grid, .education-grid, .dashboard-stats {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+    padding: 0 2rem;
+  }
+  .project-card, .thought-card, .education-card, .stat-card, .dashboard-post {
+    padding: 2.5rem;
+    font-size: 1.1rem;
+  }
+  .timeline { padding-left: 60px; }
 
+  /* Forms */
+  .form-group input, .form-group textarea, .form-group select {
+    font-size: 1.15rem;
+    padding: 1.1em 1.2em;
+  }
+  .login-card, .register-card, .contact-form, .reset-card {
+    max-width: 500px;
+    padding: 2.5rem;
+  }
+  .editor-container { max-width: 800px; margin: 0 auto; }
 
-/* MAX WIDTH 768PX */ 
+  /* Buttons */
+  button, .btn, .quick-action-btn, .submit-btn {
+    font-size: 1.1rem;
+    padding: 1em 2em;
+  }
+  .quick-actions { gap: 1.5rem; }
 
+  /* Blog Post Content */
+  .blog-image img, .author-avatar { max-width: 400px; }
+  .blog-post-content pre, .blog-post-content code { font-size: 1.1rem; }
+  .author-section { flex-direction: row; align-items: center; gap: 2.5rem; }
+  .comments-section { max-width: 700px; margin: 2rem auto 0 auto; }
 
-/* MAX WIDTH 1024PX */
+  /* Footer */
+  footer .contact-form { max-width: 500px; margin-left: auto; margin-right: auto; }
+  .footer-social { gap: 2.5rem; }
+
+  /* General Layout */
+  .section, .card { padding: 3rem; }
+  .hero, .tech, .projects-section, .experience, .education { padding: 4rem 2rem; }
+}
+
+/* MIN WIDTH 1024PX */
+@media (min-width: 1024px) {
+  header { padding: 2.5rem 6rem; }
+  .nav a { font-size: 1.2rem; padding: 1rem 2.5rem; }
+  .projects-grid, .thoughts-grid, .education-grid, .dashboard-stats {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+    padding: 0 4rem;
+  }
+  .project-card, .thought-card, .education-card, .stat-card, .dashboard-post {
+    padding: 3rem;
+    font-size: 1.15rem;
+  }
+  .timeline { padding-left: 100px; }
+  .login-card, .register-card, .contact-form, .reset-card {
+    max-width: 600px;
+    padding: 3rem;
+  }
+  .editor-container { max-width: 1000px; margin: 0 auto; }
+  button, .btn, .quick-action-btn, .submit-btn {
+    font-size: 1.15rem;
+    padding: 1.2em 2.5em;
+  }
+  .quick-actions { gap: 2rem; }
+  .blog-image img, .author-avatar { max-width: 500px; }
+  .blog-post-content pre, .blog-post-content code { font-size: 1.2rem; }
+  .author-section { gap: 3rem; }
+  .comments-section { max-width: 900px; margin: 2.5rem auto 0 auto; }
+  footer .contact-form { max-width: 600px; }
+  .footer-social { gap: 3rem; }
+  .section, .card { padding: 4rem; }
+  .hero, .tech, .projects-section, .experience, .education { padding: 5rem 4rem; }
+}
