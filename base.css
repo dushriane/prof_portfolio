@@ -330,35 +330,6 @@ hr {
   margin: 0;
 }
 
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: var(--text-color);
-  font-weight: 600;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.form-group input[type="file"] {
-  background: transparent;
-  border: 2px dashed var(--accent-purple);
-  padding: 1rem;
-  text-align: center;
-  cursor: pointer;
-}
-
-.form-group input[type="file"]:hover {
-  border-color: var(--primary-purple);
-}
-
 .profile-pic-preview {
   width: 100px;
   height: 100px;
