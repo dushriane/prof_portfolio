@@ -31,16 +31,13 @@
                 <a href="blog.html">BLOG</a>
                 <a href="dashboard.html">DASHBOARD</a>
             </div>
-            <div class="social-icons">
-                <a href="https://linkedin.com/in/ariane-dushime" class="social-icon" target="_blank" aria-label="LinkedIn">
-                    <i class="fab fa-linkedin-in"></i>
-                </a>
-                <a href="https://github.com/dushriane" class="social-icon" target="_blank" aria-label="GitHub">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="mailto:arianedushime941@gmail.com" class="social-icon" aria-label="Email">
-                    <i class="fas fa-envelope"></i>
-                </a>
+            <div class="auth-buttons">
+                <div class="auth-button login">
+                    <a href="login.html">Login</a>
+                </div>
+                <div class="auth-button register">
+                    <a href="register.html">Register</a>
+                </div>
             </div>
         </div>
 
@@ -218,48 +215,72 @@ async function createUser(userData) {
                     </blockquote>
                 </div>
 
-                <button class="like-btn" data-post-id="POST_ID">
-                    ❤️ Like <span class="like-count">0</span>
-                </button>
+                <div class="like-bookmark-section">
+                    <button class="like-btn" data-post-id="POST_ID">
+                        ❤️ Like <span class="like-count">0</span>
+                    </button>
 
-                <button class="bookmark-btn" data-post-id="POST_ID">
-                    🔖 Bookmark
-                </button>
+                    <button class="bookmark-btn" data-post-id="POST_ID">
+                        🔖 Bookmark
+                    </button>
+                </div>
 
                 <!-- Comments Section -->
                 <div class="comments-section" data-post-id="POST_ID">
                     <h3>Comments</h3>
                     <form class="add-comment-form">
-                    <textarea placeholder="Add a comment..."></textarea>
-                    <button type="submit">Post Comment</button>
+                        <textarea placeholder="Add a comment..."></textarea>
+                        <button type="submit">Post Comment</button>
                     </form>
                     <ul class="comments-list">
-                    <!-- Example comment -->
-                    <li class="comment">
-                        <div class="comment-author">
-                        <img src="images/profiles/default.png" alt="Profile" class="profile-pic" />
-                        <span class="author-name">Author Name</span>
-                        </div>
-                        <div class="comment-content">This is a comment.</div>
-                        <button class="reply-btn">Reply</button>
-                        <!-- Nested replies -->
-                        <ul class="replies-list">
-                        <li class="comment reply">
+                        <!-- Dummy comment 1 -->
+                        <li class="comment">
                             <div class="comment-author">
-                            <img src="images/profiles/default.png" alt="Profile" class="profile-pic" />
-                            <span class="author-name">Another User</span>
+                                <img src="images/profiles/userb.jpeg" alt="Profile" class="profile-pic comment-avatar" />
+                                <span class="author-name">Alice</span>
                             </div>
-                            <div class="comment-content">This is a reply.</div>
+                            <div class="comment-content">Great insights! I totally agree with designing for change.</div>
+                            <div class="comment-actions">
+                                <button class="like-btn" title="Like"><i class="far fa-heart"></i></button>
+                                <button class="bookmark-btn" title="Bookmark"><i class="far fa-bookmark"></i></button>
+                                <button class="reply-btn">Reply</button>
+                            </div>
+                            <!-- Nested replies -->
+                            <ul class="replies-list">
+                                <li class="comment reply">
+                                    <div class="comment-author">
+                                        <img src="images/profiles/usera.jpg" alt="Profile" class="profile-pic comment-avatar" />
+                                        <span class="author-name">Bob</span>
+                                    </div>
+                                    <div class="comment-content">Thanks Alice! Modularity really is a survival strategy.</div>
+                                    <div class="comment-actions">
+                                        <button class="like-btn" title="Like"><i class="far fa-heart"></i></button>
+                                        <button class="bookmark-btn" title="Bookmark"><i class="far fa-bookmark"></i></button>
+                                        <button class="reply-btn">Reply</button>
+                                    </div>
+                                </li>
+                            </ul>
                         </li>
-                        </ul>
-                    </li>
+                        <!-- Dummy comment 2 -->
+                        <li class="comment">
+                            <div class="comment-author">
+                                <img src="images/profiles/userc.jpeg" alt="Profile" class="profile-pic comment-avatar" />
+                                <span class="author-name">Charlie</span>
+                            </div>
+                            <div class="comment-content">Documentation as code is a game changer. Thanks for sharing!</div>
+                            <div class="comment-actions">
+                                <button class="like-btn" title="Like"><i class="far fa-heart"></i></button>
+                                <button class="bookmark-btn" title="Bookmark"><i class="far fa-bookmark"></i></button>
+                                <button class="reply-btn">Reply</button>
+                            </div>
+                        </li>
                     </ul>
                 </div>
-                
+                <!-- Author Section Responsive -->
                 <div class="author-section">
-                    <img src="./images/profiles/default.png" alt="John Doe" class="author-avatar">
+                    <img src="./images/profiles/default.jpg" alt="Jane Doe" class="author-avatar">
                     <div class="author-details">
-                        <h4 class="author-name">John Doe</h4>
+                        <h4 class="author-name">Jane Doe</h4>
                         <p class="author-bio">Senior Software Engineer with 8+ years of experience building scalable systems. Passionate about clean architecture, system design, and mentoring developers. When not coding, you can find him hiking or reading about emerging technologies.</p>
                     </div>
                 </div>

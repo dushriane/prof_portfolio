@@ -25,6 +25,7 @@
         </header>
         
         <div class="mobile-menu" id="mobileMenu">
+            <span class="close-menu" id="closeMobileMenu">&times;</span>
             <div class="nav">
                 <a href="index.html">PORTFOLIO</a>
                 <a href="blog.html">BLOG</a>
@@ -41,9 +42,13 @@
         </div>
 
         <div class="dashboard-container">
-            <aside class="sidebar section" id="sidebar">
-                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-                <h3 class="sidebar-title">Quick Actions</h3>
+            <main class="dashboard">
+                <div class="dashboard-header section">
+                    <div>
+                        <h1 class="dashboard-title">Blog Dashboard</h1>
+                        <p>Manage your blog posts and analytics</p>
+                    </div>
+                </div>
                 <div class="quick-actions">
                     <button class="quick-action-btn" onclick="window.location.href='createpost.html'">
                         📝 Create New Post
@@ -59,28 +64,6 @@
                     </button>
                     <button class="quick-action-btn logout-btn" onclick="logout()" style="background: #e74c3c; color: white;">Logout</button>
                 </div>
-            </aside>
-            
-            <main class="dashboard">
-                <!-- Mobile Sidebar Filter -->
-                <div class="mobile-sidebar-filter">
-                    <h3>Quick Actions</h3>
-                    <div class="mobile-quick-actions">
-                        <a href="createpost.html" class="mobile-quick-action-btn">📝 Create Post</a>
-                        <button class="mobile-quick-action-btn" onclick="viewAnalytics()">📊 Analytics</button>
-                        <button class="mobile-quick-action-btn" onclick="manageCategories()">🏷️ Categories</button>
-                        <button class="mobile-quick-action-btn" onclick="exportData()">📤 Export</button>
-                        <button class="mobile-quick-action-btn" onclick="logout()" style="background: #e74c3c; color: white;">Logout</button>
-                    </div>
-                </div>
-                
-                <div class="dashboard-header section">
-                    <div>
-                        <h1 class="dashboard-title">Blog Dashboard</h1>
-                        <p>Manage your blog posts and analytics</p>
-                    </div>
-                </div>
-
                 <div class="dashboard-stats section">
                     <div class="stat-card">
                         <div class="stat-number">5</div>
@@ -109,21 +92,19 @@
                     </div>
                 </div>
                 <div class="dashboard-posts" id="dashboardPosts">
-                    <!-- User's posts will be loaded here -->
                     <h2>Recent Posts</h2>
-                    <ul>
-                      <li>
-                        <a href="post-url.html">Post Title</a>
-                        <span class="post-date">2024-06-01</span>
-                      </li>
-                      <!-- More posts dynamically -->
-                       <!-- For each comment/post in admin view -->
-                        <button class="delete-comment-btn" data-comment-id="COMMENT_ID">Delete</button>
-                        <button class="hide-comment-btn" data-comment-id="COMMENT_ID">Hide</button>
-                        <!-- For posts -->
-                        <button class="delete-post-btn" data-post-id="POST_ID">Delete</button>
-                        <button class="hide-post-btn" data-post-id="POST_ID">Hide</button>
-                    </ul>
+                    <div class="dashboard-post">
+                        <h3>How to Build a Portfolio</h3>
+                        <p>Category: Tech</p>
+                        <p>Status: Published</p>
+                        <div class="admin-actions">
+                            <button class="delete-comment-btn" data-comment-id="COMMENT_ID">Delete Comment</button>
+                            <button class="hide-comment-btn" data-comment-id="COMMENT_ID">Hide Comment</button>
+                            <button class="delete-post-btn" data-post-id="POST_ID">Delete Post</button>
+                            <button class="hide-post-btn" data-post-id="POST_ID">Hide Post</button>
+                        </div>
+                    </div>
+                    <!-- More posts dynamically -->
                 </div>
             </main>
         </div>

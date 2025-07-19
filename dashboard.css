@@ -1,41 +1,48 @@
 /* ===== DASHBOARD STYLES ===== */
 
+body, .dashboard-container, .dashboard {
+  background: var(--dark-purple) !important;
+  margin: 0 !important;
+}
+
 .dashboard-container {
-  display: flex;
-  min-height: calc(100vh - 80px); /* Account for header */
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .dashboard {
-  flex: 1;
-  padding: 40px 30px;
-  max-width: 1400px;
-  margin: 0 auto;
+  padding: 0 0;
+  max-width: 100vw;
   box-sizing: border-box;
 }
 
 .dashboard-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-  padding: 30px;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding: 24px 18px 18px 18px;
   background-color: var(--card-bg);
   border-radius: 12px;
   box-shadow: var(--shadow);
   border: 1px solid rgba(126, 75, 255, 0.1);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .dashboard-title {
   font-family: 'Montserrat', sans-serif;
   font-size: 32px;
   color: var(--primary-purple);
-  margin: 0;
+  margin: 0 0 8px 0;
 }
 
 .dashboard-header p {
   color: var(--text-color);
-  opacity: 0.8;
-  margin: 10px 0 0 0;
+  opacity: 1;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
 }
 
 .dashboard-stats {
@@ -209,28 +216,33 @@
 
 .quick-actions {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0;
+  padding: 18px 0 0 0;
 }
 
 .quick-action-btn {
-  background: rgba(126, 75, 255, 0.1);
-  color: var(--text-color);
-  border: none;
-  padding: 0.75rem 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: left;
-  font-size: 1rem;
-  transition: all 0.2s;
-  font-family: 'Poppins', sans-serif;
-  border: 1px solid rgba(126, 75, 255, 0.2);
-}
-
-.quick-action-btn:hover {
+  flex: 1 1 45%;
+  min-width: 120px;
   background: var(--primary-purple);
   color: var(--text-color);
-  transform: translateY(-2px);
+  border: none;
+  border-radius: 8px;
+  padding: 0.75em 1.2em;
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+  margin: 0;
+}
+.quick-action-btn:hover {
+  background: var(--accent-purple);
+  color: var(--text-color);
+  box-shadow: 0 8px 32px rgba(126, 75, 255, 0.28);
+  transform: translateY(-2px) scale(1.03);
 }
 
 .logout-btn {
@@ -363,20 +375,27 @@
 .dashboard-posts {
   background: var(--card-bg);
   border-radius: 12px;
-  padding: 2rem;
+  padding: 1.5rem 1rem;
   box-shadow: var(--shadow);
   border: 1px solid rgba(126, 75, 255, 0.1);
+  margin: 0;
+}
+
+.dashboard-posts h2 {
+  color: var(--primary-purple);
+  margin: 0 0 1rem 0;
 }
 
 .dashboard-post {
-  padding: 1rem;
-  border-bottom: 1px solid rgba(126, 75, 255, 0.1);
-  transition: background 0.2s;
-  cursor: pointer;
-}
-
-.dashboard-post:hover {
   background: var(--light-purple-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(126, 75, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
 }
 
 .dashboard-post h3 {
@@ -388,33 +407,41 @@
 .dashboard-post p {
   color: var(--text-color);
   margin: 0.25rem 0;
-  font-size: 0.9rem;
-  opacity: 0.8;
+  font-size: 0.98rem;
+  opacity: 0.9;
 }
 
-/* Admin action buttons */
+.dashboard-post .admin-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
 .delete-comment-btn, .hide-comment-btn, .delete-post-btn, .hide-post-btn {
   background: var(--danger);
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.7rem;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.8rem;
-  margin: 0.25rem;
+  font-size: 0.85rem;
+  margin: 0.1rem 0.1rem 0.1rem 0;
   transition: background 0.2s;
 }
-
 .delete-comment-btn:hover, .hide-comment-btn:hover, .delete-post-btn:hover, .hide-post-btn:hover {
   background: #c0392b;
 }
-
 .hide-comment-btn, .hide-post-btn {
   background: var(--accent-purple);
 }
-
 .hide-comment-btn:hover, .hide-post-btn:hover {
   background: #8e44ad;
+}
+@media (max-width: 600px) {
+  .delete-comment-btn, .hide-comment-btn, .delete-post-btn, .hide-post-btn {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.5rem;
+  }
 }
 
 /* Responsive design */
@@ -433,6 +460,33 @@
   
   .dashboard {
     padding: 20px 15px;
+  }
+  .dashboard-header {
+    margin-bottom: 18px;
+    padding: 18px 10px 10px 10px;
+  }
+  .quick-actions {
+    gap: 10px;
+    padding: 10px 0 0 0;
+  }
+  .quick-action-btn {
+    min-width: 48%;
+    font-size: 0.98rem;
+    padding: 0.7em 0.7em;
+  }
+}
+
+@media (max-width: 600px) {
+  .quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 10px 0 0 0;
+  }
+  .quick-action-btn {
+    min-width: 0;
+    font-size: 0.95rem;
+    padding: 0.6em 0.6em;
   }
 }
 

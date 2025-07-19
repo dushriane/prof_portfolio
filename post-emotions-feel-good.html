@@ -31,16 +31,13 @@
                 <a href="blog.html">BLOG</a>
                 <a href="dashboard.html">DASHBOARD</a>
             </div>
-            <div class="social-icons">
-                <a href="https://linkedin.com/in/ariane-dushime" class="social-icon" target="_blank" aria-label="LinkedIn">
-                    <i class="fab fa-linkedin-in"></i>
-                </a>
-                <a href="https://github.com/dushriane" class="social-icon" target="_blank" aria-label="GitHub">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="mailto:arianedushime941@gmail.com" class="social-icon" aria-label="Email">
-                    <i class="fas fa-envelope"></i>
-                </a>
+            <div class="auth-buttons">
+                <div class="auth-button login">
+                    <a href="login.html">Login</a>
+                </div>
+                <div class="auth-button register">
+                    <a href="register.html">Register</a>
+                </div>
             </div>
         </div>
 
@@ -212,12 +209,64 @@
                         "The best code is written with heart, the best designs are created with feeling, and the best products are built with love."
                     </blockquote>
                 </div>
-                
+
+                <!-- Comments Section -->
+                <div class="comments-section" data-post-id="POST_ID">
+                    <h3>Comments</h3>
+                    <form class="add-comment-form">
+                        <textarea placeholder="Add a comment..."></textarea>
+                        <button type="submit">Post Comment</button>
+                    </form>
+                    <ul class="comments-list">
+                        <!-- Dummy comment 1 -->
+                        <li class="comment">
+                            <div class="comment-author">
+                                <img src="images/profiles/userb.jpeg" alt="Profile" class="profile-pic comment-avatar" />
+                                <span class="author-name">Alice</span>
+                            </div>
+                            <div class="comment-content">This post really resonated with me. Emotions are so important in design!</div>
+                            <div class="comment-actions">
+                                <button class="like-btn" title="Like"><i class="far fa-heart"></i></button>
+                                <button class="bookmark-btn" title="Bookmark"><i class="far fa-bookmark"></i></button>
+                                <button class="reply-btn">Reply</button>
+                            </div>
+                            <!-- Nested replies -->
+                            <ul class="replies-list">
+                                <li class="comment reply">
+                                    <div class="comment-author">
+                                        <img src="images/profiles/usera.jpg" alt="Profile" class="profile-pic comment-avatar" />
+                                        <span class="author-name">Bob</span>
+                                    </div>
+                                    <div class="comment-content">Absolutely! Emotional connection is what makes products memorable.</div>
+                                    <div class="comment-actions">
+                                        <button class="like-btn" title="Like"><i class="far fa-heart"></i></button>
+                                        <button class="bookmark-btn" title="Bookmark"><i class="far fa-bookmark"></i></button>
+                                        <button class="reply-btn">Reply</button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Dummy comment 2 -->
+                        <li class="comment">
+                            <div class="comment-author">
+                                <img src="images/profiles/userc.jpeg" alt="Profile" class="profile-pic comment-avatar" />
+                                <span class="author-name">Charlie</span>
+                            </div>
+                            <div class="comment-content">Loved the part about vulnerability. It's so true in tech and life.</div>
+                            <div class="comment-actions">
+                                <button class="like-btn" title="Like"><i class="far fa-heart"></i></button>
+                                <button class="bookmark-btn" title="Bookmark"><i class="far fa-bookmark"></i></button>
+                                <button class="reply-btn">Reply</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Author Section Responsive -->
                 <div class="author-section">
-                    <img src="./images/profiles/default.png" alt="Jane Smith" class="author-avatar">
+                    <img src="./images/profiles/default.jpg" alt="Jane Doe" class="author-avatar">
                     <div class="author-details">
-                        <h4>Jane Smith</h4>
-                        <p>UX Designer and Frontend Developer who believes in the power of emotional design. With a background in psychology and 6 years in tech, she creates digital experiences that truly connect with users. Advocate for inclusive design and mental health awareness in tech.</p>
+                        <h4 class="author-name">Jane Doe</h4>
+                        <p class="author-bio">Senior Software Engineer with 8+ years of experience building scalable systems. Passionate about clean architecture, system design, and mentoring developers. When not coding, you can find her hiking or reading about emerging technologies.</p>
                     </div>
                 </div>
             </article>

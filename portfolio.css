@@ -315,6 +315,7 @@ footer::before {
 .form-group {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .form-group input,

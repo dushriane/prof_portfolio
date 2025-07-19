@@ -124,24 +124,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Filter functionality for blog page
-    const filterTags = document.querySelectorAll('.filter-tags span');
-    const thoughtCards = document.querySelectorAll('.thought-card');
-    
-    filterTags.forEach(tag => {
-        tag.addEventListener('click', function() {
-            const filter = this.textContent.toLowerCase();
-            
-            // Update active state
-            filterTags.forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Filter cards
+    // Filter and search functionality for blog page
+    function filterAndSearchBlog() {
+        const filterTags = document.querySelectorAll('.filter-tags span');
+        const thoughtCards = document.querySelectorAll('.thought-card');
+        const searchInput = document.getElementById('search-input');
+        let activeCategory = 'all';
+        let searchTerm = '';
+
+        function updateCards() {
             thoughtCards.forEach(card => {
-                const cardTags = Array.from(card.querySelectorAll('.thought-tags span'))
-                    .map(span => span.textContent.toLowerCase());
-                
-                if (filter === 'all' || cardTags.includes(filter)) {
+                const cardCategories = (card.getAttribute('data-category') || '').toLowerCase();
+                const cardText = card.innerText.toLowerCase();
+                const matchesCategory = activeCategory === 'all' || cardCategories.includes(activeCategory);
+                const matchesSearch = !searchTerm || cardText.includes(searchTerm);
+                if (matchesCategory && matchesSearch) {
                     card.style.display = 'block';
                     card.style.opacity = '1';
                     card.style.transform = 'translateY(0)';
@@ -149,18 +146,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     card.style.display = 'none';
                 }
             });
-            
-            // Add animation to visible cards
-            setTimeout(() => {
-                thoughtCards.forEach((card, index) => {
-                    if (card.style.display !== 'none') {
-                        card.style.animationDelay = `${index * 0.1}s`;
-                        card.classList.add('fade-in');
-                    }
-                });
-            }, 50);
+        }
+
+        filterTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                activeCategory = this.getAttribute('data-category').toLowerCase();
+                filterTags.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                updateCards();
+            });
         });
-    });
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                searchTerm = this.value.toLowerCase();
+                updateCards();
+            });
+        }
+
+        // Set initial state
+        if (filterTags.length) filterTags[0].classList.add('active');
+        updateCards();
+    }
+
+    filterAndSearchBlog();
 
     // Dashboard category filter logic
     // (This code will only run if the dashboard filter exists on the page)
@@ -224,6 +233,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const firstFilterTag = document.querySelector('.filter-tags span');
     if (firstFilterTag && !document.querySelector('.filter-tags span.active')) {
         firstFilterTag.classList.add('active');
+    }
+
+    // Mobile menu close icon logic
+    const closeMenuBtn = document.getElementById('closeMobileMenu');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (closeMenuBtn && mobileMenu) {
+        closeMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.remove('active');
+            document.querySelector('.hamburger').classList.remove('active');
+        });
     }
 });
 
