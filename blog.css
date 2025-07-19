@@ -85,14 +85,14 @@ h1 {
   background-color: var(--primary-purple);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(126, 75, 255, 0.2);
+  /* box-shadow: 0 4px 12px rgba(126, 75, 255, 0.2); */
 }
 
 .filter-tags span.active {
   background-color: var(--primary-purple);
   color: white;
   border-color: var(--dark-purple);
-  box-shadow: 0 4px 12px rgba(126, 75, 255, 0.3);
+  /* box-shadow: 0 4px 12px rgba(126, 75, 255, 0.3); */
 }
 
 .thoughts-grid {
@@ -112,7 +112,7 @@ h1 {
   padding: 30px;
   border-radius: 12px;
   background-color: var(--card-bg);
-  box-shadow: 0 4px 12px rgba(126, 75, 255, 0.1);
+  /* box-shadow: 0 4px 12px rgba(126, 75, 255, 0.1); */
   border-left: 4px solid var(--primary-purple);
   transition: all 0.3s ease;
   cursor: pointer;
@@ -135,7 +135,7 @@ h1 {
 
 .thought-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(126, 75, 255, 0.15);
+  /* box-shadow: 0 8px 25px rgba(126, 75, 255, 0.15); */
   border-color: rgba(126, 75, 255, 0.2);
 }
 
@@ -244,7 +244,7 @@ h1 {
   margin: 10px 0 0 0;
   font-weight: 600;
   font-size: 1rem;
-  box-shadow: 0 2px 8px var(--accent-shadow);
+  /* box-shadow: 0 2px 8px var(--accent-shadow); */
   min-width: 180px;
 }
 
@@ -351,7 +351,7 @@ h1 {
 
 .thought-card.clickable:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(126, 75, 255, 0.15);
+  /* box-shadow: 0 8px 25px rgba(126, 75, 255, 0.15); */
 }
 
 /* ===== BLOG POST PAGE ===== */
@@ -365,7 +365,7 @@ h1 {
   background: var(--card-bg);
   border-radius: 16px;
   padding: 25px;
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
 }
 
 .blog-post-header {
@@ -730,7 +730,7 @@ h1 {
   background: var(--card-bg);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(126, 75, 255, 0.10);
+  /* box-shadow: 0 2px 8px rgba(126, 75, 255, 0.10); */
 }
 
 .comments-list, .replies-list {
@@ -863,4 +863,70 @@ h1 {
 .blog-post-content pre code .token.string { color: #ecc48d; }
 .blog-post-content pre code .token.function { color: #82aaff; }
 .blog-post-content pre code .token.number { color: #f78c6c; } 
+
+/* Remove default box-shadow from cards, buttons, etc. */
+.thought-card, .blog-interactions, .read-more, .comment, .comment.reply, .author-section, .submit-btn, button, .btn {
+  box-shadow: none !important;
+}
+
+/* Only apply box-shadow on hover/focus for interactive elements */
+.thought-card:hover, .blog-interactions:hover, .read-more:hover, .comment:hover, .comment.reply:hover, .author-section:hover, .submit-btn:hover, button:hover, .btn:hover {
+  box-shadow: var(--accent-shadow) !important;
+} 
+
+/* Create Post Page Improvements */
+.editor-container h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  gap: 10px;
+}
+@media (max-width: 600px) {
+  .editor-container h1 {
+    font-size: 1.3rem;
+  }
+}
+
+#post-title, .editor-container input[type="text"] {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: 1.1rem;
+  padding: 0.8em 1em;
+  background: var(--light-purple-bg);
+  color: var(--text-color);
+  border: 1.5px solid var(--accent-purple);
+  border-radius: 8px;
+  margin-bottom: 1.2rem;
+}
+
+.ql-toolbar.ql-snow {
+  background: #f0e7ff !important;
+  border-radius: 8px 8px 0 0;
+  border: 1.5px solid var(--accent-purple);
+  color: var(--primary-purple);
+}
+
+.ql-container.ql-snow {
+  background: #f8f6ff !important;
+  border-radius: 0 0 8px 8px;
+  border: 1.5px solid var(--accent-purple);
+  border-top: none;
+  color: var(--dark-purple);
+  min-height: 300px;
+}
+
+#editor {
+  background: #f8f6ff !important;
+  color: var(--dark-purple);
+  min-height: 300px;
+  border-radius: 0 0 8px 8px;
+  font-size: 1.1rem;
+  padding: 1rem;
+}
+
+.ql-editor {
+  background: transparent !important;
+  color: var(--dark-purple) !important;
+  min-height: 250px;
+} 
 

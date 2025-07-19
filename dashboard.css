@@ -1,8 +1,8 @@
 /* ===== DASHBOARD STYLES ===== */
 
 body, .dashboard-container, .dashboard {
-  background: var(--dark-purple) !important;
-  margin: 0 !important;
+  background: var(--dark-purple) ;
+  margin: 0 ;
 }
 
 .dashboard-container {
@@ -20,11 +20,10 @@ body, .dashboard-container, .dashboard {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 24px;
   padding: 24px 18px 18px 18px;
   background-color: var(--card-bg);
   border-radius: 12px;
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
   border: 1px solid rgba(126, 75, 255, 0.1);
   width: 100%;
   box-sizing: border-box;
@@ -34,7 +33,6 @@ body, .dashboard-container, .dashboard {
   font-family: 'Montserrat', sans-serif;
   font-size: 32px;
   color: var(--primary-purple);
-  margin: 0 0 8px 0;
 }
 
 .dashboard-header p {
@@ -56,7 +54,7 @@ body, .dashboard-container, .dashboard {
   background-color: var(--card-bg);
   padding: 30px;
   border-radius: 12px;
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
   text-align: center;
   transition: all 0.3s ease;
   border: 1px solid rgba(126, 75, 255, 0.1);
@@ -64,7 +62,7 @@ body, .dashboard-container, .dashboard {
 
 .stat-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(126, 75, 255, 0.15);
+  /* box-shadow: 0 8px 25px rgba(126, 75, 255, 0.15); */
 }
 
 .stat-number {
@@ -91,7 +89,7 @@ body, .dashboard-container, .dashboard {
 .posts-section {
   background-color: var(--card-bg);
   border-radius: 12px;
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
   overflow: hidden;
   border: 1px solid rgba(126, 75, 255, 0.1);
 }
@@ -180,7 +178,7 @@ body, .dashboard-container, .dashboard {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
   border-right: 1px solid rgba(126, 75, 255, 0.1);
 }
 
@@ -234,14 +232,14 @@ body, .dashboard-container, .dashboard {
   font-family: inherit;
   font-size: 1rem;
   cursor: pointer;
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
   transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
   margin: 0;
 }
 .quick-action-btn:hover {
   background: var(--accent-purple);
   color: var(--text-color);
-  box-shadow: 0 8px 32px rgba(126, 75, 255, 0.28);
+  /* box-shadow: 0 8px 32px rgba(126, 75, 255, 0.28); */
   transform: translateY(-2px) scale(1.03);
 }
 
@@ -376,7 +374,7 @@ body, .dashboard-container, .dashboard {
   background: var(--card-bg);
   border-radius: 12px;
   padding: 1.5rem 1rem;
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
   border: 1px solid rgba(126, 75, 255, 0.1);
   margin: 0;
 }
@@ -390,8 +388,7 @@ body, .dashboard-container, .dashboard {
   background: var(--light-purple-bg);
   border-radius: 8px;
   padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 8px rgba(126, 75, 255, 0.08);
+  /* box-shadow: 0 2px 8px rgba(126, 75, 255, 0.08); */
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -595,5 +592,15 @@ body, .dashboard-container, .dashboard {
   .sidebar {
     padding: 0.5rem;
   }
+}
+
+/* Remove default box-shadow from cards, buttons, etc. */
+.dashboard-header, .stat-card, .dashboard-posts, .dashboard-post, .quick-action-btn, .sidebar, .posts-section, .submit-btn, button, .btn {
+  box-shadow: none !important;
+}
+
+/* Only apply box-shadow on hover/focus for interactive elements */
+.stat-card:hover, .dashboard-post:hover, .quick-action-btn:hover, .sidebar:hover, .posts-section:hover, .submit-btn:hover, button:hover, .btn:hover {
+  box-shadow: var(--shadow) !important;
 }
 

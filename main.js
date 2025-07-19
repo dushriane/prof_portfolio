@@ -126,8 +126,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Filter and search functionality for blog page
     function filterAndSearchBlog() {
-        const filterTags = document.querySelectorAll('.filter-tags span');
-        const thoughtCards = document.querySelectorAll('.thought-card');
+    const filterTags = document.querySelectorAll('.filter-tags span');
+    const thoughtCards = document.querySelectorAll('.thought-card');
         const searchInput = document.getElementById('search-input');
         let activeCategory = 'all';
         let searchTerm = '';
@@ -235,15 +235,17 @@ document.addEventListener('DOMContentLoaded', function() {
         firstFilterTag.classList.add('active');
     }
 
-    // Mobile menu close icon logic
-    const closeMenuBtn = document.getElementById('closeMobileMenu');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (closeMenuBtn && mobileMenu) {
-        closeMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.remove('active');
-            document.querySelector('.hamburger').classList.remove('active');
-        });
-    }
+    // Mobile menu close icon logic (event delegation for robustness)
+    document.body.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'closeMobileMenu') {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu) {
+                mobileMenu.classList.remove('active');
+                const hamburger = document.querySelector('.hamburger');
+                if (hamburger) hamburger.classList.remove('active');
+            }
+        }
+    });
 });
 
 // Utility function for smooth animations

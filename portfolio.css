@@ -22,6 +22,16 @@ body {
   overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
+/* Remove default box-shadow from cards, buttons, etc. */
+.card, .section, .project-card, .tech-category, .education-card, .author-section, .footer-social a, .project-links a, .submit-btn, button, .btn {
+  box-shadow: none !important;
+}
+
+/* Only apply box-shadow on hover/focus for interactive elements */
+.project-card:hover, .tech-category:hover, .education-card:hover, .footer-social a:hover, .project-links a:hover, .submit-btn:hover, button:hover, .btn:hover {
+  box-shadow: var(--accent-shadow) !important;
+}
+
 /* ===== HERO SECTION ===== */
 .hero {
   position: relative;
@@ -108,8 +118,8 @@ body {
 .hero-section-tags span:hover {
   background: var(--primary-purple);
   color: var(--text-color);
-  box-shadow: 0 6px 9px #030707;
-}
+    /* box-shadow: 0 6px 9px #030707; */
+  }
 
 /* ===== TECH STACK ===== */
 .tech {
@@ -136,13 +146,13 @@ body {
   border-radius: 12px;
   padding: 18px;
   background-color: var(--light-purple-bg);
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
   transition: box-shadow 0.2s, transform 0.2s;
 }
 
 .tech-category:hover {
   transform: translateY(-5px) scale(1.02);
-  box-shadow: var(--accent-shadow);
+  /* box-shadow: var(--accent-shadow); */
 }
 
 .tech-category h3 {
@@ -167,7 +177,7 @@ body {
   padding: 8px 12px;
   background-color: rgba(255, 215, 0, 0.1);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.15);
+  /* box-shadow: 0 2px 8px rgba(255, 215, 0, 0.15); */
   font-size: 0.95rem;
   font-weight: 500;
   color: var(--accent-gold);
@@ -179,7 +189,7 @@ body {
   background-color: var(--accent-gold);
   color: var(--dark-purple);
   transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  /* box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3); */
 }
 
 /* ===== PROJECTS SECTION ===== */
@@ -200,14 +210,14 @@ body {
   background-color: var(--card-bg);
   padding: 18px;
   border-radius: 12px;
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
   transition: box-shadow 0.2s, transform 0.2s;
   border: 1px solid var(--primary-purple);
 }
 
 .project-card:hover {
   transform: translateY(-5px) scale(1.02);
-  box-shadow: var(--accent-shadow);
+  /* box-shadow: var(--accent-shadow); */
 }
 
 .project-card h3 {
@@ -288,7 +298,7 @@ footer::before {
   color: var(--primary-purple);
   transform: translateY(-3px) scale(1.1);
   background: rgba(255, 215, 0, 0.2);
-  box-shadow: var(--accent-shadow);
+  /* box-shadow: var(--accent-shadow); */
 }
 
 /* ===== CONTACT FORM ===== */
@@ -326,7 +336,7 @@ footer::before {
   padding: 12px 16px;
   color: var(--text-color);
   font-size: 1rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  /* transition: border-color 0.2s, box-shadow 0.2s; */
 }
 
 .form-group input::placeholder,
@@ -338,7 +348,7 @@ footer::before {
 .form-group textarea:focus {
   outline: none;
   border-color: var(--primary-purple);
-  box-shadow: 0 0 0 3px rgba(126, 75, 255, 0.1);
+  /* box-shadow: 0 0 0 3px rgba(126, 75, 255, 0.1); */
 }
 
 .form-group textarea {
@@ -384,7 +394,7 @@ footer::before {
   background: var(--accent-gold);
   margin: 15px auto 0;
   border-radius: 2px;
-  box-shadow: var(--accent-shadow);
+  /* box-shadow: var(--accent-shadow); */
 }
 
 /* ===== EXPERIENCE & EDUCATION ===== */
@@ -408,7 +418,7 @@ footer::before {
   bottom: 0;
   width: 2px;
   background: var(--accent-gold);
-  box-shadow: var(--accent-shadow);
+  /* box-shadow: var(--accent-shadow); */
 }
 
 .timeline-item {
@@ -425,14 +435,14 @@ footer::before {
   background: var(--accent-gold);
   border-radius: 50%;
   border: 3px solid var(--card-bg);
-  box-shadow: var(--accent-shadow);
+  /* box-shadow: var(--accent-shadow); */
 }
 
 .timeline-content {
   background: var(--light-purple-bg);
   padding: 20px;
   border-radius: 12px;
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
   border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
@@ -476,7 +486,7 @@ footer::before {
   background: var(--card-bg);
   padding: 20px;
   border-radius: 12px;
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
   display: flex;
   align-items: flex-start;
   gap: 16px;
@@ -486,7 +496,7 @@ footer::before {
 
 .education-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--accent-shadow);
+  /* box-shadow: var(--accent-shadow); */
 }
 
 .education-icon {
@@ -500,7 +510,7 @@ footer::before {
   justify-content: center;
   font-size: 1.2rem;
   flex-shrink: 0;
-  box-shadow: var(--accent-shadow);
+  /* box-shadow: var(--accent-shadow); */
 }
 
 .education-details h3 {

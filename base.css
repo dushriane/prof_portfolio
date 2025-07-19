@@ -1,3 +1,8 @@
+/* Global box-sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 :root {
   --primary-purple: #7e4bff;
   --dark-purple: #18102b;
@@ -10,9 +15,8 @@
 }
 
 html {
-  box-sizing: border-box;
-  font-size: 14px; /* Smaller base font size */
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  font-size: 14px;
+  overflow-x: hidden;
 }
 
 body {
@@ -70,7 +74,7 @@ header {
   justify-content: space-between;
   padding: 1rem;
   z-index: 100;
-  box-shadow: 0 2px 12px rgba(126, 75, 255, 0.12);
+  /* box-shadow: 0 2px 12px rgba(126, 75, 255, 0.12); */
   box-sizing: border-box;
 }
 
@@ -187,8 +191,8 @@ button, .btn {
   font-family: inherit;
   font-size: 1rem;
   cursor: pointer;
-  box-shadow: var(--shadow);
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+  /* box-shadow: var(--shadow); */
+  transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
 button:hover, .btn:hover {
@@ -229,7 +233,7 @@ input, textarea, select {
 .card {
   background: var(--card-bg);
   border-radius: 16px;
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
   padding: 2rem;
 }
 
@@ -306,7 +310,7 @@ hr {
 .login-card, .register-card {
   background: var(--card-bg);
   border-radius: 16px;
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
   padding: 2rem;
   width: 100%;
   max-width: 400px;
@@ -386,6 +390,47 @@ a[href*="reset-password"] {
 a[href*="reset-password"]:hover {
   color: var(--primary-purple);
   text-decoration: underline;
+}
+
+/* Improved form alignment and full-width fields/buttons */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  margin-bottom: 1.2rem;
+}
+.form-group label {
+  margin-bottom: 0.2rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="file"],
+.form-group textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: 1.1rem;
+  padding: 0.8em 1em;
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1.5px solid var(--accent-purple);
+  border-radius: 8px;
+}
+.form-group textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-btn, #resetBtn {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-top: 1.2rem;
+  padding: 0.9em 1em;
+  font-size: 1.1rem;
 }
 
 /* Responsive adjustments for login/register */

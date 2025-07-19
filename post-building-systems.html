@@ -25,7 +25,8 @@
             </div>
         </header>
         
-        <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu" id="mobileMenu" style="z-index: 9999; position: fixed;">
+            <span class="close-menu" id="closeMobileMenu">&times;</span>
             <div class="nav">
                 <a href="index.html">PORTFOLIO</a>
                 <a href="blog.html">BLOG</a>
@@ -216,13 +217,13 @@ async function createUser(userData) {
                 </div>
 
                 <div class="like-bookmark-section">
-                    <button class="like-btn" data-post-id="POST_ID">
-                        ❤️ Like <span class="like-count">0</span>
-                    </button>
+                <button class="like-btn" data-post-id="POST_ID">
+                    ❤️ Like <span class="like-count">0</span>
+                </button>
 
-                    <button class="bookmark-btn" data-post-id="POST_ID">
-                        🔖 Bookmark
-                    </button>
+                <button class="bookmark-btn" data-post-id="POST_ID">
+                    🔖 Bookmark
+                </button>
                 </div>
 
                 <!-- Comments Section -->
