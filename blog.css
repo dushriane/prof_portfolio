@@ -555,142 +555,6 @@ h1 {
   color: var(--accent-purple);
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .filter-tags {
-    gap: 10px;
-    margin: 30px auto;
-  }
-  
-  .filter-tags span {
-    padding: 8px 16px;
-    font-size: 13px;
-  }
-  
-  .thoughts-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 0 20px;
-  }
-  
-  .thought-card {
-    padding: 20px;
-  }
-  
-  .blog-post {
-    padding: 20px 15px;
-  }
-  
-  .blog-post-title {
-    font-size: 2rem;
-  }
-  
-  .blog-image {
-    height: 200px;
-  }
-  
-  .blog-post-content {
-    font-size: 1rem;
-  }
-  
-  .blog-post-content h2 {
-    font-size: 1.5rem;
-  }
-  
-  .blog-post-content h3 {
-    font-size: 1.2rem;
-  }
-  
-  /* Hide auth buttons on mobile - they're in mobile menu */
-  .auth-buttons {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .thoughts-grid {
-    padding: 0 15px;
-  }
-  
-  .filter-tags {
-    gap: 8px;
-  }
-  
-  .filter-tags span {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-  
-  .blog-post {
-    padding: 15px 10px;
-  }
-  
-  .blog-post-title {
-    font-size: 1.8rem;
-  }
-  
-  .blog-post-content {
-    font-size: 0.95rem;
-  }
-  
-  .blog-post-content h2 {
-    font-size: 1.4rem;
-  }
-  
-  .blog-post-content h3 {
-    font-size: 1.1rem;
-  }
-  
-  .blog-post-content ul,
-  .blog-post-content ol {
-    padding-left: 20px;
-  }
-  
-  #search-form {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  #search-form button {
-    width: 100%;
-  }
-}
-
-@media (max-width: 320px) {
-  .thoughts-grid {
-    padding: 0 10px;
-  }
-  
-  .thought-card {
-    padding: 15px;
-  }
-  
-  .blog-post {
-    padding: 10px 5px;
-  }
-  
-  .blog-post-title {
-    font-size: 1.6rem;
-  }
-  
-  .blog-post-content {
-    font-size: 0.9rem;
-  }
-  
-  .blog-post-content h2 {
-    font-size: 1.3rem;
-  }
-  
-  .blog-post-content h3 {
-    font-size: 1rem;
-  }
-  
-  .blog-post-content ul,
-  .blog-post-content ol {
-    padding-left: 15px;
-  }
-} 
-
 .close-menu {
   position: absolute;
   top: 18px;
@@ -833,18 +697,7 @@ h1 {
   border-radius: 12px;
   border: 1px solid rgba(126, 75, 255, 0.2);
 }
-@media (max-width: 600px) {
-  .author-section {
-    flex-direction: column;
-    text-align: center;
-    padding: 20px;
-  }
-  .author-avatar {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 10px;
-  }
-}
+
 
 /* Code block syntax highlighting */
 .blog-post-content pre code {
@@ -880,11 +733,7 @@ h1 {
   margin-bottom: 1.5rem;
   gap: 10px;
 }
-@media (max-width: 600px) {
-  .editor-container h1 {
-    font-size: 1.3rem;
-  }
-}
+
 
 #post-title, .editor-container input[type="text"] {
   width: 100%;

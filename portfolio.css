@@ -550,40 +550,23 @@ footer::before {
   z-index: 1;
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
-@media (min-width: 375px) {
-  .hero h1 { font-size: 2.5rem; }
-  .hero p { font-size: 1.2rem; }
-  .tech-category, .project-card, .education-card { padding: 22px; }
+footer .contact-form {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-@media (min-width: 425px) {
-  .hero h1 { font-size: 2.8rem; }
-  .hero p { font-size: 1.3rem; }
-  .tech-category, .project-card, .education-card { padding: 26px; }
-}
+/* RESPONSIVE DESIGN */
 
-@media (min-width: 768px) {
-  .hero { padding: 60px 30px; }
-  .tech { padding: 60px 30px; }
-  .projects-section { padding: 60px 30px; }
-  .experience, .education { padding: 60px 30px; }
-  .tech-stack { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-  .projects-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-  .education-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-}
+/* MAX WIDTH 375PX */
 
-@media (min-width: 1024px) {
-  .hero h1 { font-size: 4rem; }
-  .hero p { font-size: 1.5rem; }
-  .tech-category, .project-card, .education-card { padding: 32px; }
-}
+/* MAX WIDTH 425PX */
 
-@media (max-width: 374px) {
-  .hero h1 { font-size: 2rem; }
-  .hero p { font-size: 1rem; }
-  .section-title { font-size: 1.5rem; }
-  .tech-category, .project-card, .education-card { padding: 16px; }
-  .hero { padding: 40px 8px; }
-  .tech, .projects-section, .experience, .education { padding: 30px 8px; }
-}
+
+/* MAX WIDTH 768PX */ 
+
+
+/* MAX WIDTH 1024PX */

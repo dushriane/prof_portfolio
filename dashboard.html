@@ -42,6 +42,25 @@
         </div>
 
         <div class="dashboard-container">
+            <aside class="sidebar section" id="sidebar">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+                <h3 class="sidebar-title">Quick Actions</h3>
+                <div class="quick-actions">
+                    <button class="quick-action-btn" onclick="window.location.href='createpost.html'">
+                        📝 Create New Post
+                    </button>
+                    <button class="quick-action-btn" onclick="viewAnalytics()">
+                        📊 View Analytics
+                    </button>
+                    <button class="quick-action-btn" onclick="manageCategories()">
+                        🏷️ Manage Categories
+                    </button>
+                    <button class="quick-action-btn" onclick="exportData()">
+                        📤 Export Data
+                    </button>
+                    <button class="quick-action-btn logout-btn" onclick="logout()" style="background: #e74c3c; color: white;">Logout</button>
+                </div>
+            </aside>
             <main class="dashboard">
                 <div class="dashboard-header section">
                     <div>
@@ -49,7 +68,8 @@
                         <p>Manage your blog posts and analytics</p>
                     </div>
                 </div>
-                <div class="quick-actions">
+                <!-- Mobile quick actions (hidden on >=768px) -->
+                <div class="quick-actions mobile-quick-actions">
                     <button class="quick-action-btn" onclick="window.location.href='createpost.html'">
                         📝 Create New Post
                     </button>
