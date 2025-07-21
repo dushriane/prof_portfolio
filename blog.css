@@ -727,13 +727,24 @@ h1 {
 } 
 
 /* Create Post Page Improvements */
-.editor-container h1 {
-  font-size: 2.2rem;
-  margin-bottom: 1.5rem;
+.editor-container{
+  display: flex;
+  flex-direction: column;
   gap: 10px;
+  padding: 20px;
+}
+.editor-container h1 {
+  font-size: 20px;
+  gap:  0 15px;
+  margin: 0;
 }
 
-
+.editor-container > .form-group{
+  margin: 0;
+}
+.blog-form{
+  gap: 15px;
+}
 #post-title, .editor-container input[type="text"] {
   width: 100%;
   max-width: 100%;
@@ -744,7 +755,7 @@ h1 {
   color: var(--text-color);
   border: 1.5px solid var(--accent-purple);
   border-radius: 8px;
-  margin-bottom: 1.2rem;
+  margin: 0;
 }
 
 .ql-toolbar.ql-snow {
@@ -777,6 +788,23 @@ h1 {
   color: var(--dark-purple) !important;
   min-height: 250px;
 } 
+.form-actions{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.image-upload-container{
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.btn-upload{
+  padding: 8px;
+}
+.btn-draft, .btn-submit{
+  padding: 10px;
+}
+
 
 /* RESPONSIVE DESIGN */
 
@@ -819,6 +847,45 @@ h1 {
 
   /* General Layout */
   .section, .card { padding: 3rem; }
+
+  /* blog creation page */
+  .editor-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 60px;
+  }
+  .editor-container h1 {
+    font-size: 20px;
+    gap:  0 15px;
+    margin: 0;
+  }
+
+  .editor-container > .form-group{
+    margin: 0;
+  }
+  .blog-form{
+    gap: 15px;
+  }
+  .form-actions{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .image-upload-container{
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px
+  }
+  .btn-upload{
+    padding: 8px;
+    flex-grow: 1;
+  }
+  .btn-draft, .btn-submit{
+    padding: 10px;
+  }
+
 }
 
 @media (min-width: 1024px) {
@@ -847,4 +914,41 @@ h1 {
     align-items: center;
     max-width: 1000px;
   }
+  .editor-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 80px;
+    align-items: center;
+  }
+  .editor-container h1 {
+    font-size: 20px;
+    gap:  0 15px;
+    margin: 0;
+  }
+
+  .editor-container > .form-group{
+    margin: 0;
+  }
+  .blog-form{
+    gap: 15px;
+  }
+  .form-actions{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .image-upload-container{
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 190px;
+  }
+  .btn-upload{
+    padding: 8px;
+  }
+  .btn-draft, .btn-submit{
+    padding: 10px;
+  }
+
 }

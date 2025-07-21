@@ -21,18 +21,16 @@ body, .dashboard-container, .dashboard {
   flex-direction: column;
   align-items: flex-start;
   padding: 24px 18px 18px 18px;
-  background-color: var(--card-bg);
-  border-radius: 12px;
-  /* box-shadow: var(--shadow); */
-  border: 1px solid rgba(126, 75, 255, 0.1);
   width: 100%;
   box-sizing: border-box;
+  gap: 8px;
 }
 
 .dashboard-title {
   font-family: 'Montserrat', sans-serif;
   font-size: 32px;
   color: var(--primary-purple);
+  margin: 0;
 }
 
 .dashboard-header p {
@@ -44,25 +42,28 @@ body, .dashboard-container, .dashboard {
 }
 
 .dashboard-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 30px;
-  margin-bottom: 40px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+  padding: 10px;
 }
 
 .stat-card {
   background-color: var(--card-bg);
-  padding: 30px;
+  padding: 10px;
   border-radius: 12px;
-  /* box-shadow: var(--shadow); */
   text-align: center;
   transition: all 0.3s ease;
   border: 1px solid rgba(126, 75, 255, 0.1);
+  width: 140px;
+  height: 112px;
 }
 
 .stat-card:hover {
   transform: translateY(-3px);
-  /* box-shadow: 0 8px 25px rgba(126, 75, 255, 0.15); */
 }
 
 .stat-number {
@@ -217,7 +218,7 @@ body, .dashboard-container, .dashboard {
   flex-wrap: wrap;
   gap: 12px;
   margin: 0;
-  padding: 18px 0 0 0;
+  padding: 18px;
 }
 
 .quick-action-btn {
@@ -338,6 +339,7 @@ body, .dashboard-container, .dashboard {
   gap: 1rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
+  padding: 0 10px;
 }
 
 .filter-label {
@@ -411,7 +413,11 @@ body, .dashboard-container, .dashboard {
 .dashboard-post .admin-actions {
   display: flex;
   gap: 8px;
-  margin-top: 4px;
+  margin: 0;
+}
+.admin-actions{
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .delete-comment-btn, .hide-comment-btn, .delete-post-btn, .hide-post-btn {
@@ -433,11 +439,6 @@ body, .dashboard-container, .dashboard {
 }
 .hide-comment-btn:hover, .hide-post-btn:hover {
   background: #8e44ad;
-}
-
-/* Remove default box-shadow from cards, buttons, etc. */
-.dashboard-header, .stat-card, .dashboard-posts, .dashboard-post, .quick-action-btn, .sidebar, .posts-section, .submit-btn, button, .btn {
-  box-shadow: none !important;
 }
 
 /* Only apply box-shadow on hover/focus for interactive elements */
