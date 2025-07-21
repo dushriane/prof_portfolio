@@ -64,8 +64,7 @@ h1 {
   gap: 15px;
   justify-content: center;
   max-width: 800px;
-  margin: 40px auto;
-  padding: 0 10px;
+  padding: 10px 0;
 }
 
 .filter-tags span {
@@ -787,7 +786,7 @@ h1 {
   /* Navigation */
   header { padding: 1.5rem 3rem; }
   .mobile-menu { display: none !important; }
-  header > .nav { display: flex !important; gap: 2.5rem; }
+  header > .nav { display: flex !important; gap: 0; }
   .hamburger { display: none !important; }
   .nav a { font-size: 1.1rem; padding: 0.7rem 1.5rem; }
 
@@ -798,7 +797,12 @@ h1 {
   /* Forms */
   #search-form, .contact-form { max-width: 600px; margin-left: auto; margin-right: auto; }
   #search-input, .contact-form input, .contact-form textarea { font-size: 1.1rem; padding: 1.1em 1.2em; }
-
+  .filter-tags {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding: 20px 0;
+  }
   /* Buttons */
   button, .btn, .submit-btn { font-size: 1.1rem; padding: 1em 2em; }
 
@@ -833,4 +837,14 @@ h1 {
   footer .contact-form { max-width: 600px; }
   .footer-social { gap: 3rem; }
   .section, .card { padding: 4rem; }
+  .filter-tags {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 15px;
+    justify-content: center;
+    padding: 20px 0;
+    align-items: center;
+    max-width: 1000px;
+  }
 }

@@ -199,8 +199,8 @@ body {
 }
 
 .projects-grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
   margin: 24px auto 0;
   max-width: 1000px;
@@ -317,7 +317,6 @@ footer::before {
   flex-direction: column;
   gap: 15px;
   max-width: 500px;
-  /* margin: 0 auto; */
   position: relative;
   z-index: 1;
 }
@@ -551,12 +550,12 @@ footer::before {
 }
 
 footer .contact-form {
-  margin-left: auto;
-  margin-right: auto;
+  /* margin-left: auto;
+  margin-right: auto; */
   padding: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
 }
 
 /* RESPONSIVE DESIGN */
@@ -564,17 +563,22 @@ footer .contact-form {
 /* MIN WIDTH 768PX */
 @media (min-width: 768px) {
   /* Navigation */
-  header { padding: 1.5rem 3rem; }
+  header { padding: 1.2rem 2rem; }
   .mobile-menu { display: none !important; }
   header > .nav { display: flex !important; gap: 2.5rem; }
   .hamburger { display: none !important; }
   .nav a { font-size: 1.1rem; padding: 0.7rem 1.5rem; }
 
   /* Cards/Grids */
-  .projects-grid, .thoughts-grid, .education-grid, .dashboard-stats {
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2.5rem;
-    padding: 0 2rem;
+ .thoughts-grid, .education-grid, .dashboard-stats {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .projects-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    max-width: 1000px;
   }
   .project-card, .thought-card, .education-card, .stat-card, .dashboard-post {
     padding: 2.5rem;
@@ -607,7 +611,7 @@ footer .contact-form {
   .comments-section { max-width: 700px; margin: 2rem auto 0 auto; }
 
   /* Footer */
-  footer .contact-form { max-width: 500px; margin-left: auto; margin-right: auto; }
+  footer .contact-form { max-width: 500px; }
   .footer-social { gap: 2.5rem; }
 
   /* General Layout */
@@ -617,20 +621,37 @@ footer .contact-form {
 
 /* MIN WIDTH 1024PX */
 @media (min-width: 1024px) {
-  header { padding: 2.5rem 6rem; }
+  header { padding: 2rem 4rem; }
   .nav a { font-size: 1.2rem; padding: 1rem 2.5rem; }
-  .projects-grid, .thoughts-grid, .education-grid, .dashboard-stats {
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  .projects-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 0 2rem;
+  }
+  .education-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 0 2rem;
+  }
+  .dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 3rem;
     padding: 0 4rem;
   }
   .project-card, .thought-card, .education-card, .stat-card, .dashboard-post {
-    padding: 3rem;
+    padding: 1.5rem;
     font-size: 1.15rem;
   }
   .timeline { padding-left: 100px; }
-  .login-card, .register-card, .contact-form, .reset-card {
+  .login-card, .register-card, .reset-card {
     max-width: 600px;
+    padding: 3rem;
+  }
+  .contact-form {
+    max-width: 700px;
     padding: 3rem;
   }
   .editor-container { max-width: 1000px; margin: 0 auto; }
@@ -646,5 +667,44 @@ footer .contact-form {
   footer .contact-form { max-width: 600px; }
   .footer-social { gap: 3rem; }
   .section, .card { padding: 4rem; }
-  .hero, .tech, .projects-section, .experience, .education { padding: 5rem 4rem; }
+  .hero, .tech, .projects-section, .experience, .education { padding: 4rem 2rem; }
+
+  /* Dashboard sidebar for quick actions */
+  .dashboard-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .quick-actions {
+    flex-direction: column;
+    min-width: 220px;
+    max-width: 260px;
+    margin-right: 2rem;
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 2rem 1rem;
+    gap: 1.5rem;
+  }
+  .dashboard {
+    flex: 1;
+  }
+}
+
+/* TIMELINE DOT ALIGNMENT FIX */
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+}
+.timeline-dot {
+  margin-top: 20px;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+.timeline-content {
+  flex: 1;
 }

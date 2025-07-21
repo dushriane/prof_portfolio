@@ -462,9 +462,9 @@ body, .dashboard-container, .dashboard {
 
   /* Cards/Grids */
   .dashboard-stats { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 40px; }
-  .stat-card { padding: 40px; font-size: 1.1rem; }
+  .stat-card { padding: 30px; font-size: 1.1rem; }
   .dashboard-content { grid-template-columns: 1fr 350px; gap: 60px; }
-  .posts-section, .dashboard-posts { padding: 2.5rem 2rem; }
+  .posts-section, .dashboard-posts { padding: 2rem 2rem; }
   .dashboard-post { padding: 2rem; font-size: 1.1rem; }
 
   /* Forms */
@@ -482,14 +482,31 @@ body, .dashboard-container, .dashboard {
 
   /* General Layout */
   .section, .card { padding: 3rem; }
+  .sidebar.section {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 0 2rem;
+    justify-content: center;
+    align-items: center;
+    max-width: 1000px;
+  }
 }
 
 @media (min-width: 1024px) {
   .sidebar { width: 300px; padding: 3rem 2rem 2rem 2rem; }
   .dashboard-header { padding: 40px 48px 32px 48px; }
   .dashboard-title { font-size: 2.5rem; }
-  .dashboard-stats { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 48px; }
-  .stat-card { padding: 48px; font-size: 1.15rem; }
+  .dashboard-stats { 
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 0 2rem;
+    justify-content: center;
+    align-items: center;
+    max-width: 1000px;
+  }
+  .stat-card { padding: 20px; font-size: 1.15rem; }
   .dashboard-content { grid-template-columns: 1fr 400px; gap: 80px; }
   .posts-section, .dashboard-posts { padding: 3rem 3rem; }
   .dashboard-post { padding: 2.5rem; font-size: 1.15rem; }
@@ -500,5 +517,14 @@ body, .dashboard-container, .dashboard {
   .dashboard-post h3 { font-size: 1.5rem; }
   .dashboard-post p { font-size: 1.1rem; }
   .dashboard-post .admin-actions { gap: 16px; }
-  .section, .card { padding: 4rem; }
+  .section, .card { padding: 3rem; }
+  .sidebar.section {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 0 2rem;
+    justify-content: center;
+    align-items: center;
+    max-width: 1000px;
+  }
 }

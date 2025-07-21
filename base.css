@@ -74,7 +74,6 @@ header {
   justify-content: space-between;
   padding: 1rem;
   z-index: 100;
-  /* box-shadow: 0 2px 12px rgba(126, 75, 255, 0.12); */
   box-sizing: border-box;
 }
 
@@ -131,7 +130,6 @@ button, .btn {
   font-family: inherit;
   font-size: 1rem;
   cursor: pointer;
-  /* box-shadow: var(--shadow); */
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
@@ -173,7 +171,6 @@ input, textarea, select {
 .card {
   background: var(--card-bg);
   border-radius: 16px;
-  /* box-shadow: var(--shadow); */
   padding: 2rem;
 }
 
@@ -200,7 +197,6 @@ hr {
 .login-card, .register-card {
   background: var(--card-bg);
   border-radius: 16px;
-  /* box-shadow: var(--shadow); */
   padding: 2rem;
   width: 100%;
   max-width: 400px;
@@ -420,7 +416,7 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
 
 @media (min-width: 768px) {
   /* Navigation */
-  header { padding: 1.5rem 3rem; }
+  header { padding: 1.2rem 2rem; }
   .mobile-menu { display: none !important; }
   header > .nav { display: flex !important; gap: 2.5rem; }
   .hamburger { display: none !important; }
@@ -445,7 +441,7 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
 }
 
 @media (min-width: 1024px) {
-  header { padding: 2.5rem 6rem; }
+  header { padding: 2rem 4rem; }
   .nav a { font-size: 1.2rem; padding: 1rem 2.5rem; }
   .card, .section { padding: 4rem; }
   .login-card, .register-card, .contact-form, .reset-card { max-width: 600px; padding: 3rem; }
