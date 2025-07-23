@@ -581,8 +581,16 @@ footer .contact-form {
     max-width: 1000px;
   }
   .project-card, .thought-card, .education-card, .stat-card, .dashboard-post {
+
     padding: 2.5rem;
     font-size: 1.1rem;
+  }
+  .project-image{
+    height: 200px;
+    overflow: hidden;
+    border-radius: 12px;
+    width: 100%;
+    
   }
   .timeline { padding-left: 60px; }
 
@@ -684,17 +692,19 @@ footer .contact-form {
   .section, .card { padding: 4rem; }
   .hero, .tech, .projects-section, .experience, .education { padding: 4rem 2rem; }
 
-  /* Dashboard sidebar for quick actions */
+/* === DASHBOARD SIDEBAR LAYOUT (>=768px) === */
+@media (min-width: 768px) {
   .dashboard-container {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 2rem;
     align-items: flex-start;
+    width: 100%;
   }
   .quick-actions {
     flex-direction: column;
     min-width: 220px;
     max-width: 260px;
-    margin-right: 2rem;
     position: sticky;
     top: 2rem;
     height: fit-content;
@@ -703,6 +713,7 @@ footer .contact-form {
     box-shadow: var(--shadow);
     padding: 2rem 1rem;
     gap: 1.5rem;
+    z-index: 2;
   }
   .dashboard {
     flex: 1;
@@ -722,4 +733,4 @@ footer .contact-form {
 }
 .timeline-content {
   flex: 1;
-}
+}}

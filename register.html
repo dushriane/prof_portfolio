@@ -29,13 +29,8 @@
                     <input type="password" id="password" name="password" required>
                 </div>
                 <div class="form-group">
-                    <label for="bio">Bio (optional)</label>
-                    <textarea id="bio" name="bio" rows="2" placeholder="Tell us about yourself..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="profilePicture">Profile Picture (optional)</label>
-                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
-                    <img id="profilePicPreview" class="profile-pic-preview" style="display:none;" />
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
                 </div>
                 <button type="submit" class="register-btn" id="registerBtn">Register</button>
             </form>
@@ -52,24 +47,22 @@
         const registerForm = document.getElementById('registerForm');
         const registerBtn = document.getElementById('registerBtn');
         const messageDiv = document.getElementById('message');
-        const profilePictureInput = document.getElementById('profilePicture');
-        const profilePicPreview = document.getElementById('profilePicPreview');
-
-        profilePictureInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                profilePicPreview.src = URL.createObjectURL(file);
-                profilePicPreview.style.display = 'block';
-            } else {
-                profilePicPreview.style.display = 'none';
-            }
-        });
 
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             registerBtn.disabled = true;
             registerBtn.textContent = 'Registering...';
             messageDiv.innerHTML = '';
+
+            // Password match check
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (password !== confirmPassword) {
+                messageDiv.innerHTML = '<div class="error-message">Passwords do not match.</div>';
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Register';
+                return;
+            }
 
             const formData = new FormData(registerForm);
 
