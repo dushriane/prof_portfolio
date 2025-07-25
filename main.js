@@ -1,12 +1,12 @@
 
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-        }
-    });
-}, observerOptions);
+// const observer = new IntersectionObserver((entries) => {
+//     entries.forEach(entry => {
+//         if (entry.isIntersecting) {
+//             entry.target.classList.add('visible');
+//         }
+//     });
+// }, observerOptions);
 
 // Mobile menu functionality
 function toggleMobileMenu() {
