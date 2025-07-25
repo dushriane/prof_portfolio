@@ -161,24 +161,29 @@
                 window.location.href = 'login.html';
             }
 
+            // Show/hide dashboard stats for admin only
+            function isAdmin() {
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                return user && user.role === 'admin';
+            }
             async function loadDashboardData() {
+                const token = localStorage.getItem('authToken');
                 try {
-                    const token = localStorage.getItem('authToken');
-                    
-                    // Load stats
-                    const statsResponse = await fetch('http://localhost:3000/api/dashboard/stats', {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                    const stats = await statsResponse.json();
-                    
-                    // Update stats display
-                    document.querySelector('.stat-card:nth-child(1) .stat-number').textContent = stats.totalPosts;
-                    document.querySelector('.stat-card:nth-child(2) .stat-number').textContent = stats.totalViews;
-                    document.querySelector('.stat-card:nth-child(3) .stat-number').textContent = '8'; // Categories
-                    document.querySelector('.stat-card:nth-child(4) .stat-number').textContent = '95%'; // Engagement
-                    
+                    // Show stats only for admin
+                    if (isAdmin()) {
+                        const statsResponse = await fetch('http://localhost:3000/api/admin/dashboard/stats', {
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+                        const stats = await statsResponse.json();
+                        document.querySelector('.stat-card:nth-child(1) .stat-number').textContent = stats.totalPosts;
+                        document.querySelector('.stat-card:nth-child(2) .stat-number').textContent = stats.totalUsers;
+                        document.querySelector('.stat-card:nth-child(3) .stat-number').textContent = stats.totalComments;
+                        document.querySelector('.stat-card:nth-child(4) .stat-number').textContent = '95%'; // Engagement
+                    } else {
+                        document.querySelector('.dashboard-stats').style.display = 'none';
+                    }
                     // Load posts
                     const postsResponse = await fetch('http://localhost:3000/api/posts', {
                         headers: {
@@ -186,7 +191,6 @@
                         }
                     });
                     const postsData = await postsResponse.json();
-                    
                     // Update posts display
                     const postsContainer = document.getElementById('dashboardPosts');
                     postsContainer.innerHTML = '';
@@ -212,11 +216,12 @@
                         `;
                         postsContainer.appendChild(postElement);
                     });
-                    
                 } catch (error) {
                     console.error('Error loading dashboard data:', error);
+                    document.querySelector('.dashboard-stats').style.display = 'none';
                 }
             }
+            
 
             function createNewPost() {
                 alert('New post creation feature coming soon!');

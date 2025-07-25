@@ -150,25 +150,38 @@
         });
 
         // Save draft functionality
-        document.getElementById('save-draft').addEventListener('click', function() {
+        document.getElementById('save-draft').addEventListener('click', async function() {
             const content = quill.root.innerHTML;
-            const title = document.getElementById('post-title').value;
-            //const author = document.getElementById('author-name').value;
-            
-            const draft = {
+            const titleElem = document.getElementById('post-title');
+            const title = titleElem ? titleElem.value : '';
+            const categoryElem = document.getElementById('category');
+            const category = categoryElem ? categoryElem.value : 'General';
+            const postData = {
                 title,
-                author,
                 content,
-                createdAt: new Date().toISOString(),
-                isDraft: true
+                excerpt: content.substring(0, 150),
+                category,
+                published: false
             };
-            
-            // Save to localStorage or send to drafts API
-            const drafts = JSON.parse(localStorage.getItem('drafts')) || [];
-            drafts.push(draft);
-            localStorage.setItem('drafts', JSON.stringify(drafts));
-            
-            alert('Draft saved successfully!');
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch('http://localhost:3000/api/posts/draft', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(postData)
+                });
+                if (response.ok) {
+                    alert('Draft saved successfully!');
+                } else {
+                    const data = await response.json();
+                    throw new Error(data.error || 'Failed to save draft');
+                }
+            } catch (error) {
+                alert('Error saving draft: ' + error.message);
+            }
         });
 
         function toggleMobileMenu() {

@@ -20,6 +20,18 @@
         <section class="post-detail section" id="postDetailContainer">
             <!-- Post content will be rendered here -->
         </section>
+        <section class="post-interactions section" id="postInteractions" style="display:none;">
+            <button id="likeBtn"><i class="far fa-heart"></i> <span id="likeCount">0</span> Like</button>
+            <button id="bookmarkBtn"><i class="far fa-bookmark"></i> Bookmark</button>
+        </section>
+        <section class="comments section" id="commentsSection" style="display:none;">
+            <h2>Comments</h2>
+            <div id="commentsList"></div>
+            <form id="commentForm">
+                <textarea id="commentInput" placeholder="Write a comment..." required></textarea>
+                <button type="submit">Post Comment</button>
+            </form>
+        </section>
     </main>
     <script>
     // Utility to get query param
@@ -27,8 +39,13 @@
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(name);
     }
+    let currentPost = null;
+    let postId = null;
+    function isLoggedIn() {
+        return !!localStorage.getItem('authToken');
+    }
     async function fetchAndRenderPost() {
-        const postId = getQueryParam('id');
+        postId = getQueryParam('id');
         if (!postId) {
             document.getElementById('postDetailContainer').innerHTML = '<div>Post not found.</div>';
             return;
@@ -37,6 +54,7 @@
             const response = await fetch(`http://localhost:3000/api/posts/${postId}`);
             if (!response.ok) throw new Error('Post not found');
             const post = await response.json();
+            currentPost = post;
             document.getElementById('postDetailContainer').innerHTML = `
                 <h1 class="post-title">${post.title}</h1>
                 <div class="post-meta">
@@ -48,10 +66,79 @@
                 </div>
                 <div class="post-content">${post.content}</div>
             `;
+            if (isLoggedIn()) {
+                document.getElementById('postInteractions').style.display = 'block';
+                document.getElementById('commentsSection').style.display = 'block';
+                renderLikeBookmark(post);
+                fetchAndRenderComments();
+            }
         } catch (error) {
             document.getElementById('postDetailContainer').innerHTML = '<div>Error loading post.</div>';
         }
     }
+    function renderLikeBookmark(post) {
+        // Like
+        document.getElementById('likeCount').textContent = post.likes ? post.likes.length : 0;
+        document.getElementById('likeBtn').onclick = async function() {
+            const token = localStorage.getItem('authToken');
+            const response = await fetch(`http://localhost:3000/api/posts/${post._id}/like`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('likeCount').textContent = data.likesCount;
+            }
+        };
+        // Bookmark
+        document.getElementById('bookmarkBtn').onclick = async function() {
+            const token = localStorage.getItem('authToken');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!user || !user.id) return;
+            const response = await fetch(`http://localhost:3000/api/users/me/bookmarks/${post._id}`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                alert('Bookmarked!');
+            }
+        };
+    }
+    // Comments
+    async function fetchAndRenderComments() {
+        const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`);
+        const comments = await response.json();
+        const commentsList = document.getElementById('commentsList');
+        commentsList.innerHTML = '';
+        if (!Array.isArray(comments) || comments.length === 0) {
+            commentsList.innerHTML = '<div>No comments yet.</div>';
+            return;
+        }
+        comments.forEach(comment => {
+            const div = document.createElement('div');
+            div.className = 'comment';
+            div.innerHTML = `<b>${comment.author?.username || 'User'}:</b> ${comment.content}`;
+            commentsList.appendChild(div);
+        });
+    }
+    document.getElementById('commentForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const token = localStorage.getItem('authToken');
+        const content = document.getElementById('commentInput').value;
+        if (!content) return;
+        const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ content })
+        });
+        if (response.ok) {
+            document.getElementById('commentInput').value = '';
+            fetchAndRenderComments();
+        }
+    });
     document.addEventListener('DOMContentLoaded', fetchAndRenderPost);
     </script>
 </body>
