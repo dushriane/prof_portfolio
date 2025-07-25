@@ -246,6 +246,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // Utility: Check if user is logged in
+    function isLoggedIn() {
+        return !!localStorage.getItem('authToken');
+    }
+    // Hide dashboard link if not logged in
+    function updateDashboardLinkVisibility() {
+        const dashboardLink = document.querySelector('.nav a[href="dashboard.html"]');
+        if (dashboardLink) {
+            dashboardLink.style.display = isLoggedIn() ? 'inline-block' : 'none';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', updateDashboardLinkVisibility);
 });
 
 // Utility function for smooth animations

@@ -75,139 +75,8 @@
                 </div>
             </section>
         
-        <section class="thoughts-grid section">
-            <!-- Blog Post Card Example -->
-            <div class="thought-card clickable" data-category="engineering philosophy systems" onclick="window.location.href='post-building-systems.html'">
-                <div class="thought-date">Jan 15, 2025</div>
-                <div class="post-image">
-                    <img src="./images/blogone.jpeg">
-                </div>
-                <div class="author-info">
-                    <img src="./images/profiles/vector.jpg" class="author-pic" alt="Author">
-                    <span class="author-name">Jane Doe</span>
-                </div>
-                <h2 class="thought-title">Building Systems That Last</h2>
-                <p class="thought-description">
-                    Why reliability isn't just optional-it's essential. A deep dive into creating software that stands the test of time.
-                </p>
-                <div class="thought-tags">
-                    <span>Engineering</span>
-                    <span>Philosophy</span>
-                    <span>Systems</span>
-                </div>
-                <div class="blog-interactions visible">
-                    <div class="likes">
-                        <i class="far fa-heart"></i>
-                        <span>0</span>
-                    </div>
-                    <div class="comments">
-                        <i class="far fa-comment"></i>
-                        <span>0</span>
-                    </div>
-                    <div class="bookmark" onclick="event.stopPropagation(); toggleBookmark(this);">
-                        <i class="far fa-bookmark"></i>
-                    </div>
-                </div>
-                <a href="post-building-systems.html" class="read-more">READ MORE </a>
-            </div>
-            <div class="thought-card clickable" data-category="philosophy emotion" onclick="window.location.href='post-emotions-feel-good.html'">
-                <div class="thought-date">Jan 15, 2025</div>
-                <div class="post-image">
-                    <img src="./images/blogtwo.jpg">
-                </div>
-                <div class="author-info">
-                    <img src="./images/profiles/default.jpg" class="author-pic" alt="Author">
-                    <span class="author-name">Liza Smith</span>
-                </div>
-                <h2 class="thought-title">Emotions feel good.</h2>
-                <p class="thought-description">
-                    We were made to feel. What makes things resonate.
-                </p>
-                <div class="thought-tags">
-                    <span>Philosophy</span>
-                    <span>Emotion</span>
-                </div>
-                <div class="blog-interactions visible">
-                    <div class="likes">
-                        <i class="far fa-heart"></i>
-                        <span>0</span>
-                    </div>
-                    <div class="comments">
-                        <i class="far fa-comment"></i>
-                        <span>0</span>
-                    </div>
-                    <div class="bookmark" onclick="event.stopPropagation(); toggleBookmark(this);">
-                        <i class="far fa-bookmark"></i>
-                    </div>
-                </div>
-                <a href="post-emotions-feel-good.html" class="read-more">READ MORE </a>
-            </div>
-            <div class="thought-card" data-category="philosophy emotion design">
-                <div class="thought-date">Jan 15, 2025</div>
-                <div class="post-image">
-                    <img src="./images/blogthree.jpg">
-                </div>
-                <div class="author-info">
-                    <img src="./images/profiles/vector.jpg" class="author-pic" alt="Author">
-                    <span class="author-name">Jane Doe</span>
-                </div>
-                <h2 class="thought-title">Design is 50% of the battle.</h2>
-                <p class="thought-description">
-                    It may look good but does it work? It may work but does it look good? Design is 50% of the battle.
-                </p>
-                <div class="thought-tags">
-                    <span>Philosophy</span>
-                    <span>Emotion</span>
-                    <span>Design</span>
-                </div>
-                <div class="blog-interactions visible">
-                    <div class="likes">
-                        <i class="far fa-heart"></i>
-                        <span>0</span>
-                    </div>
-                    <div class="comments">
-                        <i class="far fa-comment"></i>
-                        <span>0</span>
-                    </div>
-                    <div class="bookmark" onclick="event.stopPropagation(); toggleBookmark(this);">
-                        <i class="far fa-bookmark"></i>
-                    </div>
-                </div>
-                <a href="#" class="read-more">READ MORE </a>
-            </div>
-            <div class="thought-card" data-category="philosophy software community">
-                <div class="thought-date">Jun 26, 2025</div>
-                <div class="post-image">
-                    <img src="./images/blogfour.jpg">
-                </div>
-                <div class="author-info">
-                    <img src="./images/profiles/default.jpg" class="author-pic" alt="Author">
-                    <span class="author-name">Liza Smith</span>
-                </div>
-                <h2 class="thought-title">Not so open, open source.</h2>
-                <p class="thought-description">
-                    Modern day open sourced is not what it used to be. Open sourced is bad.
-                </p>
-                <div class="thought-tags">
-                    <span>Philosophy</span>
-                    <span>Software</span>
-                    <span>Community</span>
-                </div>
-                <div class="blog-interactions visible">
-                    <div class="likes">
-                        <i class="far fa-heart"></i>
-                        <span>0</span>
-                    </div>
-                    <div class="comments">
-                        <i class="far fa-comment"></i>
-                        <span>0</span>
-                    </div>
-                    <div class="bookmark" onclick="event.stopPropagation(); toggleBookmark(this);">
-                        <i class="far fa-bookmark"></i>
-                    </div>
-                </div>
-                <a href="#" class="read-more">READ MORE </a>
-            </div>
+        <section class="thoughts-grid section" id="blogPostsContainer">
+            <!-- Blog posts will be rendered here dynamically -->
         </section>
     </main> 
     
@@ -244,6 +113,86 @@
                 icon.classList.add('far');
             }
         }
+
+        // Fetch and render blog posts dynamically, with optional search and category
+        async function fetchAndRenderPosts({search = '', category = ''} = {}) {
+            const container = document.getElementById('blogPostsContainer');
+            container.innerHTML = '<div>Loading posts...</div>';
+            try {
+                let url = 'http://localhost:3000/api/posts';
+                if (search) {
+                    url = `http://localhost:3000/api/posts/search?q=${encodeURIComponent(search)}`;
+                }
+                if (category && category !== 'all') {
+                    url += (url.includes('?') ? '&' : '?') + `category=${encodeURIComponent(category)}`;
+                }
+                const response = await fetch(url);
+                const data = await response.json();
+                const posts = data.posts || [];
+                if (!Array.isArray(posts) || posts.length === 0) {
+                    container.innerHTML = '<div>No posts found.</div>';
+                    return;
+                }
+                container.innerHTML = '';
+                posts.forEach(post => {
+                    const postCard = document.createElement('div');
+                    postCard.className = 'thought-card clickable';
+                    postCard.setAttribute('data-category', post.category);
+                    postCard.onclick = () => {
+                        window.location.href = `post.html?id=${post._id}`;
+                    };
+                    postCard.innerHTML = `
+                        <div class="thought-date">${new Date(post.publishedAt || post.createdAt).toLocaleDateString()}</div>
+                        <div class="post-image">
+                            <img src="${post.imageUrl || './images/blogone.jpeg'}">
+                        </div>
+                        <div class="author-info">
+                            <img src="./images/profiles/default.jpg" class="author-pic" alt="Author">
+                            <span class="author-name">${post.author?.username || 'Unknown'}</span>
+                        </div>
+                        <h2 class="thought-title">${post.title}</h2>
+                        <p class="thought-description">${post.excerpt || ''}</p>
+                        <div class="thought-tags">
+                            ${(post.tags || []).map(tag => `<span>${tag}</span>`).join('')}
+                        </div>
+                        <div class="blog-interactions visible">
+                            <div class="likes">
+                                <i class="far fa-heart"></i>
+                                <span>${post.likes ? post.likes.length : 0}</span>
+                            </div>
+                            <div class="comments">
+                                <i class="far fa-comment"></i>
+                                <span>${post.commentsCount || 0}</span>
+                            </div>
+                        </div>
+                        <a href="post.html?id=${post._id}" class="read-more">READ MORE </a>
+                    `;
+                    container.appendChild(postCard);
+                });
+            } catch (error) {
+                container.innerHTML = '<div>Error loading posts.</div>';
+            }
+        }
+        // Handle search form
+        const searchForm = document.getElementById('search-form');
+        if (searchForm) {
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const search = document.getElementById('search-input').value;
+                fetchAndRenderPosts({search});
+            });
+        }
+        // Handle filter tags
+        const filterTags = document.querySelectorAll('.filter-tags span');
+        filterTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                filterTags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                const category = tag.getAttribute('data-category');
+                fetchAndRenderPosts({category});
+            });
+        });
+        document.addEventListener('DOMContentLoaded', () => fetchAndRenderPosts());
     </script>
 </html>
 
