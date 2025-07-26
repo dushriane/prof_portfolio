@@ -11,9 +11,10 @@
     </head>
     <body>
         <header>
-            <div class="logo">DUSH</div>
+            <div class="logo">
+                <a href="index.html">DUSH</a>
+            </div>
             <div class="nav">
-                <a href="index.html" class="active">PORTFOLIO</a>
                 <a href="blog.html">BLOG</a>
             </div>
             <div class="hamburger" onclick="toggleMobileMenu()">
@@ -26,9 +27,7 @@
         <div class="mobile-menu" id="mobileMenu">
             <span class="close-menu" id="closeMobileMenu">&times;</span>
             <div class="nav">
-                <a href="index.html" class="active">PORTFOLIO</a>
                 <a href="blog.html">BLOG</a>
-                <a href="dashboard.html">DASHBOARD</a>
             </div>
             <div class="auth-buttons">
                 <div class="auth-button login">
@@ -170,9 +169,6 @@
             <div class="education-grid">
                 <!-- Education Item 1 -->
                 <div class="education-card">
-                    <!-- <div class="education-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div> -->
                     <div class="education-details">
                         <h3>BSIT of Software Engineering</h3>
                         <span class="institution">Adventist University of Central Africa</span>
@@ -185,9 +181,6 @@
                 
                 <!-- Education Item 2 -->
                 <div class="education-card">
-                    <!-- <div class="education-icon">
-                        <i class="fas fa-certificate"></i>
-                    </div> -->
                     <div class="education-details">
                         <h3>High School A-level</h3>
                         <span class="institution">Lycee de Kigali</span>
@@ -199,9 +192,6 @@
                 </div>
                 <!-- Education Item 3 -->
                 <div class="education-card">
-                    <!-- <div class="education-icon">
-                        <i class="fas fa-certificate"></i>
-                    </div> -->
                     <div class="education-details">
                         <h3>Python Course</h3>
                         <span class="institution">WiredIn Academy</span>
@@ -223,6 +213,9 @@
                     </div>
                     <div class="form-group">
                         <input type="email" id="email" name="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="subject" name="subject" placeholder="Subject of Message" required>
                     </div>
                     <div class="form-group">
                         <textarea id="message" name="message" placeholder="Your Message" required></textarea>

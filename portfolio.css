@@ -44,19 +44,6 @@ body {
   box-sizing: border-box;
 }
 
-.hero-glow-bg {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90vw;
-  height: 350px;
-  background: radial-gradient(circle at 50% 40%, var(--primary-purple) 0%, var(--accent-purple) 60%, transparent 100%);
-  filter: blur(60px);
-  opacity: 0.25;
-  z-index: 0;
-  pointer-events: none;
-}
 
 .hero > *:not(.hero-glow-bg) {
   position: relative;

@@ -1,13 +1,3 @@
-
-
-// const observer = new IntersectionObserver((entries) => {
-//     entries.forEach(entry => {
-//         if (entry.isIntersecting) {
-//             entry.target.classList.add('visible');
-//         }
-//     });
-// }, observerOptions);
-
 // Mobile menu functionality
 function toggleMobileMenu() {
     const hamburger = document.querySelector('.hamburger');
@@ -273,6 +263,7 @@ function animateOnScroll(element, animation) {
     
     observer.observe(element);
 }
+
 
 // Add CSS for loading state
 const style = document.createElement('style');

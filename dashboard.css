@@ -336,6 +336,7 @@ body, .dashboard-container, .dashboard {
 .dashboard-filter {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
@@ -456,17 +457,42 @@ body, .dashboard-container, .dashboard {
 
 @media (min-width: 768px) {
   /* Navigation (Sidebar/Header) */
-  .sidebar { width: 260px; padding: 2.5rem 1.5rem 1.5rem 1.5rem; }
-  .sidebar .sidebar-title { font-size: 1.2rem; }
-  .dashboard-header { flex-direction: row; align-items: center; padding: 32px 32px 24px 32px; }
-  .dashboard-title { font-size: 2.2rem; }
+  .sidebar { 
+    width: 260px; 
+    padding: 2.5rem 1.5rem 1.5rem 1.5rem; 
+  }
+  .sidebar .sidebar-title { 
+    font-size: 1.2rem; 
+  }
+  .dashboard-header { 
+    flex-direction: row; 
+    align-items: center; 
+    padding: 32px 32px 24px 32px; 
+  }
+  .dashboard-title { 
+    font-size: 2.2rem; 
+  }
 
   /* Cards/Grids */
-  .dashboard-stats { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 40px; }
-  .stat-card { padding: 30px; font-size: 1.1rem; }
-  .dashboard-content { grid-template-columns: 1fr 350px; gap: 60px; }
-  .posts-section, .dashboard-posts { padding: 2rem 2rem; }
-  .dashboard-post { padding: 2rem; font-size: 1.1rem; }
+  .dashboard-stats { 
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+    gap: 40px; 
+  }
+  .stat-card { 
+    padding: 30px; 
+    font-size: 1.1rem; 
+  }
+  .dashboard-content { 
+    grid-template-columns: 1fr 350px; 
+    gap: 60px; 
+  }
+  .posts-section, .dashboard-posts { 
+    padding: 2rem 2rem; 
+  }
+  .dashboard-post { 
+    padding: 2rem; 
+    font-size: 1.1rem; 
+  }
 
   /* Forms */
   .login-card, .register-card, .contact-form, .reset-card { max-width: 500px; padding: 2.5rem; }
@@ -474,7 +500,7 @@ body, .dashboard-container, .dashboard {
 
   /* Buttons */
   button, .btn, .quick-action-btn, .submit-btn { font-size: 1.1rem; padding: 1em 2em; }
-  .quick-actions { gap: 1.5rem; }
+  .quick-actions { gap: 1.5rem; flex-direction: row; flex-wrap: nowrap; }
 
   /* Dashboard Post Content */
   .dashboard-post h3 { font-size: 1.3rem; }
@@ -509,12 +535,12 @@ body, .dashboard-container, .dashboard {
   }
   .stat-card { padding: 20px; font-size: 1.15rem; }
   .dashboard-content { grid-template-columns: 1fr 400px; gap: 80px; }
-  .posts-section, .dashboard-posts { padding: 3rem 3rem; }
-  .dashboard-post { padding: 2.5rem; font-size: 1.15rem; }
+  .posts-section, .dashboard-posts { padding: 3rem 3rem; background: none;}
+  .dashboard-post { padding: 2.5rem; font-size: 1.15rem;}
   .login-card, .register-card, .contact-form, .reset-card { max-width: 600px; padding: 3rem; }
   .form-group input, .form-group textarea, .form-group select { font-size: 1.15rem; padding: 1.2em 1.4em; }
   button, .btn, .quick-action-btn, .submit-btn { font-size: 1.15rem; padding: 1.2em 2.5em; }
-  .quick-actions { gap: 2rem; }
+  .quick-actions { gap: 2rem; flex-direction: row; flex-wrap: nowrap;}
   .dashboard-post h3 { font-size: 1.5rem; }
   .dashboard-post p { font-size: 1.1rem; }
   .dashboard-post .admin-actions { gap: 16px; }

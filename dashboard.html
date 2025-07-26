@@ -11,7 +11,9 @@
     </head>
     <body>
         <header>
-            <div class="logo">DUSH</div>
+            <div class="logo">
+                <a href="index.html">DUSH</a>
+            </div>
             <div class="nav">
                 <a href="index.html">PORTFOLIO</a>
                 <a href="blog.html">BLOG</a>
@@ -126,7 +128,7 @@
             </main>
         </div>
 
-        <script>
+        <!-- <script>
             // Sidebar expand/collapse
             function toggleSidebar() {
                 document.getElementById('sidebar').classList.toggle('collapsed');
@@ -144,9 +146,6 @@
                     authButtons.querySelector('.register').style.display = 'block';
                     authButtons.querySelector('.logout').style.display = 'none';
                 }
-                // Check authentication on page load
-                // Authentication check disabled for frontend development
-                // checkAuth();
                 loadDashboardData();
             });
 
@@ -161,6 +160,18 @@
                 window.location.href = 'login.html';
             }
 
+            // Get the admin buttons
+            const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
+            const exportDataBtn = document.getElementById('exportDataBtn');
+            // Show/hide admin buttons based on role
+            if (isAdmin()) {
+                document.querySelector('.quick-action-btn:nth-child(3)').style.display = 'block'; // Manage Categories
+                document.querySelector('.quick-action-btn:nth-child(4)').style.display = 'block'; // Export Data
+            } else {
+                document.querySelector('.quick-action-btn:nth-child(3)').style.display = 'none';
+                document.querySelector('.quick-action-btn:nth-child(4)').style.display = 'none';
+            }
+            
             // Show/hide dashboard stats for admin only
             function isAdmin() {
                 const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -346,6 +357,6 @@
                     alert('Error deleting post.');
                 }
             };
-        </script>
+        </script> -->
     </body>
 </html>
