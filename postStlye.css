@@ -24,9 +24,7 @@
 .post-interactions {
             display: flex;
             gap: 15px;
-            margin: 20px 0;
             padding: 15px;
-            background: #f8f9fa;
             border-radius: 8px;
         }
         
