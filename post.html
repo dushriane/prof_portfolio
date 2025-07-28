@@ -6,6 +6,7 @@
     <title>Blog Post</title>
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="blog.css">
+    <link rel="stylesheet" href="postStlye.css">
     <script src="main.js" defer></script>
 </head>
 <body>
@@ -43,33 +44,80 @@
             </div>
         </div>
     <main>
+        <a href="blog.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to Blog
+        </a>
         <section class="post-detail section" id="postDetailContainer">
             <!-- Post content will be rendered here -->
         </section>
-        <section class="post-interactions section" id="postInteractions" style="display:none;">
-            <button id="likeBtn"><i class="far fa-heart"></i> <span id="likeCount">0</span> Like</button>
-            <button id="bookmarkBtn"><i class="far fa-bookmark"></i> Bookmark</button>
+        <section class="post-interactions section" id="postInteractions">
+            <button id="likeBtn">
+                <i class="far fa-heart"></i> 
+                <span id="likeCount">0</span> Like
+            </button>
+            <button id="bookmarkBtn">
+                <i class="far fa-bookmark"></i> 
+                Bookmark
+            </button>
         </section>
-        <section class="comments section" id="commentsSection" style="display:none;">
+        <section class="comments section" id="commentsSection">
             <h2>Comments</h2>
-            <div id="commentsList"></div>
+            <div class="login-prompt" id="loginPrompt" style="display:none;">
+                <p>Please <a href="login.html">login</a> to comment and bookmark posts.</p>
+            </div>
+            
             <form id="commentForm">
-                <textarea id="commentInput" placeholder="Write a comment..." required></textarea>
-                <button type="submit">Post Comment</button>
+                <textarea 
+                    class="comment-input"
+                    name="comment" 
+                    id="commentInput" 
+                    placeholder="Write a comment..." 
+                    required></textarea>
+                <button type="submit" class="comment-submit" id="commentSubmit" disabled>Post Comment</button>
             </form>
+            <div id="commentsList"></div>
         </section>
-    </main>
+    </main> 
     <script>
     // Utility to get query param
     function getQueryParam(name) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(name);
     }
+
+    //Global variables
     let currentPost = null;
     let postId = null;
+    let userLikedPost = false;
+    let userBookmarkedPost = false;
+
     function isLoggedIn() {
         return !!localStorage.getItem('authToken');
     }
+    function getCurrentUser() {
+            return JSON.parse(localStorage.getItem('user') || '{}');
+        }
+
+    function isAuthorOrAdmin(post) {
+            const user = getCurrentUser();
+            return user.id === post.author?.id || user.role === 'admin';
+        }
+
+    function validateComment(text) {
+            return text && text.trim().length > 0;
+        }
+    
+    async function incrementViewCount() {
+            try {
+                await fetch(`http://localhost:3000/api/posts/${postId}/view`, {
+                    method: 'POST'
+                });
+            } catch (error) {
+                console.error('Error incrementing view count:', error);
+            }
+        }
+        
     async function fetchAndRenderPost() {
         postId = getQueryParam('id');
         if (!postId) {
