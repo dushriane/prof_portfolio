@@ -1,4 +1,10 @@
 /* ===== DASHBOARD STYLES ===== */
+/* Global box-sizing */
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body, .dashboard-container, .dashboard {
   background: var(--dark-purple) ;
@@ -37,7 +43,7 @@ body, .dashboard-container, .dashboard {
   color: var(--text-color);
   opacity: 1;
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 17.6px;
   font-weight: 500;
 }
 
@@ -80,7 +86,30 @@ body, .dashboard-container, .dashboard {
   font-size: 14px;
   opacity: 0.8;
 }
-
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 32px;
+    align-items: flex-start;
+    width: 100%;
+  }
+  .quick-actions {
+    flex-direction: column;
+    min-width: 220px;
+    max-width: 260px;
+    position: sticky;
+    top: 32px;
+    height: fit-content;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 32px 16px;
+    gap: 24px;
+    z-index: 2;
+  }
+  .dashboard {
+    flex: 1;
+  }
 .dashboard-content {
   display: grid;
   grid-template-columns: 1fr 300px;
@@ -174,7 +203,7 @@ body, .dashboard-container, .dashboard {
   color: var(--text-color);
   position: relative;
   min-height: 100vh;
-  padding: 2rem 1rem 1rem 1rem;
+  padding: 32px 16px 16px 16px;
   transition: width 0.3s;
   box-sizing: border-box;
   display: flex;
@@ -191,9 +220,9 @@ body, .dashboard-container, .dashboard {
   background: none;
   border: none;
   color: var(--primary-purple);
-  font-size: 1.5rem;
+  font-size: 24px;
   cursor: pointer;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
   align-self: flex-end;
   padding: 8px;
   border-radius: 4px;
@@ -205,9 +234,9 @@ body, .dashboard-container, .dashboard {
 }
 
 .sidebar .sidebar-title {
-  font-size: 1.1rem;
+  font-size: 17.6px;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
   margin-top: 0;
   color: var(--primary-purple);
   font-family: 'Montserrat', sans-serif;
@@ -231,7 +260,7 @@ body, .dashboard-container, .dashboard {
   padding: 0.75em 1.2em;
   font-weight: 600;
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 16px;
   cursor: pointer;
   /* box-shadow: var(--shadow); */
   transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
@@ -255,20 +284,20 @@ body, .dashboard-container, .dashboard {
 }
 
 .activity-list {
-  margin-top: 2rem;
+  margin-top: 32px;
 }
 
 .activity-list h3 {
   color: var(--primary-purple);
-  font-size: 1rem;
-  margin-bottom: 1rem;
+  font-size: 16px;
+  margin-bottom: 16px;
   font-family: 'Montserrat', sans-serif;
 }
 
 .activity-item {
-  padding: 0.75rem;
+  padding: 12px;
   border-radius: 5px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
   background: rgba(126, 75, 255, 0.05);
   border-left: 3px solid var(--primary-purple);
   transition: background 0.2s;
@@ -279,36 +308,36 @@ body, .dashboard-container, .dashboard {
 }
 
 .activity-time {
-  font-size: 0.8rem;
+  font-size: 12.8px;
   color: var(--accent-purple);
-  margin-bottom: 0.25rem;
+  margin-bottom: 4px;
 }
 
 .activity-text {
   color: var(--text-color);
-  font-size: 0.9rem;
+  font-size: 14.4px;
 }
 
 /* Mobile sidebar filter */
 .mobile-sidebar-filter {
   display: none;
   background: var(--card-bg);
-  padding: 1rem;
-  margin-bottom: 1rem;
+  padding: 16px;
+  margin-bottom: 16px;
   border-radius: 8px;
   border: 1px solid rgba(126, 75, 255, 0.1);
 }
 
 .mobile-sidebar-filter h3 {
   color: var(--primary-purple);
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
   font-family: 'Montserrat', sans-serif;
 }
 
 .mobile-quick-actions {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .mobile-quick-action-btn {
@@ -319,7 +348,7 @@ body, .dashboard-container, .dashboard {
   border-radius: 5px;
   cursor: pointer;
   text-align: left;
-  font-size: 1rem;
+  font-size: 16px;
   transition: all 0.2s;
   font-family: 'Poppins', sans-serif;
   text-decoration: none;
@@ -337,8 +366,8 @@ body, .dashboard-container, .dashboard {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 16px;
+  margin-bottom: 32px;
   flex-wrap: wrap;
   padding: 0 10px;
 }
@@ -351,19 +380,19 @@ body, .dashboard-container, .dashboard {
 
 .dashboard-filter-tags {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .dashboard-filter-tag {
-  padding: 0.5rem 1rem;
+  padding: 8px 16px;
   background: rgba(126, 75, 255, 0.1);
   color: var(--text-color);
   border: 1px solid rgba(126, 75, 255, 0.2);
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 0.9rem;
+  font-size: 14.4px;
   font-weight: 500;
 }
 
@@ -376,7 +405,7 @@ body, .dashboard-container, .dashboard {
 .dashboard-posts {
   background: var(--card-bg);
   border-radius: 12px;
-  padding: 1.5rem 1rem;
+  padding: 24px 16px;
   /* box-shadow: var(--shadow); */
   border: 1px solid rgba(126, 75, 255, 0.1);
   margin: 0;
@@ -384,13 +413,13 @@ body, .dashboard-container, .dashboard {
 
 .dashboard-posts h2 {
   color: var(--primary-purple);
-  margin: 0 0 1rem 0;
+  margin: 0 0 16px 0;
 }
 
 .dashboard-post {
   background: var(--light-purple-bg);
   border-radius: 8px;
-  padding: 1rem;
+  padding: 16px;
   /* box-shadow: 0 2px 8px rgba(126, 75, 255, 0.08); */
   display: flex;
   flex-direction: column;
@@ -400,14 +429,14 @@ body, .dashboard-container, .dashboard {
 
 .dashboard-post h3 {
   color: var(--primary-purple);
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 8px 0;
   font-family: 'Montserrat', sans-serif;
 }
 
 .dashboard-post p {
   color: var(--text-color);
-  margin: 0.25rem 0;
-  font-size: 0.98rem;
+  margin: 4px 0;
+  font-size: 15.68px;
   opacity: 0.9;
 }
 
@@ -425,11 +454,11 @@ body, .dashboard-container, .dashboard {
   background: var(--danger);
   color: white;
   border: none;
-  padding: 0.4rem 0.7rem;
+  padding: 6.4px 11.2px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.85rem;
-  margin: 0.1rem 0.1rem 0.1rem 0;
+  font-size: 13.6px;
+  margin: 1.6px 1.6px 1.6px 0;
   transition: background 0.2s;
 }
 .delete-comment-btn:hover, .hide-comment-btn:hover, .delete-post-btn:hover, .hide-post-btn:hover {
@@ -459,10 +488,10 @@ body, .dashboard-container, .dashboard {
   /* Navigation (Sidebar/Header) */
   .sidebar { 
     width: 260px; 
-    padding: 2.5rem 1.5rem 1.5rem 1.5rem; 
+    padding: 40px 24px 24px 24px; 
   }
   .sidebar .sidebar-title { 
-    font-size: 1.2rem; 
+    font-size: 19.2px; 
   }
   .dashboard-header { 
     flex-direction: row; 
@@ -470,7 +499,7 @@ body, .dashboard-container, .dashboard {
     padding: 32px 32px 24px 32px; 
   }
   .dashboard-title { 
-    font-size: 2.2rem; 
+    font-size: 35.2px; 
   }
 
   /* Cards/Grids */
@@ -480,35 +509,56 @@ body, .dashboard-container, .dashboard {
   }
   .stat-card { 
     padding: 30px; 
-    font-size: 1.1rem; 
+    font-size: 17.6px; 
   }
   .dashboard-content { 
     grid-template-columns: 1fr 350px; 
     gap: 60px; 
   }
   .posts-section, .dashboard-posts { 
-    padding: 2rem 2rem; 
+    padding: 32px 32px; 
   }
   .dashboard-post { 
-    padding: 2rem; 
-    font-size: 1.1rem; 
+    padding: 32px; 
+    font-size: 17.6px; 
   }
 
   /* Forms */
-  .login-card, .register-card, .contact-form, .reset-card { max-width: 500px; padding: 2.5rem; }
-  .form-group input, .form-group textarea, .form-group select { font-size: 1.1rem; padding: 1.1em 1.2em; }
+  .login-card, .register-card, .contact-form, .reset-card { 
+    max-width: 500px; 
+    padding: 2.5rem; 
+  }
+  .form-group input, .form-group textarea, .form-group select { 
+    font-size: 17.6px; 
+    padding: 1.1em 1.2em; 
+  }
 
   /* Buttons */
-  button, .btn, .quick-action-btn, .submit-btn { font-size: 1.1rem; padding: 1em 2em; }
-  .quick-actions { gap: 1.5rem; flex-direction: row; flex-wrap: nowrap; }
+  button, .btn, .quick-action-btn, .submit-btn { 
+    font-size: 17.6px; 
+    padding: 1em 2em; 
+  }
+  .quick-actions { 
+    gap: 1.5rem; 
+    flex-direction: row; 
+    flex-wrap: nowrap; 
+  }
 
   /* Dashboard Post Content */
-  .dashboard-post h3 { font-size: 1.3rem; }
-  .dashboard-post p { font-size: 1.05rem; }
-  .dashboard-post .admin-actions { gap: 12px; }
+  .dashboard-post h3 { 
+    font-size: 1.3rem; 
+  }
+  .dashboard-post p { 
+    font-size: 1.05rem; 
+  }
+  .dashboard-post .admin-actions { 
+    gap: 12px; 
+  }
 
   /* General Layout */
-  .section, .card { padding: 3rem; }
+  .section, .card { 
+    padding: 3rem; 
+  }
   .sidebar.section {
     display: flex;
     flex-direction: row;
@@ -521,9 +571,16 @@ body, .dashboard-container, .dashboard {
 }
 
 @media (min-width: 1024px) {
-  .sidebar { width: 300px; padding: 3rem 2rem 2rem 2rem; }
-  .dashboard-header { padding: 40px 48px 32px 48px; }
-  .dashboard-title { font-size: 2.5rem; }
+  .sidebar { 
+    width: 300px; 
+    padding: 3rem 2rem 2rem 2rem; 
+  }
+  .dashboard-header { 
+    padding: 40px 48px 32px 48px; 
+  }
+  .dashboard-title { 
+    font-size: 2.5rem; 
+  }
   .dashboard-stats { 
     display: flex;
     flex-direction: row;
@@ -533,18 +590,51 @@ body, .dashboard-container, .dashboard {
     align-items: center;
     max-width: 1000px;
   }
-  .stat-card { padding: 20px; font-size: 1.15rem; }
-  .dashboard-content { grid-template-columns: 1fr 400px; gap: 80px; }
-  .posts-section, .dashboard-posts { padding: 3rem 3rem; background: none;}
-  .dashboard-post { padding: 2.5rem; font-size: 1.15rem;}
-  .login-card, .register-card, .contact-form, .reset-card { max-width: 600px; padding: 3rem; }
-  .form-group input, .form-group textarea, .form-group select { font-size: 1.15rem; padding: 1.2em 1.4em; }
-  button, .btn, .quick-action-btn, .submit-btn { font-size: 1.15rem; padding: 1.2em 2.5em; }
-  .quick-actions { gap: 2rem; flex-direction: row; flex-wrap: nowrap;}
-  .dashboard-post h3 { font-size: 1.5rem; }
-  .dashboard-post p { font-size: 1.1rem; }
-  .dashboard-post .admin-actions { gap: 16px; }
-  .section, .card { padding: 3rem; }
+  .stat-card { 
+    padding: 20px; 
+    font-size: 1.15rem; 
+  }
+  .dashboard-content { 
+    grid-template-columns: 1fr 400px; 
+    gap: 80px; 
+  }
+  .posts-section, .dashboard-posts { 
+    padding: 3rem 3rem; 
+    background: none;
+  }
+  .dashboard-post { 
+    padding: 2.5rem; 
+    font-size: 1.15rem;
+  }
+  .login-card, .register-card, .contact-form, .reset-card { 
+    max-width: 600px; 
+    padding: 3rem; 
+  }
+  .form-group input, .form-group textarea, .form-group select { 
+    font-size: 1.15rem; 
+    padding: 1.2em 1.4em; 
+  }
+  button, .btn, .quick-action-btn, .submit-btn { 
+    font-size: 1.15rem; 
+    padding: 1.2em 2.5em; 
+  }
+  .quick-actions { 
+    gap: 2rem; 
+    flex-direction: row; 
+    flex-wrap: nowrap;
+  }
+  .dashboard-post h3 { 
+    font-size: 24px; 
+  }
+  .dashboard-post p { 
+    font-size: 17.6px; 
+  }
+  .dashboard-post .admin-actions { 
+    gap: 16px; 
+  }
+  .section, .card { 
+    padding: 3rem; 
+  }
   .sidebar.section {
     display: flex;
     flex-direction: row;

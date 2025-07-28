@@ -314,3 +314,22 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+
+function logout() {
+    // Remove authentication tokens or cookies
+    localStorage.removeItem('token');
+    // Redirect to login page
+    window.location.href = 'login.html';
+}
+
+document.body.addEventListener('click', function(e) {
+    if (e.target && e.target.id === 'closeMobileMenu') {
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) {
+            mobileMenu.classList.remove('active');
+            const hamburger = document.querySelector('.hamburger');
+            if (hamburger) hamburger.classList.remove('active');
+        }
+    }
+});

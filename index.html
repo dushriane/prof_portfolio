@@ -17,6 +17,7 @@
             <div class="nav">
                 <a href="blog.html">BLOG</a>
             </div>
+            
             <div class="hamburger" onclick="toggleMobileMenu()">
                 <span></span>
                 <span></span>
@@ -40,14 +41,13 @@
         </div>
             
         <section class="hero section">
-            <div class="hero-glow-bg"></div>
-                <h1>Muraho</h1>
-                <p>I'm Ariane Dushime, an aspiring software engineer who cares about</p>
-                <div class="hero-section-tags">
-                    <span>CREATIVITY</span>
-                    <span>QUALITY</span>
-                    <span>DESIGN</span>
-                </div>
+            <h1>Muraho</h1>
+            <p>I'm Ariane Dushime, an aspiring software engineer who cares about</p>
+            <div class="hero-section-tags">
+                <span>CREATIVITY</span>
+                <span>QUALITY</span>
+                <span>DESIGN</span>
+            </div>
         </section>
 
         <!-- Projects Section -->
@@ -62,8 +62,8 @@
                     <p>Let's sedation free juste this project for your purpose! In this book, I was all that here we just connect into each that have my best camera with each that.</p>
                     <p>Buy your daily job online.</p>
                     <div class="project-links">
-                        <a href="https://github.com/dushriane/house_treasures">Github</a>
-                        <a href="#">Website</a>
+                        <a href="https://github.com/dushriane/house_treasures" target="_blank">Github</a>
+                        <a href="#" target="_blank">Website</a>
                     </div>
                     
                 </div>
@@ -75,8 +75,8 @@
                     <p>Let's sedation free juste this project for your purpose! In this book, I was all that here we just connect into each that have my best camera with each that.</p>
                     <p>Web App developed using Bolt AI for a hackathon.</p>
                     <div class="project-links">
-                        <a href="https://github.com/dushriane/boltnew-lostandfound">Github</a>
-                        <a href="https://boltlostandfound.netlify.app/">Website</a>
+                        <a href="https://github.com/dushriane/boltnew-lostandfound" target="_blank">Github</a>
+                        <a href="https://boltlostandfound.netlify.app/" target="_blank">Website</a>
                     </div>
                 </div>
                 <div class="project-card">
@@ -87,8 +87,8 @@
                     <p>Let's sedation free juste this project for your purpose! In this book, I was all that here we just connect into each that have my best camera with each that.</p>
                     <p>Created using PL/SQL using Oracle Database</p>
                     <div class="project-links">
-                        <a href="https://github.com/dushriane/Wed_25584_LostandFoundMatchmaker">Github</a>
-                        <a href="#">Website</a>
+                        <a href="https://github.com/dushriane/Wed_25584_LostandFoundMatchmaker" target="_blank">Github</a>
+                        <a href="#" target="_blank">Website</a>
                     </div>
                 </div>
             </div>
@@ -207,7 +207,7 @@
         <footer>
             <div class="contact">
                 <h2>LET'S BUILD SOMETHING <br>AMAZING TOGETHER</h2>
-                <form class="contact-form" action="#" method="POST">
+                <form class="contact-form" id="contactForm">
                     <div class="form-group">
                         <input type="text" id="name" name="name" placeholder="Your Name" required>
                     </div>
@@ -240,6 +240,35 @@
                 <p>&copy; 2025 Ariane Dushime. All rights reserved.</p>
             </div>
         </footer>
+        <script>
+            document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
+
+            try {
+            const response = await fetch('http://localhost:3000/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                alert('Message sent successfully!');
+                document.getElementById('contactForm').reset();
+            } else {
+                throw new Error('Failed to send');
+            }
+            } catch (error) {
+            alert('Error sending message. Please try again.');
+            }
+        });
+        </script>
     </body>
 </html>
     
