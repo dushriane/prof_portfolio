@@ -39,12 +39,11 @@ h1, h3{
 p, ul, ol, li, label, input, textarea, select, button {
   font-family: inherit;
   color: var(--text-color);
-  font-size: 1rem;
-  margin: 0;
+  font-size: 14px;
 }
 
 ul, ol {
-  padding-left: 1.5rem;
+  padding-left: 21px;
 }
 
 img {
@@ -78,8 +77,39 @@ header {
   box-sizing: border-box;
 }
 
+/* Auth buttons styling */
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Mobile menu styling */
+.mobile-menu {
+  z-index: 9999;
+  position: fixed;
+}
+
+/* Login prompt styling */
+.login-prompt {
+  display: none;
+}
+
+/* Profile picture preview styling */
+.profile-pic-preview {
+  display: none;
+  max-width: 120px;
+  margin-top: 10px;
+  border-radius: 50%;
+}
+
+/* Hidden file input */
+.hidden-file-input {
+  display: none;
+}
+
 .logo {
-  font-size: 1.5rem;
+  font-size: 21px;
   font-weight: 700;
   color: var(--primary-purple);
   z-index: 101;
@@ -96,7 +126,7 @@ header > .nav {
   flex-direction: column;
   cursor: pointer;
   z-index: 101;
-  padding: 0.5rem;
+  padding: 7px;
 }
 
 .hamburger span {
@@ -126,10 +156,10 @@ button, .btn {
   color: var(--text-color);
   border: none;
   border-radius: 8px;
-  padding: 0.75em 1.5em;
+  padding: 10px 21px;
   font-weight: 600;
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 14px;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
@@ -163,20 +193,20 @@ input, textarea, select {
   background: var(--card-bg);
   border: 1.5px solid var(--accent-purple);
   border-radius: 8px;
-  padding: 0.75em 1em;
+  padding: 10px 14px;
   color: var(--text-color);
-  font-size: 1rem;
+  font-size: 14px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .card {
   background: var(--card-bg);
   border-radius: 16px;
-  padding: 2rem;
+  padding: 28px;
 }
 
 .section {
-  padding: 2rem;
+  padding: 28px;
 }
 
 hr {
@@ -191,14 +221,14 @@ hr {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 14px;
   box-sizing: border-box;
 }
 
 .login-card, .register-card {
   background: var(--card-bg);
   border-radius: 16px;
-  padding: 2rem;
+  padding: 28px;
   width: 100%;
   max-width: 400px;
   box-sizing: border-box;
@@ -206,19 +236,16 @@ hr {
 
 .login-header, .register-header {
   text-align: center;
-  margin: 0;
 }
 
 .login-header h1, .register-header h1 {
   color: var(--primary-purple);
-  margin: 0;
-  font-size: 1.8rem;
+  font-size: 25px;
 }
 
 .login-header p, .register-header p {
   color: var(--text-color);
   opacity: 0.8;
-  margin: 0;
 }
 
 .profile-pic-preview {
@@ -226,13 +253,11 @@ hr {
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  margin: 0;
   border: 2px solid var(--primary-purple);
 }
 
 .back-link {
   text-align: center;
-  margin: 0;
 }
 
 .back-link a {
@@ -251,7 +276,6 @@ hr {
   color: #2ecc71;
   padding: 1rem;
   border-radius: 8px;
-  margin: 0;
   text-align: center;
 }
 
@@ -260,7 +284,6 @@ hr {
   color: #e74c3c;
   padding: 1rem;
   border-radius: 8px;
-  margin: 0;
   text-align: center;
 }
 
@@ -268,10 +291,9 @@ hr {
 a[href*="reset-password"] {
   color: var(--accent-purple);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 13px;
   display: block;
   text-align: center;
-  margin: 0;
 }
 
 a[href*="reset-password"]:hover {
@@ -285,10 +307,8 @@ a[href*="reset-password"]:hover {
   flex-direction: column;
   align-items: stretch;
   gap: 6px;
-  margin: 0;
 }
 .form-group label {
-  margin: 0;
   font-weight: 600;
   color: var(--text-color);
 }
@@ -300,8 +320,8 @@ a[href*="reset-password"]:hover {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  font-size: 1.1rem;
-  padding: 0.8em 1em;
+  font-size: 15px;
+  padding: 11px 14px;
   background: var(--card-bg);
   color: var(--text-color);
   border: 1.5px solid var(--accent-purple);
@@ -316,8 +336,8 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
   max-width: 100%;
   box-sizing: border-box;
   margin: 0;
-  padding: 0.9em 1em;
-  font-size: 1.1rem;
+  padding: 13px 14px;
+  font-size: 15px;
 }
 
 /* ===== MOBILE MENU (GLOBAL) ===== */
@@ -332,24 +352,24 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
   transition: left 0.3s ease;
   display: flex;
   flex-direction: column;
-  padding: 5rem 2rem 2rem 2rem;
+  padding: 70px 28px 28px 28px;
   box-sizing: border-box;
 }
 .mobile-menu.active { left: 0; }
 .mobile-menu .nav {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 14px;
   margin: 0;
 }
 .mobile-menu .nav a {
   color: var(--text-color);
   font-weight: 600;
   text-decoration: none;
-  padding: 1rem;
+  padding: 14px;
   border-radius: 8px;
   transition: background 0.2s, color 0.2s;
-  font-size: 1.1rem;
+  font-size: 15px;
 }
 .mobile-menu .nav a.active, .mobile-menu .nav a:hover {
   background: var(--primary-purple);
@@ -358,14 +378,14 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
 .mobile-menu .auth-buttons {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 10px;
   margin: 0;
 }
 .mobile-menu .auth-button {
-  padding: 0.7rem 0;
+  padding: 10px 0;
   border-radius: 6px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 14px;
   text-align: center;
   background: none;
   border: none;
@@ -398,7 +418,7 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
   position: absolute;
   top: 18px;
   right: 22px;
-  font-size: 2.2rem;
+  font-size: 31px;
   color: var(--primary-purple);
   cursor: pointer;
   z-index: 102;
@@ -418,14 +438,14 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
 @media (min-width: 768px) {
   /* Navigation */
   header { 
-    padding: 1rem 1.2rem; 
+    padding: 14px 17px; 
   }
   .mobile-menu { 
     display: none !important; 
   }
   header > .nav { 
     display: flex !important; 
-    gap: 2.5rem; 
+    gap: 35px; 
   }
   .hamburger { 
     display: none !important; 

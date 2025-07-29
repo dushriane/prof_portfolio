@@ -539,8 +539,8 @@ footer .contact-form {
 
   /* Forms */
   .form-group input, .form-group textarea, .form-group select {
-    font-size: 18.4px;
-    padding: 1.1em 1.2em;
+    font-size: 18px;
+    padding: 15px 17px;
   }
   .contact-form {
     max-width: 500px;
@@ -552,8 +552,8 @@ footer .contact-form {
 
   /* Buttons */
   button, .btn, .quick-action-btn, .submit-btn {
-    font-size: 17.6px;
-    padding: 1em 2em;
+    font-size: 18px;
+    padding: 14px 28px;
   }
 
   .tech-stack {
@@ -622,8 +622,8 @@ footer .contact-form {
   }
 
   button, .btn, .submit-btn {
-    font-size: 18.4px;
-    padding: 1.2em 2.5em;
+    font-size: 18px;
+    padding: 17px 35px;
   }
   .tech-stack {
     display: flex;
