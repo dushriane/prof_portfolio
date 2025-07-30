@@ -1,43 +1,7 @@
-/* ===== PORTFOLIO STYLES (DARK MODE, MOBILE FIRST) ===== */
-:root {
-  --primary-purple: #7e4bff;
-  --dark-purple: #18102b;
-  --accent-purple: #a259ff;
-  --light-purple-bg: #2e2347;
-  --text-color: #f3f3fa;
-  --card-bg: #231a3a;
-  --tag-bg: #2d2046;
-  --danger: #e74c3c;
-  --shadow: 0 4px 24px rgba(126, 75, 255, 0.18);
-  --accent-gold: #ffb74b;
-  --accent-shadow: 0 4px 20px rgba(58, 44, 90, 0.25);
-}
-
-/* Global box-sizing */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background: var(--dark-purple);
-  color: var(--text-color);
-  font-family: 'Montserrat', 'Lato', 'Poppins';
-  min-height: 100vh;
-  overflow-x: hidden; /* Prevent horizontal scroll */
-}
-a{
-  text-decoration: none;
-  /* color: var(--text-color) */
-}
-a [target="blank"]{
-  background-color: #f0f0f0;
-}
 /* ===== HERO SECTION ===== */
 .hero {
   position: relative;
-  padding: 52px 10px;
+  padding: 60px 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -48,15 +12,14 @@ a [target="blank"]{
 
 .hero h1 {
   font-family: 'Abril Fatface', cursive;/**/
-  font-size: 64px;
-  color: var(--primary-purple);
+  font-size: 68px;
+  color: var(--accent-purple);
   font-weight: 700;
 }
 
 .hero h1::after {
   content: '';
   display: block;
-  width: 60px;
   height: 3px;
   background-color: var(--primary-purple);
   border-radius: 2px;
@@ -64,9 +27,9 @@ a [target="blank"]{
 
 .hero p {
   font-family: 'Lato', sans-serif;
-  font-size: 16px;
-  color: var(--accent-purple);
-  font-weight: 500;
+  font-size: 15px;
+  color: var(--text-color);
+  font-weight: 450;
   max-width: 90vw;
 }
 
@@ -81,8 +44,8 @@ a [target="blank"]{
 
 .hero-section-tags span {
   padding: 7px 18px;
-  background-color: var(--tag-bg);
-  color: var(--text-color); 
+  background-color: none;
+  color: var(--accent-purple); 
   border-radius: 30px;
   font-weight: 600;
   font-size: 16px;
@@ -92,8 +55,8 @@ a [target="blank"]{
 }
 
 .hero-section-tags span:hover {
-  background: var(--accent-gold);
-  color: var(--dark-purple);
+  background: var(--accent-purple);
+  color: var(--text-color);
   }
 
 /* ===== TECH STACK ===== */

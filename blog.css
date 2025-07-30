@@ -48,7 +48,7 @@
 .intro {
   font-family: 'Poppins', sans-serif;
   font-size: 18px;
-  color: var(--primary-purple);
+  color: var(--accent-purple);
   opacity: 0.9;
   padding: 0 10px;
   margin: 0;
@@ -56,7 +56,7 @@
 }
 
 h1 {
-  color: var(--primary-purple);
+  color: var(--accent-purple);
   font-size: 32px;
   font-weight: 700;
   letter-spacing: -1px;
@@ -73,7 +73,6 @@ h1 {
 
 .filter-tags span {
   padding: 5px 8px;
-  background-color: var(--light-purple-bg);
   border-radius: 40px;
   font-size: 14px;
   color: var(--primary-purple);
@@ -383,16 +382,12 @@ h1 {
   font-weight: 600;
 }
 
-.blog-post-content p {
-}
 
 .blog-post-content ul,
 .blog-post-content ol {
   padding-left: 30px;
 }
 
-.blog-post-content li {
-}
 
 .blog-post-content blockquote {
   border-left: 4px solid var(--primary-purple);
@@ -484,25 +479,6 @@ h1 {
 
 .back-btn:hover {
   color: var(--accent-purple);
-}
-
-.close-menu {
-  position: absolute;
-  top: 18px;
-  right: 22px;
-  font-size: 35.2px;
-  color: var(--primary-purple);
-  cursor: pointer;
-  z-index: 102;
-  background: none;
-  border: none;
-  padding: 0 8px;
-  line-height: 1;
-  transition: color 0.2s, transform 0.2s;
-}
-.close-menu:hover {
-  color: var(--accent-gold);
-  transform: scale(1.15);
 }
 
 /* Ensure mobile-menu is position: fixed or relative for absolute close icon */
@@ -768,23 +744,6 @@ h1 {
 /* MIN WIDTH 768PX */ 
 
 @media (min-width: 768px) {
-  /* Navigation */
-  .mobile-menu { 
-    display: none !important; 
-  }
-  header > .nav { 
-    display: flex !important; gap: 0; 
-  }
-  .hamburger { 
-    display: none !important; 
-  }
-  .nav a { 
-    font-size: 17.6px; 
-    padding: 11.2px 24px; 
-  }
-
-  
-
   /* Forms */
   #search-form, .contact-form { 
     max-width: 600px; 

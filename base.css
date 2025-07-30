@@ -1,24 +1,19 @@
 /* Global box-sizing */
-* {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-:root {
-  --primary-purple: #7e4bff;
-  --dark-purple: #18102b;
-  --accent-purple: #a259ff;
-  --text-color: #f3f3fa;
-  --card-bg: #231a3a;
-  --danger: #e74c3c;
-  --shadow: 0 4px 24px rgba(126, 75, 255, 0.18);
-  --light-purple: #f0e7ff;
-}
-
-html {
-  font-size: 14px;
-  overflow-x: hidden;
+ :root {
+  --primary-purple: #7B2CBF; 
+  --dark-purple: #050609; 
+  --accent-purple: #C77DFF;
+  --text-color: #FFFCF2; 
+  --card-bg: #231a3a; 
+  --danger: #E63946; 
+  --shadow: 0 4px 24px rgba(123, 44, 191, 0.18); 
+  --light-purple: #FCBF49; 
 }
 
 body {
@@ -36,8 +31,8 @@ h1, h3{
   margin: 0;
 }
 
-p, ul, ol, li, label, input, textarea, select, button {
-  font-family: inherit;
+p, ul, ol, li, label, input, textarea, select {
+  /* font-family: inherit; */
   color: var(--text-color);
   font-size: 14px;
 }
@@ -50,17 +45,7 @@ img {
   max-width: 100%;
   display: block;
   border-radius: 10px;
-}
-
-a {
-  color: var(--primary-purple);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-a:hover{
-  color: var(--accent-purple);
-  text-decoration: underline;
-}
+} 
 
 /* ===== NAVBAR ===== */
 header {
@@ -68,13 +53,22 @@ header {
   top: 0;
   width: 100%;
   background: var(--card-bg);
-  color: var(--text-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px;
   z-index: 100;
-  box-sizing: border-box;
+}
+
+header a{
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+header a:hover{
+  color: var(--accent-purple);
+  text-decoration: underline;
 }
 
 /* Auth buttons styling */
@@ -98,7 +92,7 @@ header {
 /* Profile picture preview styling */
 .profile-pic-preview {
   display: none;
-  max-width: 120px;
+  max-width: 100px;
   margin-top: 10px;
   border-radius: 50%;
 }
@@ -109,9 +103,9 @@ header {
 }
 
 .logo {
+  font-family: "Abril FatFace", cursive;
   font-size: 21px;
   font-weight: 700;
-  color: var(--primary-purple);
   z-index: 101;
 }
 
@@ -126,13 +120,14 @@ header > .nav {
   flex-direction: column;
   cursor: pointer;
   z-index: 101;
-  padding: 7px;
+  padding: 8px;
+  gap: 5px;
 }
 
 .hamburger span {
   width: 25px;
   height: 3px;
-  background: var(--primary-purple);
+  background: var(--text-color);
   margin: 0;
   transition: 0.3s;
   border-radius: 2px;
@@ -150,13 +145,13 @@ header > .nav {
   transform: rotate(45deg) translate(-5px, -6px);
 }
 
-/* Button styles with proper spacing using padding instead of margin */
+/* Button styles */
 button, .btn {
   background: var(--primary-purple);
   color: var(--text-color);
   border: none;
   border-radius: 8px;
-  padding: 10px 21px;
+  padding: 8px 17px;
   font-weight: 600;
   font-family: inherit;
   font-size: 14px;
@@ -173,27 +168,26 @@ button:hover, .btn:hover {
 
 /* Login button style - border only */
 .login-btn {
-  background: transparent !important;
-  border: 2px solid var(--primary-purple) !important;
-  color: var(--primary-purple) !important;
+  background: var(--accent-purple);
+  color: var(--primary-purple);
 }
 
 .login-btn:hover {
-  background: var(--primary-purple) !important;
-  color: var(--text-color) !important;
+  background: var(--primary-purple);
+  color: var(--text-color);
 }
 
 /* Register button style - solid background */
 .register-btn {
-  background: var(--primary-purple) !important;
-  color: var(--text-color) !important;
+  background: var(--primary-purple);
+  color: var(--text-color);
 }
 
 input, textarea, select {
   background: var(--card-bg);
   border: 1.5px solid var(--accent-purple);
   border-radius: 8px;
-  padding: 10px 14px;
+  padding: 8px 12px;
   color: var(--text-color);
   font-size: 14px;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -202,17 +196,17 @@ input, textarea, select {
 .card {
   background: var(--card-bg);
   border-radius: 16px;
-  padding: 28px;
+  padding: 20px;
 }
 
 .section {
   padding: 28px;
 }
 
-hr {
+/* hr {
   border: none;
   border-top: 2px solid var(--accent-purple);
-}
+} */
 
 
 /* ===== LOGIN & REGISTER PAGES ===== */
@@ -222,30 +216,30 @@ hr {
   align-items: center;
   justify-content: center;
   padding: 14px;
-  box-sizing: border-box;
 }
 
 .login-card, .register-card {
   background: var(--card-bg);
   border-radius: 16px;
-  padding: 28px;
+  padding: 25px;
   width: 100%;
   max-width: 400px;
-  box-sizing: border-box;
 }
 
 .login-header, .register-header {
   text-align: center;
+  gap: 5px;
 }
 
 .login-header h1, .register-header h1 {
-  color: var(--primary-purple);
+  color: var(--accent-purple);
   font-size: 25px;
 }
 
 .login-header p, .register-header p {
   color: var(--text-color);
   opacity: 0.8;
+  padding: 5px 0;
 }
 
 .profile-pic-preview {
@@ -258,12 +252,14 @@ hr {
 
 .back-link {
   text-align: center;
+  padding: 5px 0;
 }
 
-.back-link a {
+.back-link > a {
   color: var(--accent-purple);
   text-decoration: none;
   font-weight: 500;
+  font-size: 14px;
 }
 
 .back-link a:hover {
@@ -273,16 +269,16 @@ hr {
 
 .success-message {
   background: rgba(46, 204, 113, 0.2);
-  color: #2ecc71;
-  padding: 1rem;
+  color: var(--light-purple);
+  padding: 16px;
   border-radius: 8px;
   text-align: center;
 }
 
 .error-message {
   background: rgba(231, 76, 60, 0.2);
-  color: #e74c3c;
-  padding: 1rem;
+  color: var(--danger);
+  padding: 16px;
   border-radius: 8px;
   text-align: center;
 }
@@ -292,7 +288,6 @@ a[href*="reset-password"] {
   color: var(--accent-purple);
   text-decoration: none;
   font-size: 13px;
-  display: block;
   text-align: center;
 }
 
@@ -307,6 +302,7 @@ a[href*="reset-password"]:hover {
   flex-direction: column;
   align-items: stretch;
   gap: 6px;
+  padding: 10px 0;
 }
 .form-group label {
   font-weight: 600;
@@ -315,11 +311,10 @@ a[href*="reset-password"]:hover {
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="password"],
-.form-group input[type="file"],
+.form-group input[type="confirmPassword"],
 .form-group textarea {
   width: 100%;
   max-width: 100%;
-  box-sizing: border-box;
   font-size: 15px;
   padding: 11px 14px;
   background: var(--card-bg);
@@ -334,7 +329,6 @@ a[href*="reset-password"]:hover {
 button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-btn, #resetBtn {
   width: 100%;
   max-width: 100%;
-  box-sizing: border-box;
   margin: 0;
   padding: 13px 14px;
   font-size: 15px;
@@ -350,23 +344,24 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
   background: var(--card-bg);
   z-index: 9999;
   transition: left 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  padding: 70px 28px 28px 28px;
-  box-sizing: border-box;
+  padding: 50px 20px 20px 20px;
+
 }
-.mobile-menu.active { left: 0; }
+.mobile-menu.active { 
+  left: 0; 
+}
 .mobile-menu .nav {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
   margin: 0;
+  padding: 0 0 80px 0;
 }
 .mobile-menu .nav a {
   color: var(--text-color);
   font-weight: 600;
   text-decoration: none;
-  padding: 14px;
+  padding: 14px 9px;
   border-radius: 8px;
   transition: background 0.2s, color 0.2s;
   font-size: 15px;
@@ -382,13 +377,14 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
   margin: 0;
 }
 .mobile-menu .auth-button {
-  padding: 10px 0;
+  padding: 10px 7px;
   border-radius: 6px;
   font-weight: 600;
   font-size: 14px;
   text-align: center;
   background: none;
   border: none;
+  width: 100%;
 }
 .mobile-menu .auth-button.login {
   border: 2px solid var(--primary-purple);
@@ -433,6 +429,43 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
   transform: scale(1.15);
 }
 
+Profile Picture Navbar Logged in user
+  .profile-dropdown {
+      position: relative;
+      display: inline-block;
+  }
+
+  .profile-picture {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+  }
+
+  .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+  }
+
+  .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #f1f1f1
+  }
+
+  .profile-dropdown:hover .dropdown-content {
+      display: block;
+  }
+
 /* RESPONSIVE DESIGN */
 
 @media (min-width: 768px) {
@@ -441,88 +474,40 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
     padding: 14px 17px; 
   }
   .mobile-menu { 
-    display: none !important; 
+    display: none; 
   }
   header > .nav { 
-    display: flex !important; 
-    gap: 35px; 
+    display: flex; 
+    gap: 0; 
   }
   .hamburger { 
-    display: none !important; 
+    display: none; 
   }
   .nav a { 
-    font-size: 1.1rem; 
-    padding: 0.7rem 1.5rem; 
-  }
-
-  /* Cards/Grids */
-  .card, .section { 
-    padding: 3rem; 
+    font-size: 17.6px; 
+    padding: 11.2px 20px;  
   }
 
   /* Forms */
   .login-card, .register-card, .contact-form, .reset-card { 
     max-width: 500px; 
-    padding: 2.5rem; 
+    padding: 40px; 
   }
   .form-group input, .form-group textarea, .form-group select { 
-    font-size: 1.1rem; 
-    padding: 1.1em 1.2em; 
+    font-size: 17px; 
+    padding: 17px 19px; 
   }
 
   /* Buttons */
   button, .btn, .register-btn, .login-btn { 
-    font-size: 1.1rem; 
+    font-size: 17px; 
     padding: 1em 2em; 
-  }
-
-  /* Footer */
-  footer .contact-form { 
-    max-width: 500px; 
-    margin: 0; 
-  }
-  .footer-social { 
-    gap: 2.5rem; 
   }
 
   /* General Layout */
   .hero, .tech, .projects-section, .experience, .education { 
-    padding: 4rem 2rem; 
+    padding: 64px 32px; 
   }
-  /* Profile Picture Navbar Logged in user*/
-.profile-dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.profile-picture {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover {background-color: #f1f1f1}
-
-.profile-dropdown:hover .dropdown-content {
-    display: block;
-}
 }
 
 @media (min-width: 1024px) {
@@ -530,65 +515,27 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
     padding: 10px; 
   }
   .nav a { 
-    font-size: 1.2rem; 
+    font-size: 19px; 
     padding: 10px; 
   }
-  .card, .section { 
-    padding: 4rem; 
+  .section { 
+    padding: 64px; 
   }
   .login-card, .register-card, .contact-form, .reset-card { 
     max-width: 600px; 
-    padding: 3rem; 
+    padding: 48px; 
   }
   .form-group input, .form-group textarea, .form-group select { 
-    font-size: 1.15rem; 
+    font-size: 18px; 
     padding: 1.2em 1.4em; 
   }
   button, .btn, .register-btn, .login-btn { 
-    font-size: 1.15rem; 
+    font-size: 18px; 
     padding: 1.2em 2.5em; 
   }
-  footer .contact-form { 
-    max-width: 600px; 
-  }
-  .footer-social { 
-    gap: 3rem; 
-  }
+  
   .hero, .tech, .projects-section, .experience, .education { 
-    padding: 5rem 4rem; 
+    padding: 80px 64px; 
   }
-   /* Profile Picture Navbar Logged in user*/
-.profile-dropdown {
-    position: relative;
-    display: inline-block;
-}
 
-.profile-picture {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover {background-color: #f1f1f1}
-
-.profile-dropdown:hover .dropdown-content {
-    display: block;
-}
 }

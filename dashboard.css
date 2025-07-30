@@ -549,7 +549,7 @@ body, .dashboard-container, .dashboard {
   }
   .sidebar.section {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 20px;
     padding: 0 28px;
     justify-content: center;
@@ -625,7 +625,7 @@ body, .dashboard-container, .dashboard {
   }
   .sidebar.section {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 20px;
     padding: 0 28px;
     justify-content: center;
