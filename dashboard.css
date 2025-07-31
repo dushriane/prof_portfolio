@@ -1,12 +1,5 @@
 /* ===== DASHBOARD STYLES ===== */
-/* Global box-sizing */
-*{
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body, .dashboard-container, .dashboard {
+.dashboard-container, .dashboard {
   background: var(--dark-purple) ;
   margin: 0 ;
 }
@@ -195,46 +188,8 @@ body, .dashboard-container, .dashboard {
 }
 
 /* Sidebar styles */
-.sidebar {
-  width: 250px;
-  background: var(--card-bg);
-  color: var(--text-color);
-  position: relative;
-  min-height: 100vh;
-  padding: 32px 16px 16px 16px;
-  transition: width 0.3s;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  /* box-shadow: var(--shadow); */
-  border-right: 1px solid rgba(126, 75, 255, 0.1);
-}
-
-.sidebar.collapsed {
-  width: 60px;
-}
-
-.sidebar .sidebar-toggle {
-  background: none;
-  border: none;
-  color: var(--primary-purple);
-  font-size: 24px;
-  cursor: pointer;
-  align-self: flex-end;
-  padding: 8px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.sidebar .sidebar-toggle:hover {
-  background-color: rgba(126, 75, 255, 0.1);
-}
-
-.sidebar .sidebar-title {
-  font-size: 17.6px;
-  font-weight: 700;
-  color: var(--primary-purple);
-  font-family: 'Montserrat', sans-serif;
+.sidebar{
+  display: none;
 }
 
 .quick-actions {
@@ -473,156 +428,50 @@ body, .dashboard-container, .dashboard {
 /* RESPONSIVE DESIGN */
 
 @media (min-width: 768px) {
-  /* Navigation (Sidebar/Header) */
-  .sidebar { 
-    width: 260px; 
-    padding: 40px 24px 24px 24px; 
-  }
-  .sidebar .sidebar-title { 
-    font-size: 19.2px; 
-  }
-  .dashboard-header { 
-    flex-direction: row; 
-    align-items: center; 
-    padding: 32px 32px 24px 32px; 
-  }
-  .dashboard-title { 
-    font-size: 35.2px; 
-  }
-
-  /* Cards/Grids */
-  .dashboard-stats { 
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
-    gap: 40px; 
-  }
-  .stat-card { 
-    padding: 30px; 
-    font-size: 17.6px; 
-  }
-  .dashboard-content { 
-    grid-template-columns: 1fr 350px; 
-    gap: 60px; 
-  }
-  .posts-section, .dashboard-posts { 
-    padding: 32px 32px; 
-  }
-  .dashboard-post { 
-    padding: 32px; 
-    font-size: 17.6px; 
-  }
-
-  /* Forms */
-  .login-card, .register-card, .contact-form, .reset-card { 
-    max-width: 500px; 
-    padding: 35px; 
-  }
-  .form-group input, .form-group textarea, .form-group select { 
-    font-size: 18px; 
-    padding: 15px 17px; 
-  }
-
-  /* Buttons */
-  button, .btn, .quick-action-btn, .submit-btn { 
-    font-size: 18px; 
-    padding: 14px 28px; 
-  }
-  .quick-actions { 
-    gap: 21px; 
-    flex-direction: row; 
-    flex-wrap: nowrap; 
-  }
-
-  /* Dashboard Post Content */
-  .dashboard-post h3 { 
-    font-size: 18px; 
-  }
-  .dashboard-post p { 
-    font-size: 15px; 
-  }
-  .dashboard-post .admin-actions { 
-    gap: 12px; 
-  }
-
-  .sidebar.section {
+  .sidebar {
+    width: 250px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    position: relative;
+    min-height: 100vh;
+    padding: 32px 16px 16px 16px;
+    transition: width 0.3s;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 0 28px;
-    justify-content: center;
-    align-items: center;
-    max-width: 1000px;
+    border-right: 1px solid rgba(126, 75, 255, 0.1);
+  }
+  .sidebar .sidebar-toggle {
+    background: none;
+    border: none;
+    color: var(--primary-purple);
+    font-size: 24px;
+    cursor: pointer;
+    align-self: flex-end;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+
+  .sidebar .sidebar-toggle:hover {
+    background-color: rgba(126, 75, 255, 0.1);
+  }
+
+  .sidebar .sidebar-title {
+    font-size: 17.6px;
+    font-weight: 700;
+    color: var(--primary-purple);
+    font-family: 'Montserrat', sans-serif;
+  }
+  .sidebar.collapsed {
+    width: 60px;
   }
 }
 
+
+
+
 @media (min-width: 1024px) {
-  .sidebar { 
-    width: 300px; 
-    padding: 42px 28px 28px 28px; 
-  }
-  .dashboard-header { 
-    padding: 40px 48px 32px 48px; 
-  }
-  .dashboard-title { 
-    font-size: 35px; 
-  }
-  .dashboard-stats { 
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    padding: 0 28px;
-    justify-content: center;
-    align-items: center;
-    max-width: 1000px;
-  }
-  .stat-card { 
-    padding: 20px; 
-    font-size: 16px; 
-  }
-  .dashboard-content { 
-    grid-template-columns: 1fr 400px; 
-    gap: 80px; 
-  }
-  .posts-section, .dashboard-posts { 
-    padding: 42px 42px; 
-    background: none;
-  }
-  .dashboard-post { 
-    padding: 35px; 
-    font-size: 16px;
-  }
-  .login-card, .register-card, .contact-form, .reset-card { 
-    max-width: 600px; 
-    padding: 42px; 
-  }
-  .form-group input, .form-group textarea, .form-group select { 
-    font-size: 16px; 
-    padding: 17px 20px; 
-  }
-  button, .btn, .quick-action-btn, .submit-btn { 
-    font-size: 16px; 
-    padding: 17px 35px; 
-  }
-  .quick-actions { 
-    gap: 28px; 
-    flex-direction: row; 
-    flex-wrap: nowrap;
-  }
-  .dashboard-post h3 { 
-    font-size: 24px; 
-  }
-  .dashboard-post p { 
-    font-size: 17.6px; 
-  }
-  .dashboard-post .admin-actions { 
-    gap: 16px; 
-  }
-  .sidebar.section {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 0 28px;
-    justify-content: center;
-    align-items: center;
-    max-width: 1000px;
-  }
+  
+  
 }

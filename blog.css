@@ -1,11 +1,4 @@
-/* Global box-sizing */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
 /* ===== BLOG LIST PAGE ===== */
-
 /* Search form styles */
 #search-form {
   display: flex;
@@ -16,7 +9,6 @@
 
 #search-input {
   flex: 1;
-  padding: 9px 13px;
   border: 2px solid var(--accent-purple);
   border-radius: 8px;
   background: var(--card-bg);
@@ -38,16 +30,19 @@
 #search-form button:hover {
   background: var(--accent-purple);
 }
+
 .hero{
   display: flex; 
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 15px;
+  padding: 45px 7px;
 }
+
 .intro {
   font-family: 'Poppins', sans-serif;
-  font-size: 18px;
+  font-size: 15px;
   color: var(--accent-purple);
   opacity: 0.9;
   padding: 0 10px;
@@ -55,7 +50,7 @@
   font-weight: 400;
 }
 
-h1 {
+.hero h1 {
   color: var(--accent-purple);
   font-size: 32px;
   font-weight: 700;
@@ -96,8 +91,6 @@ h1 {
   border-color: var(--dark-purple);
   /* box-shadow: 0 4px 12px rgba(126, 75, 255, 0.3); */
 }
-
-
 
 .post-image {
   width: 100%;
@@ -481,11 +474,6 @@ h1 {
   color: var(--accent-purple);
 }
 
-/* Ensure mobile-menu is position: fixed or relative for absolute close icon */
-.mobile-menu {
-  position: fixed;
-  /* ...existing styles... */
-} 
 
 /* Comment section improvements */
 .comment-avatar {
@@ -704,15 +692,6 @@ h1 {
   max-width: 100%;
   overflow-y: auto;
 }
-/* 
-#editor {
-   background: #f8f6ff ; 
-   color: var(--dark-purple); 
-  color: #18102b;
-  min-height: 300px;
-  border-radius: 0 0 8px 8px;
-  
-} */
 
 .ql-editor {
   background: transparent !important;
@@ -737,211 +716,6 @@ h1 {
 }
 .image-preview{
   display: none;
-}
-
-/* RESPONSIVE DESIGN */
-
-/* MIN WIDTH 768PX */ 
-
-@media (min-width: 768px) {
-  /* Forms */
-  #search-form, .contact-form { 
-    max-width: 600px; 
-    margin-left: auto; 
-    margin-right: auto; 
-  }
-  #search-input, .contact-form input, .contact-form textarea { 
-    font-size: 17.6px; 
-    padding: 15px 17px; 
-  }
-  .filter-tags {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    padding: 20px 0;
-  }
-  /* Buttons */
-  button, .btn, .submit-btn { 
-    font-size: 17.6px; 
-    padding: 14px 28px; 
-  }
-  .auth-buttons {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-  /* Blog Post Content */
-  .blog-post { 
-    max-width: 900px; 
-    padding: 60px 40px; 
-  }
-  .blog-post-content pre, .blog-post-content code { 
-    font-size: 17.6px; 
-  }
-  .blog-image { 
-    height: 400px; 
-  }
-  .author-section { 
-    flex-direction: row; 
-    align-items: center; 
-    gap: 40px; 
-  }
-  .comments-section { 
-    max-width: 700px; 
-    margin: 32px auto 0 auto; 
-  }
-
-  /* Footer */
-  footer .contact-form { 
-    max-width: 500px; 
-    margin-left: auto; 
-    margin-right: auto; 
-  }
-  .footer-social { 
-    gap: 40px; 
-  }
-
-
-  /* blog creation page */
-  .editor-container{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 20px 60px;
-  }
-  .editor-container h1 {
-    font-size: 20px;
-    gap:  0 15px;
-    margin: 0;
-  }
-
-  .editor-container > .form-group{
-    margin: 0;
-  }
-  .blog-form{
-    gap: 15px;
-  }
-  .form-actions{
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-  .image-upload-container{
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 50px
-  }
-  .btn-upload{
-    padding: 8px;
-    flex-grow: 1;
-  }
-  .btn-draft, .btn-submit{
-    padding: 10px;
-  }
-
-}
-
-@media (min-width: 1024px) {
-  .nav a { 
-    font-size: 19.2px; 
-    padding: 14px 35px; 
-  }
-  .thoughts-grid { 
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
-        gap: 42px;
-    padding: 0 56px; 
-  }
-  .thought-card { 
-    padding: 48px; 
-    font-size: 18.4px; 
-  }
-  #search-form, .contact-form { 
-    max-width: 700px; 
-  }
-  #search-input, .contact-form input, .contact-form textarea { 
-    font-size: 18.4px; 
-    padding: 17px 20px; 
-  }
-  button, .btn, .submit-btn { 
-    font-size: 18.4px; 
-    padding: 17px 35px; 
-  }
-  .blog-post { 
-    max-width: 1100px; 
-    padding: 80px 80px; 
-  }
-  .blog-post-content pre, .blog-post-content code { 
-    font-size: 19.2px; 
-  }
-  .blog-image { 
-    height: 500px; 
-  }
-  .author-section { 
-    gap: 42px; 
-  }
-  .comments-section { 
-    max-width: 900px; 
-    margin: 35px auto 0 auto; 
-  }
-  footer .contact-form { 
-    max-width: 600px; 
-  }
-  .footer-social { 
-    gap: 42px; 
-  }
-  .auth-buttons {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-    .filter-tags {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 15px;
-    justify-content: center;
-    padding: 20px 0;
-    align-items: center;
-    max-width: 1000px;
-  }
-  .editor-container{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 20px 80px;
-    align-items: center;
-  }
-  .editor-container h1 {
-    font-size: 20px;
-    gap:  0 15px;
-    margin: 0;
-  }
-
-  .editor-container > .form-group{
-    margin: 0;
-  }
-  .blog-form{
-    gap: 15px;
-  }
-  .form-actions{
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-  .image-upload-container{
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 190px;
-  }
-  .btn-upload{
-    padding: 8px;
-  }
-  .btn-draft, .btn-submit{
-    padding: 10px;
-  }
-
 }
 
 /* --- POST DETAIL PAGE (post.html) --- */
@@ -1138,3 +912,248 @@ h1 {
   margin-bottom: 10px;
   font-weight: 500;
 }
+
+
+/* RESPONSIVE DESIGN */
+/* MIN WIDTH 768PX */ 
+
+@media (min-width: 768px) {
+  .intro{
+    font-size: 19px;
+  }
+  .hero h1{
+    font-size: 40px;
+  }
+  .hero{
+    padding: 70px 0;
+  }
+  /* Forms */
+  #search-form, .contact-form { 
+    max-width: 600px; 
+    margin-left: auto; 
+    margin-right: auto; 
+  }
+  #search-input, .contact-form input, .contact-form textarea { 
+    font-size: 17.6px; 
+  }
+  .filter-tags {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding: 20px 0;
+  }
+  /* Buttons */
+  button, .btn, .submit-btn { 
+    font-size: 17.6px; 
+    padding: 14px 28px; 
+  }
+ 
+  /* Blog Post Content */
+  .blog-post { 
+    max-width: 900px; 
+    padding: 60px 40px; 
+  }
+  .blog-post-content pre, .blog-post-content code { 
+    font-size: 17.6px; 
+  }
+  .blog-image { 
+    height: 400px; 
+  }
+  .author-section { 
+    flex-direction: row; 
+    align-items: center; 
+    gap: 40px; 
+  }
+  .comments-section { 
+    max-width: 700px; 
+    margin: 32px auto 0 auto; 
+  }
+
+  /* blog creation page */
+  .editor-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 60px;
+  }
+  .editor-container h1 {
+    font-size: 20px;
+    gap:  0 15px;
+    margin: 0;
+  }
+
+  .editor-container > .form-group{
+    margin: 0;
+  }
+  .blog-form{
+    gap: 15px;
+  }
+  .form-actions{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .image-upload-container{
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px
+  }
+  .btn-upload{
+    padding: 8px;
+    flex-grow: 1;
+  }
+  .btn-draft, .btn-submit{
+    padding: 10px;
+  }
+
+}
+
+@media (min-width: 1024px) {
+  .thoughts-grid { 
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+        gap: 42px;
+    padding: 0 56px; 
+  }
+  .thought-card { 
+    padding: 48px; 
+    font-size: 18.4px; 
+  }
+  #search-form, .contact-form { 
+    max-width: 700px; 
+  }
+  #search-input, .contact-form input, .contact-form textarea { 
+    font-size: 18.4px; 
+    padding: 17px 20px; 
+  }
+  .submit-btn { 
+    font-size: 18.4px; 
+    padding: 17px 35px; 
+  }
+  .blog-post { 
+    max-width: 1100px; 
+    padding: 80px 80px; 
+  }
+  .blog-post-content pre, .blog-post-content code { 
+    font-size: 19.2px; 
+  }
+  .blog-image { 
+    height: 500px; 
+  }
+  .author-section { 
+    gap: 42px; 
+  }
+  .comments-section { 
+    max-width: 900px; 
+    margin: 35px auto 0 auto; 
+  }
+  footer .contact-form { 
+    max-width: 600px; 
+  }
+  .footer-social { 
+    gap: 42px; 
+  }
+
+  .filter-tags {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 15px;
+    justify-content: center;
+    padding: 20px 0;
+    align-items: center;
+    max-width: 1000px;
+  }
+  .editor-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 80px;
+    align-items: center;
+  }
+  .editor-container h1 {
+    font-size: 20px;
+    gap:  0 15px;
+    margin: 0;
+  }
+
+  .editor-container > .form-group{
+    margin: 0;
+  }
+  .blog-form{
+    gap: 15px;
+  }
+  .form-actions{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .image-upload-container{
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 190px;
+  }
+  .btn-upload{
+    padding: 8px;
+  }
+  .btn-draft, .btn-submit{
+    padding: 10px;
+  }
+
+}
+
+
+
+
+    
+    
+/*     
+    /* Consistent card height 
+    .blog-card {
+        height: 300px; 
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .blog-card .excerpt {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; 
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        flex-grow: 1;
+    }
+    
+    /* Responsive width 
+    .thoughts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        width: 100%;
+    }
+    
+    /* Liked/bookmarked styles 
+    .like-btn.liked i {
+        color: red;
+    }
+    
+    .bookmark-btn.bookmarked i {
+        color: gold;
+    }
+    
+    /* Always show bookmark button 
+    .bookmark-btn {
+        opacity: 1 !important;
+    }
+    
+    @media (max-width: 768px) {
+        /* Full width on mobile 
+        .blog-card {
+            width: 100%;
+        }
+        
+        /* Hide desktop auth buttons 
+        .desktop-auth {
+            display: none;
+        }
+    } */

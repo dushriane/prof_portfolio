@@ -61,12 +61,6 @@ header a:hover{
   align-items: center;
 }
 
-/* Mobile menu styling */
-.mobile-menu {
-  z-index: 9999;
-  position: fixed;
-}
-
 /* Login prompt styling */
 .login-prompt {
   display: none;
@@ -337,12 +331,13 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
   background: var(--primary-purple);
   color: var(--text-color);
 }
-.mobile-menu .auth-buttons {
+ .mobile-menu .auth-buttons {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin: 0;
-}
+} 
+
 .mobile-menu .auth-button {
   padding: 10px 7px;
   border-radius: 6px;
@@ -471,10 +466,6 @@ Profile Picture Navbar Logged in user
     padding: 1em 2em; 
   }
 
-  /* General Layout */
-  .hero, .tech, .projects-section, .experience, .education { 
-    padding: 64px 32px; 
-  }
 }
 
 @media (min-width: 1024px) {
