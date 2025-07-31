@@ -543,10 +543,6 @@ body, .dashboard-container, .dashboard {
     gap: 12px; 
   }
 
-  /* General Layout */
-  .section, .card { 
-    padding: 42px; 
-  }
   .sidebar.section {
     display: flex;
     flex-direction: column;
@@ -619,9 +615,6 @@ body, .dashboard-container, .dashboard {
   }
   .dashboard-post .admin-actions { 
     gap: 16px; 
-  }
-  .section, .card { 
-    padding: 42px; 
   }
   .sidebar.section {
     display: flex;
