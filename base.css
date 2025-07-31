@@ -24,23 +24,6 @@ body {
   overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-h1, h3{
-  color: var(--primary-purple);
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  margin: 0;
-}
-
-p, ul, ol, li, label, input, textarea, select {
-  /* font-family: inherit; */
-  color: var(--text-color);
-  font-size: 14px;
-}
-
-ul, ol {
-  padding-left: 21px;
-}
-
 img {
   max-width: 100%;
   display: block;
@@ -192,12 +175,6 @@ input, textarea, select {
   font-size: 14px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-
-/* hr {
-  border: none;
-  border-top: 2px solid var(--accent-purple);
-} */
-
 
 /* ===== LOGIN & REGISTER PAGES ===== */
 .login-container, .register-container {
