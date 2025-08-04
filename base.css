@@ -391,7 +391,7 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
   transform: scale(1.15);
 }
 
-Profile Picture Navbar Logged in user
+/* Profile Picture Navbar Logged in user */
   .profile-dropdown {
       position: relative;
       display: inline-block;
@@ -411,6 +411,8 @@ Profile Picture Navbar Logged in user
       min-width: 160px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       z-index: 1;
+      right: 0;
+      border-radius: 6px;
   }
 
   .dropdown-content a {

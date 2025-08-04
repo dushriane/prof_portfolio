@@ -49,6 +49,7 @@
                 <a href="blog.html" class="active">BLOG</a>
                 <a href="dashboard.html">DASHBOARD</a>
             </div>
+
             <div class="auth-buttons">
                 <div class="auth-button login">
                     <a href="login.html">Login</a>
@@ -91,7 +92,8 @@
         // Show/hide auth buttons based on login status
         document.addEventListener('DOMContentLoaded', async function() {
             const token = localStorage.getItem('authToken');
-            if(!token) return showAuthButtons();
+            const user = localStorage.getItem('user');
+            if(!token || !user) return showAuthButtons();
 
             try{
                 const response = await fetch('/api/verify-auth', {

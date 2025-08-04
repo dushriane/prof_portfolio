@@ -567,7 +567,7 @@
 /* Danger Actions */
 .danger {
     background: var(--danger);
-    color: white;
+    color: var(--text-color);
 }
 
 /* RESPONSIVE DESIGN */
@@ -585,10 +585,15 @@
         align-items: flex-start;
         gap: 1rem;
     }
+
 }
 
 
 @media (min-width: 1024px) {
-  
+  .quick-actions{
+    position: sticky;
+    top: 16px;
+    height: 100vh;
+  }
   
 }
