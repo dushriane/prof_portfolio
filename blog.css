@@ -630,11 +630,6 @@
   color: #f78c6c; 
 } 
 
-/* Remove default box-shadow from cards, buttons, etc. */
-.thought-card, .blog-interactions, .read-more, .comment, .comment.reply, .author-section, .submit-btn, button, .btn {
-  box-shadow: none !important;
-}
-
 /* Only apply box-shadow on hover/focus for interactive elements */
 .thought-card:hover, .blog-interactions:hover, .read-more:hover, .comment:hover, .comment.reply:hover, .author-section:hover, .submit-btn:hover, button:hover, .btn:hover {
   box-shadow: var(--accent-shadow) !important;
@@ -749,10 +744,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 30px;
-  padding: 0 30px;
-  max-width: 1200px;
+  padding: 10px 0;
   margin: 0;
-  align-items: stretch;
+  align-items:center;
 }
 .thought-card {
   display: flex;
@@ -761,7 +755,6 @@
   justify-content: flex-start;
   height: 100%;
   min-height: 420px;
-  box-sizing: border-box;
   padding: 15px;
   border-radius: 12px;
   background-color: var(--card-bg);
@@ -880,6 +873,11 @@
     margin: 0;
   }
 
+  .thoughts-grid{
+    padding: 0 30px 60px 30px;
+    max-width: 1200px;
+  }
+
   .editor-container > .form-group{
     margin: 0;
   }
@@ -909,12 +907,11 @@
 
 @media (min-width: 1024px) {
   .thoughts-grid { 
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
-        gap: 42px;
-    padding: 0 56px; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 42px;
   }
   .thought-card { 
-    padding: 48px; 
+    padding: 24px; 
     font-size: 18.4px; 
   }
   #search-form, .contact-form { 

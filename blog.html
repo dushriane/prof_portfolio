@@ -99,13 +99,19 @@
                 });
                 if(!response.ok) throw new Error('Invalid token');
 
-                const user = JSON.parse(localStorage.getItem(user));
+                const user = JSON.parse(localStorage.getItem('user'));
                 showLoggedInState(user);
             }catch(error){
                 localStorage.removeItem('authToken');
                 showAuthButtons();
             }
         });
+
+        // Add this to your <script> in blog.html
+        function showAuthButtons() {
+            document.getElementById('authButtons').style.display = 'flex';
+            document.querySelector('.profile-dropdown').style.display = 'none';
+        }
 
         function showLoggedInState(user) {
             document.getElementById('authButtons').style.display = 'none';
