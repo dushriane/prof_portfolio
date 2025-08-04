@@ -52,31 +52,34 @@
             <!-- Post content will be rendered here -->
         </section>
         <section class="post-interactions section" id="postInteractions">
-            <button id="likeBtn">
+            <button id="likeBtn" class="interaction-btn">
                 <i class="far fa-heart"></i> 
                 <span id="likeCount">0</span> Like
             </button>
-            <button id="bookmarkBtn">
+            <button id="bookmarkBtn" class="interaction-btn">
                 <i class="far fa-bookmark"></i> 
                 Bookmark
             </button>
         </section>
-        <section class="comments section" id="commentsSection">
-            <h2>Comments</h2>
+        <section class="comments section modern-comments" id="commentsSection">
+            <h2 class="comments-title">Comments</h2>
             <div class="login-prompt" id="loginPrompt">
-                <p>Please <a href="login.html">login</a> to comment and bookmark posts.</p>
+                <p>
+                    Please <a href="login.html" class="login-link">login</a> to comment and bookmark posts.
+                </p>
             </div>
-            
-            <form id="commentForm">
-                <textarea 
-                    class="comment-input"
-                    name="comment" 
-                    id="commentInput" 
-                    placeholder="Write a comment..." 
-                    required></textarea>
-                <button type="submit" class="comment-submit" id="commentSubmit" disabled>Post Comment</button>
-            </form>
-            <div id="commentsList"></div>
+            <div class="comment-form-container">
+                <form id="commentForm" class="comment-form">
+                    <textarea 
+                        class="comment-input"
+                        name="comment" 
+                        id="commentInput" 
+                        placeholder="Write a comment..." 
+                        required></textarea>
+                    <button type="submit" class="comment-submit" id="commentSubmit" disabled>Post Comment</button>
+                </form>
+            </div>
+            <div id="commentsList" class="comments-list"></div>
         </section>
     </main> 
     <script>
