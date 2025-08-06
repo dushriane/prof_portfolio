@@ -70,7 +70,6 @@ header a:hover{
 .profile-pic-preview {
   display: none;
   max-width: 100px;
-  margin-top: 10px;
   border-radius: 50%;
 }
 
@@ -105,7 +104,6 @@ header > .nav {
   width: 25px;
   height: 3px;
   background: var(--text-color);
-  margin: 0;
   transition: 0.3s;
   border-radius: 2px;
 }
@@ -290,7 +288,6 @@ a[href*="reset-password"]:hover {
 button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-btn, #resetBtn {
   width: 100%;
   max-width: 100%;
-  margin: 0;
   padding: 13px 14px;
   font-size: 15px;
 }
@@ -315,7 +312,6 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin: 0;
   padding: 0 0 80px 0;
 }
 .mobile-menu .nav a {
@@ -335,10 +331,9 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin: 0;
 } 
 
-.mobile-menu .auth-button {
+.mobile-menu .auth-button { 
   padding: 10px 7px;
   border-radius: 6px;
   font-weight: 600;

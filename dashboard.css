@@ -34,7 +34,6 @@
 .dashboard-header p {
   color: var(--text-color);
   opacity: 1;
-  margin: 0;
   font-size: 17.6px;
   font-weight: 500;
 }
@@ -43,7 +42,6 @@
   font-family: 'Montserrat', sans-serif;
   font-size: 32px;
   color: var(--primary-purple);
-  margin: 0;
 }
 
 .dashboard-stats {
@@ -52,7 +50,6 @@
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 10px;
-  margin: 0;
   padding: 10px;
 }
 
@@ -76,7 +73,6 @@
   font-size: 32px;
   font-weight: 700;
   color: var(--primary-purple);
-  margin-bottom: 10px;
 }
 
 .stat-label {
@@ -133,7 +129,6 @@
   font-family: 'Montserrat', sans-serif;
   font-size: 20px;
   color: var(--primary-purple);
-  margin: 0;
 }
 
 .new-post-btn {
@@ -217,7 +212,6 @@
   align-items: center;
   justify-content: center;
   gap: 16px;
-  margin-bottom: 32px;
   flex-wrap: wrap;
   padding: 0 10px;
 }
@@ -256,9 +250,7 @@
   background: var(--card-bg);
   border-radius: 12px;
   padding: 24px 16px;
-  /* box-shadow: var(--shadow); */
   border: 1px solid rgba(126, 75, 255, 0.1);
-  margin: 0;
 }
 
 .dashboard-posts h2 {
@@ -418,7 +410,6 @@
     font-size: 16px;
     cursor: pointer;
     padding: 8px 16px;
-    margin-bottom: 24px;
     border-radius: 4px;
     transition: all 0.2s;
     display: flex;
@@ -514,7 +505,6 @@
 .metric-label {
     font-size: 0.9rem;
     color: var(--accent-purple);
-    margin-bottom: 0.3rem;
 }
 
 /* Chart Cards */
@@ -529,7 +519,7 @@
 
 .chart-container {
     grid-column: span 2;
-    background: white;
+    background: var(--text-color);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
@@ -542,10 +532,6 @@
     padding: 1.5rem;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     color: var(--text-color);
-}
-
-.top-posts-list {
-    margin-top: 1rem;
 }
 
 .top-post-item {
