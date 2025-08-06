@@ -109,7 +109,6 @@
             }
         });
 
-        // Add this to your <script> in blog.html
         function showAuthButtons() {
             document.getElementById('authButtons').style.display = 'flex';
             document.querySelector('.profile-dropdown').style.display = 'none';
@@ -125,6 +124,7 @@
         function logout() {
             localStorage.removeItem('authToken');
             localStorage.removeItem('user');
+            showAuthButtons();
             window.location.href = 'login.html';
         }
         // Bookmark toggle logic

@@ -64,7 +64,7 @@
                 <button class="quick-action-btn" onclick="showDashboard()">
                     📊 Dashboard
                 </button>
-                <button class="quick-action-btn" onclick="window.location.href='createpost.html'">
+                <button class="quick-action-btn" onclick="createNewPost()">
                     📝 Create New Post
                 </button>
                 <button class="quick-action-btn" onclick="viewAnalytics()">
@@ -76,7 +76,7 @@
                 <button class="quick-action-btn" onclick="exportData()">
                     📤 Export Data
                 </button>
-                <button class="quick-action-btn" onclick="window.location.href='edit-profile.html'">
+                <button class="quick-action-btn" onclick="showEditProfileForm()">
                     👤 Edit Profile
                 </button>
                 
@@ -163,9 +163,22 @@
                 window.location.reload();
             }
 
+            function showAuthButtons() {
+                document.getElementById('authButtons').style.display = 'flex';
+                document.querySelector('.profile-dropdown').style.display = 'none';
+            }
+
+            function showLoggedInState(user) {
+                document.getElementById('authButtons').style.display = 'none';
+                const profileDropdown = document.querySelector('.profile-dropdown');
+                profileDropdown.style.display = 'block';
+                profileDropdown.querySelector('img').src = user.profilePic || './images/profiles/default.jpg';
+            }
+
             function logout() {
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('user');
+                showAuthButtons();
                 window.location.href = 'login.html';
             }
 
@@ -186,6 +199,7 @@
                 const user = JSON.parse(localStorage.getItem('user') || '{}');
                 return user && user.role === 'admin';
             }
+
             async function loadDashboardData() {
                 const token = localStorage.getItem('authToken');
                 try {
@@ -244,7 +258,87 @@
             
 
             function createNewPost() {
-                alert('New post creation feature coming soon!');
+                document.querySelector('.dashboard').innerHTML = `
+                    <div class="full-page-view">
+                        <h1>Create New Blog Post</h1>
+                        <form id="blog-form">
+                            <div class="form-group">
+                                <label for="post-title">Title</label>
+                                <input type="text" id="post-title" name="title" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Featured Image</label>
+                                <div class="image-upload-container">
+                                    <input type="file" id="featured-image" accept="image/*" class="hidden-file-input">
+                                    <button type="button" id="upload-btn" class="btn-upload">
+                                        <i class="fas fa-image"></i> Choose Image
+                                    </button>
+                                    <span id="file-name">No image selected</span>
+                                    <div id="image-preview" class="image-preview" ></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Content</label>
+                                <div id="editor" ></div>
+                                <input type="hidden" id="post-content" name="content">
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn-submit">
+                                    <i class="fas fa-paper-plane"></i> Publish Post
+                                </button>
+                                <button type="button" id="save-draft" class="btn-draft">
+                                    <i class="fas fa-save"></i> Save Draft
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+            }
+
+            document.getElementById('newPostForm').onsubmit = function(e) {
+                e.preventDefault();
+                const title = document.getElementById('post-title').value;
+                const content = document.getElementById('post-content').value;
+                const category = document.getElementById('category').value;
+                const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim());
+                const featuredImage = document.getElementById('featured-image').files[0];
+                if (!title || !content) {
+                    alert('Title and content are required.');
+                    return;
+                }
+                const postData = {
+                    title,
+                    content,
+                    category,
+                    tags,
+                    featuredImage: featuredImage ? featuredImage.name : null,   
+                    published: true // Set to false if you want to save as draft
+                };
+                // Send postData to your backend API
+                fetch('/api/posts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(postData)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(data => {
+                    console.log('Post created successfully:', data);
+                    // Redirect to the new post page
+                    openPost(data.id);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
             }
 
             function openPost(postId) {
@@ -255,10 +349,6 @@
                 // Create analytics page content dynamically
                 const analyticsHTML = `
                     <div class="analytics-page">
-                        <button class="back-button" onclick="returnToDashboard()">
-                            ← Back to Dashboard
-                        </button>
-                        
                         <div class="analytics-header">
                             <h2><i class="fas fa-chart-bar"></i> Blog Analytics</h2>
                             <div class="time-filter">
@@ -274,7 +364,7 @@
                         <div class="analytics-grid">
                             <!-- Metric Cards -->
                             <div class="metric-card">
-                                <div class="metric-icon">👁️</div>
+                                <!-- <div class="metric-icon">👁️</div> -->
                                 <div class="metric-info">
                                     <div class="metric-label">Total Views</div>
                                     <div class="metric-value" id="totalViews">0</div>
@@ -298,7 +388,6 @@
                         </div>
                     </div>
                 `;
-                
                 
                 // Replace content and load data
                 document.querySelector('.dashboard').innerHTML = analyticsHTML;
@@ -328,7 +417,6 @@
                     
                     // Render activity table
                     renderRecentActivity(data.recentActivity);
-                    
                 } catch (error) {
                     console.error('Error loading analytics:', error);
                     document.querySelector('.analytics-page').innerHTML += `
@@ -338,13 +426,8 @@
             }
 
             function manageCategories() {
-                // Create modal overlay
-                const modalHTML = `
+                const categoriesHTML= `
                     <div class="full-page-view">
-                        <button class="back-button" onclick="showDashboard()">
-                            ← Back to Dashboard
-                        </button>
-                        
                         <div class="section-header">
                             <h2><i class="fas fa-tags"></i> Manage Categories</h2>
                         </div>
@@ -365,9 +448,7 @@
                         </div>
                     </div>
                 `;
-                
                 document.querySelector('.dashboard').innerHTML = categoriesHTML;
-                
                 // Load existing categories
                 loadCategories();
             }
@@ -400,6 +481,7 @@
             function closeModal() {
                 document.getElementById('categoriesModal')?.remove();
             }
+
             function returnToDashboard() {
                 // Reload the original dashboard
                 window.location.reload();
@@ -416,12 +498,8 @@
 
             function exportData() {
                 // Create export modal
-                const modalHTML = `
+                const exportHTML = `
                     <div class="full-page-view">
-                        <button class="back-button" onclick="showDashboard()">
-                            ← Back to Dashboard
-                        </button>
-                        
                         <div class="section-header">
                             <h2><i class="fas fa-file-export"></i> Export Data</h2>
                         </div>
@@ -567,6 +645,102 @@
                 }
             }
 
+            function showEditProfileForm() {
+                // Create edit profile form
+                const editProfileHTML = `
+                    <div class="full-page-view">
+                        <div class="section-header">
+                            <h2><i class="fas fa-user-edit"></i> Edit Profile</h2>
+                            <p>Update your bio and profile picture</p>
+                        </div>
+                        
+                        <form id="editProfileForm" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" name="username" placeholder="Enter your username" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="bio">Bio</label>
+                                <textarea id="bio" name="bio" rows="3" placeholder="Tell us about yourself..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" placeholder="Enter your email" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="text" id="phone" name="phone" placeholder="Enter your phone number" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select id="gender" name="gender" readonly>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="profilePicture">Profile Picture</label>
+                                <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+                                <img id="profilePicPreview" class="profile-pic-preview" />
+                            </div>
+                            <button type="submit" class="register-btn" id="saveBtn">Save Changes</button>
+                        </form>
+                    </div>
+                `;
+                document.querySelector('.dashboard').innerHTML = editProfileHTML;
+                // Prefill form with existing user data
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                if (user) {
+                    document.getElementById('profileName').value = user.name || '';
+                    document.getElementById('profileEmail').value = user.email || '';
+                    document.getElementById('profileBio').value = user.bio || '';   
+                    const profilePicPreview = document.getElementById('profilePicPreview');
+                    if (user.profilePic) {
+                        profilePicPreview.src = user.profilePic;
+                        profilePicPreview.style.display = 'block';
+                    } else {
+                        profilePicPreview.style.display = 'none';
+                    }
+                }
+                // Handle profile picture preview
+                const profilePictureInput = document.getElementById('profilePicture');
+                profilePictureInput.addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const profilePicPreview = document.getElementById('profilePicPreview');
+                            profilePicPreview.src = e.target.result;
+                            profilePicPreview.style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        document.getElementById('profilePicPreview').style.display = 'none';
+                    }
+                });
+                // Handle form submission
+                document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const name = document.getElementById('profileName').value;
+                    const email = document.getElementById('profileEmail').value;
+                    const bio = document.getElementById('profileBio').value;
+                    const profilePicture = document.getElementById('profilePicture').files[0];
+                    // Simulate saving profile data (replace with actual API call)
+                    const user = {
+                        name,
+                        email,
+                        bio,
+                        profilePic: profilePicture ? URL.createObjectURL(profilePicture) : null
+                    };
+                    localStorage.setItem('user', JSON.stringify(user));
+                    document.getElementById('message').innerHTML = '<div class="success-message">Profile updated successfully!</div>';
+                    // Optionally, redirect to dashboard or show updated profile    
+                    setTimeout(() => {
+                        showDashboard();
+                    }, 1000);
+                });
+            }
+
             // Show/hide dashboard link based on login status
             function updateNavbarLinks() {
                 const token = localStorage.getItem('authToken');
@@ -575,11 +749,13 @@
                     dashboardLink.style.display = token ? 'inline-block' : 'none';
                 }
             }
+
             document.addEventListener('DOMContentLoaded', updateNavbarLinks);
             // Restrict dashboard access to logged-in users
             if (!localStorage.getItem('authToken')) {
                 window.location.href = 'login.html';
             }
+
             // Fetch and display only the logged-in user's posts
             let userPostsCache = [];
             async function loadUserPosts() {
@@ -597,6 +773,7 @@
                     postsContainer.innerHTML = '<div>Error loading your posts.</div>';
                 }
             }
+
             function renderUserPosts() {
                 const postsContainer = document.getElementById('dashboardPosts');
                 const search = document.getElementById('dashboardSearchInput').value.toLowerCase();
@@ -631,13 +808,16 @@
                     postsContainer.appendChild(postDiv);
                 });
             }
+
             document.getElementById('dashboardSearchInput').addEventListener('input', renderUserPosts);
             document.getElementById('dashboardCategoryFilter').addEventListener('change', renderUserPosts);
             document.addEventListener('DOMContentLoaded', loadUserPosts);
+
             // CRUD functions
             window.editPost = function(postId) {
                 window.location.href = `createpost.html?edit=${postId}`;
             };
+
             window.deletePost = async function(postId) {
                 if (!confirm('Are you sure you want to delete this post?')) return;
                 const token = localStorage.getItem('authToken');
