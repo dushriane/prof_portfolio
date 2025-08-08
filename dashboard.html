@@ -6,6 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="base.css">
         <link rel="stylesheet" href="dashboard.css">
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@400;700&family=Poppins:wght@400;600&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
         <script src="main.js" defer></script>
     </head>
@@ -135,7 +137,7 @@
                 </div>
                 <div class="dashboard-posts" id="dashboardPosts">
                     <h2>Recent Posts</h2>
-                    <div class="dashboard-post">
+                    <!-- <div class="dashboard-post">
                         <h3>How to Build a Portfolio</h3>
                         <p>Category: Tech</p>
                         <p>Status: Published</p>
@@ -145,13 +147,14 @@
                             <button class="delete-post-btn" data-post-id="POST_ID">Delete Post</button>
                             <button class="hide-post-btn" data-post-id="POST_ID">Hide Post</button>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- More posts dynamically -->
                 </div>
             </main>
         </div>
 
-         <script>
+        
+        <script>
             // Show/hide auth buttons based on login status
             document.addEventListener('DOMContentLoaded', function() {
                 const token = localStorage.getItem('authToken');
@@ -265,14 +268,7 @@
                     const postsContainer = document.getElementById('dashboardPosts');
                     postsContainer.innerHTML = '';
                     let posts = postsData.posts;
-                    if (!posts || !Array.isArray(posts) || posts.length === 0) {
-                        // Fallback mock data for frontend
-                        posts = [
-                            { id: 1, title: 'How to Build a Portfolio', category: 'Tech', published: true, views: 120, },
-                            { id: 2, title: 'Emotions Feel Good', category: 'Life', published: true, views: 80, },
-                            { id: 3, title: 'Building Systems That Last', category: 'Philosophy', published: false, views: 45, },
-                        ];
-                    }
+                    
                     posts.forEach(post => {
                         const postElement = document.createElement('div');
                         postElement.className = 'dashboard-post';
@@ -313,6 +309,21 @@
                             </div>
 
                             <div class="form-group">
+                                <label for="excerpt">Excerpt</label>
+                                <textarea id="excerpt" name="excerpt" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <input type="text" id="category" name="category" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tags">Tags (comma separated)</label>
+                                <input type="text" id="tags" name="tags">
+                            </div>
+
+                            <div class="form-group">
                                 <label>Featured Image</label>
                                 <div class="image-upload-container">
                                     <input type="file" id="featured-image" accept="image/*" class="hidden-file-input">
@@ -341,49 +352,62 @@
                         </form>
                     </div>
                 `;
-            }
 
-            document.getElementById('newPostForm').onsubmit = function(e) {
-                e.preventDefault();
-                const title = document.getElementById('post-title').value;
-                const content = document.getElementById('post-content').value;
-                const category = document.getElementById('category').value;
-                const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim());
-                const featuredImage = document.getElementById('featured-image').files[0];
-                if (!title || !content) {
-                    alert('Title and content are required.');
-                    return;
-                }
-                const postData = {
-                    title,
-                    content,
-                    category,
-                    tags,
-                    featuredImage: featuredImage ? featuredImage.name : null,   
-                    published: true // Set to false if you want to save as draft
-                };
-                // Send postData to your backend API
-                fetch('/api/posts', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(postData)
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok.');
-                })
-                .then(data => {
-                    console.log('Post created successfully:', data);
-                    // Redirect to the new post page
-                    openPost(data.id);
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
+                 // Initialize Quill after the editor div is in the DOM
+                const quill = new Quill('#editor', {
+                    theme: 'snow',
+                    placeholder: 'Write your blog content here...'
                 });
+
+                // Set up form submission
+                document.getElementById('blog-form').onsubmit = function(e) {
+                    e.preventDefault();
+                    document.getElementById('post-content').value = quill.root.innerHTML;
+
+                    const title = document.getElementById('post-title').value;
+                    const content = document.getElementById('post-content').value;
+                    const excerpt = document.getElementById('excerpt').value;
+                    const category = document.getElementById('category').value;
+                    const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim());
+                    const featuredImage = document.getElementById('featured-image').files[0];
+
+                    if (!title || !content) {
+                        alert('Title and content are required.');
+                        return;
+                    }
+
+                    const postData = {
+                        title,
+                        content,
+                        excerpt,
+                        category,
+                        tags,
+                        featuredImage: featuredImage ? featuredImage.name : null,
+                        published: true // Set to false if you want to save as draft
+                    };
+
+                    // Send postData to your backend API
+                    fetch('/api/posts', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(postData)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw new Error('Network response was not ok.');
+                    })
+                    .then(data => {
+                        console.log('Post created successfully:', data);
+                        openPost(data.id);
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation:', error);
+                    });
+                };
             }
 
             function openPost(postId) {
@@ -443,7 +467,7 @@
             async function loadAnalyticsData() {
                 try {
                     const token = localStorage.getItem('authToken');
-                    const response = await fetch('/api/analytics', {
+                    const response = await fetch('http://localhost:3000/api/analytics', {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     
@@ -501,7 +525,7 @@
             async function loadCategories() {
                 try {
                     const token = localStorage.getItem('authToken');
-                    const response = await fetch('/api/categories', {
+                    const response = await fetch('http://localhost:3000/api/categories', {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     
@@ -607,22 +631,37 @@
                 
                 document.querySelector('.dashboard').innerHTML = exportHTML;
                 updateExportSummary();
+
+                // Attach event listeners for navigation
+                document.getElementById('continueStep1').onclick = nextExportStep;
+                document.getElementById('continueStep2').onclick = nextExportStep;
+                document.getElementById('backStep2').onclick = prevExportStep;
+                document.getElementById('backStep3').onclick = prevExportStep;
             }
 
             // Export step navigation
             let currentExportStep = 1;
 
             function nextExportStep() {
-                document.getElementById(`step${currentExportStep}`).classList.remove('active');
+                if (document.getElementById(`step${currentExportStep}`)) {
+                    document.getElementById(`step${currentExportStep}`).classList.remove('active');
+                }
                 currentExportStep++;
-                document.getElementById(`step${currentExportStep}`).classList.add('active');
+                if (document.getElementById(`step${currentExportStep}`)) {
+                    document.getElementById(`step${currentExportStep}`).classList.add('active');
+                }
                 updateExportSummary();
             }
 
             function prevExportStep() {
-                document.getElementById(`step${currentExportStep}`).classList.remove('active');
+                if (document.getElementById(`step${currentExportStep}`)) {
+                    document.getElementById(`step${currentExportStep}`).classList.remove('active');
+                }
                 currentExportStep--;
-                document.getElementById(`step${currentExportStep}`).classList.add('active');
+                if (document.getElementById(`step${currentExportStep}`)) {
+                    document.getElementById(`step${currentExportStep}`).classList.add('active');
+                }
+                updateExportSummary();
             }
 
             function updateExportSummary() {

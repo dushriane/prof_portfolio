@@ -168,6 +168,19 @@ input, textarea, select {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+/* icons */
+i.fas, i.fab, i.far, i.fa, .fa {
+  color: var(--accent-purple);
+  font-size: 1.2em;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.fab, .fas, .fa, .far {
+  font-family: "Font Awesome 6 Free", "Font Awesome 5 Free", "FontAwesome", Arial, sans-serif;
+  font-weight: 900;
+}
+
 /* ===== LOGIN & REGISTER PAGES ===== */
 .login-container, .register-container {
   min-height: 100vh;
