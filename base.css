@@ -391,7 +391,8 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
       position: relative;
       display: flex;
       align-items: center;
-      padding: 0 0 0 8px;
+      padding: 0 8px 0 0;
+      order: 2;
   }
 
   .profile-picture {
@@ -403,15 +404,21 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
       border: 2px solid var(--primary-purple);
   }
 
+  .nav-actions{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
   .dropdown-content {
       display: none;
       position: absolute;
-      background-color: #f9f9f9;
-      min-width: 160px;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      z-index: 1;
+      background-color: var(--card-bg);
+      min-width: 140px;
+      box-shadow: var(--shadow, 0 4px 24px rgba(123, 44, 191, 0.18));
+      z-index: 100;
       right: 0;
-      border-radius: 6px;
+      border-radius: 8px;
   }
 
   .dropdown-content a {
@@ -419,6 +426,7 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
       padding: 12px 16px;
       text-decoration: none;
       display: block;
+      border-radius: 8px;
   }
 
   .dropdown-content a:hover {
@@ -449,6 +457,13 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
   .nav a { 
     font-size: 17.6px; 
     padding: 11.2px 20px;  
+  }
+  .nav-actions{
+    margin-left: 0;
+    gap: 0;
+  }
+  .profile-dropdown{
+    margin-right: 0;
   }
 
   /* Forms */

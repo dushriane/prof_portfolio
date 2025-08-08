@@ -19,17 +19,19 @@
             <a href="blog.html" class="active">BLOG</a>
             <a href="dashboard.html">DASHBOARD</a>
         </div>
-        <div class="hamburger" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <div class="profile-dropdown">
-            <img src="./images/profiles/default.jpg" alt="Profile Picture" class="profile-picture">
-            <div class="dropdown-content">
-                <a href="edit-profile.html">Profile Settings</a>
-                <a href="#" onclick="logout()">Logout</a>
-            </div>
+        <div class="nav-actions">
+                <div class="hamburger" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="profile-dropdown">
+                    <img src="./images/profiles/default.jpg" alt="Profile Picture" class="profile-picture">
+                    <div class="dropdown-content">
+                        <a href="edit-profile.html">Profile Settings</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
         </div>
     </header>
     <div class="mobile-menu" id="mobileMenu">
@@ -39,7 +41,7 @@
                 <a href="blog.html" class="active">BLOG</a>
                 <a href="dashboard.html">DASHBOARD</a>
             </div>
-            <div class="auth-buttons">
+            <div class="auth-buttons" id="mobileAuthButtons">
                 <div class="auth-button login">
                     <a href="login.html">Login</a>
                 </div>
@@ -97,6 +99,18 @@
         document.addEventListener('click', function() {
             document.querySelector('.profile-dropdown').classList.remove('active');
         });
+
+        function updateMobileAuthButtons(isLoggedIn) {
+            const mobileAuth = document.getElementById('mobileAuthButtons');
+            if (isLoggedIn) {
+                mobileAuth.innerHTML = `<button class="logout-btn" onclick="logout()">Logout</button>`;
+            } else {
+                mobileAuth.innerHTML = `
+                <div class="auth-button login"><a href="login.html">Login</a></div>
+                <div class="auth-button register"><a href="register.html">Register</a></div>
+                `;
+            }
+        }
         // Utility to get query param
         function getQueryParam(name) {
             const urlParams = new URLSearchParams(window.location.search);
