@@ -162,7 +162,14 @@
                 if (token) {
                     authButtons.querySelector('.login').style.display = 'none';
                     authButtons.querySelector('.register').style.display = 'none';
-                    authButtons.querySelector('.logout').style.display = 'block';
+                    if (!authButtons.querySelector('.logout')) {
+                        const logoutBtn = document.createElement('div');
+                        logoutBtn.className = 'auth-button logout';
+                        logoutBtn.innerHTML = `<a href="#" onclick="logout()">Logout</a>`;
+                        authButtons.appendChild(logoutBtn);
+                    } else {
+                        authButtons.querySelector('.logout').style.display = 'block';
+                    }
                 } else {
                     authButtons.querySelector('.login').style.display = 'block';
                     authButtons.querySelector('.register').style.display = 'block';
@@ -298,7 +305,21 @@
                 if (e.target === this) toggleQuickActionsMenu();
             });
 
-            function createNewPost() {
+            async function fetchCategories() {
+                try {
+                    const token = localStorage.getItem('authToken');
+                    const res = await fetch('http://localhost:3000/api/categories', {
+                        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                    });
+                    return await res.json();
+                } catch {
+                    return [];
+                }
+            }
+
+            async function createNewPost() {
+                const categories =  await loadCategories()
+                console.log('Fetced categories',categories)
                 document.querySelector('.dashboard').innerHTML = `
                     <div class="full-page-view">
                         <h1>Create New Blog Post</h1>
@@ -315,7 +336,10 @@
 
                             <div class="form-group">
                                 <label for="category">Category</label>
-                                <input type="text" id="category" name="category" required>
+                                <select id="category" name="category" required>
+                                    <option value="">Select category</option>
+                                    ${categories.map(cat => `<option value="${cat.name}">${cat.name}</option>`).join('')}
+                                </select>
                             </div>
 
                             <div class="form-group">
@@ -387,7 +411,7 @@
                     };
 
                     // Send postData to your backend API
-                    fetch('/api/posts', {
+                    fetch('http://localhost:3000/api/posts', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -406,6 +430,45 @@
                     })
                     .catch(error => {
                         console.error('There was a problem with the fetch operation:', error);
+                    });
+                };
+
+                document.getElementById('save-draft').onclick = function() {
+                    document.getElementById('post-content').value = quill.root.innerHTML;
+                    const title = document.getElementById('post-title').value;
+                    const content = document.getElementById('post-content').value;
+                    const excerpt = document.getElementById('excerpt').value;
+                    const category = document.getElementById('category').value;
+                    const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim());
+                    const featuredImage = document.getElementById('featured-image').files[0];
+
+                    if (!title || !content) {
+                        alert('Title and content are required.');
+                        return;
+                    }
+
+                    const postData = {
+                        title,
+                        content,
+                        excerpt,
+                        category,
+                        tags,
+                        featuredImage: featuredImage ? featuredImage.name : null,
+                        published: false // Save as draft
+                    };
+
+                    fetch('http://localhost:3000/api/posts', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(postData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Draft saved!');
+                        openPost(data.id);
+                    })
+                    .catch(error => {
+                        alert('Error saving draft.');
                     });
                 };
             }
@@ -522,6 +585,33 @@
                 loadCategories();
             }
 
+            window.addCategory = async function() {
+                const name = document.getElementById('newCategoryName').value.trim();
+                if (!name) {
+                    alert('Category name required');
+                    return;
+                }
+                const token = localStorage.getItem('authToken');
+                try {
+                    const response = await fetch('http://localhost:3000/api/categories', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ name })
+                    });
+                    if (response.ok) {
+                        alert('Category added!');
+                        loadCategories();
+                    } else {
+                        alert('Failed to add category.');
+                    }
+                } catch (error) {
+                    alert('Error adding category.');
+                }
+            };
+
             async function loadCategories() {
                 try {
                     const token = localStorage.getItem('authToken');
@@ -532,12 +622,16 @@
                     const categories = await response.json();
                     const listElement = document.getElementById('categoriesList');
                     
-                    listElement.innerHTML = categories.map(cat => `
-                        <li>
-                            <span>${cat.name}</span>
-                            <span class="post-count">${cat.postCount} posts</span>
-                        </li>
-                    `).join('');
+                    if (Array.isArray(categories)) {
+                        listElement.innerHTML = categories.map(cat => `
+                            <li>
+                                <span>${cat.name}</span>
+                                <span class="post-count">${cat.postCount} posts</span>
+                            </li>
+                        `).join('');
+                    } else {
+                        listElement.innerHTML = `<li class="error">Failed to load categories</li>`;
+                    }
                     
                 } catch (error) {
                     console.error('Error loading categories:', error);
@@ -775,9 +869,9 @@
                 // Prefill form with existing user data
                 const user = JSON.parse(localStorage.getItem('user') || '{}');
                 if (user) {
-                    document.getElementById('profileName').value = user.name || '';
-                    document.getElementById('profileEmail').value = user.email || '';
-                    document.getElementById('profileBio').value = user.bio || '';   
+                    document.getElementById('username').value = user.name || '';
+                    document.getElementById('email').value = user.email || '';
+                    document.getElementById('bio').value = user.bio || '';   
                     const profilePicPreview = document.getElementById('profilePicPreview');
                     if (user.profilePic) {
                         profilePicPreview.src = user.profilePic;
@@ -805,9 +899,9 @@
                 // Handle form submission
                 document.getElementById('editProfileForm').addEventListener('submit', function(e) {
                     e.preventDefault();
-                    const name = document.getElementById('profileName').value;
-                    const email = document.getElementById('profileEmail').value;
-                    const bio = document.getElementById('profileBio').value;
+                    const name = document.getElementById('username').value;
+                    const email = document.getElementById('email').value;
+                    const bio = document.getElementById('bio').value;
                     const profilePicture = document.getElementById('profilePicture').files[0];
                     // Simulate saving profile data (replace with actual API call)
                     const user = {

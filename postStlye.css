@@ -244,16 +244,27 @@ main{
         
         .modern-comments {
             padding: 36px 28px;
-            max-width: 700px;
-            color: var(--text-color);
         }
         
         .reply-btn {
             background: none;
             border: none;
             cursor: pointer;
-            color: var(--accent-purple); /*color: var(--primary-purple);*/
+            color: var(--primary-purple); 
             font-size: 14px;
+        }
+        .reply-box textarea {
+            width: 100%;
+            min-height: 40px;
+            margin-bottom: 4px;
+        }
+        .reply-box button {
+            background: var(--accent-purple);
+            color: var(--text-color);
+            border: none;
+            border-radius: 4px;
+            padding: 4px 12px;
+            cursor: pointer;
         }
         
         .reply-form {
@@ -305,7 +316,9 @@ main{
         
         .reply {
             border-left: 3px solid var(--primary-purple);
-            padding-left: 15px;
+            padding-left: 25px;
+            font-size: 0.97rem;
+            background: var(--card-bg);
         }
         
         .edit-form {
@@ -401,4 +414,18 @@ main{
     }
 }
 
-/*
+@media (min-width: 1024px) {
+    /* body, main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    main {
+        width: 100%;
+    } */
+
+    .modern-comments{
+        max-width: 700px;
+    }
+}

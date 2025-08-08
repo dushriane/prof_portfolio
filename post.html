@@ -176,7 +176,7 @@
                     <div class="post-content">${post.content}</div>
                 `;
                 if (isLoggedIn()) {
-                    document.getElementById('postInteractions').style.display = 'block';
+                    document.getElementById('postInteractions').style.display ='flex';
                     document.getElementById('commentsSection').style.display = 'block';
                     renderLikeBookmark(post);
                     fetchAndRenderComments();
@@ -185,6 +185,8 @@
                 document.getElementById('postDetailContainer').innerHTML = '<div>Error loading post.</div>';
             }
         }
+
+
         function renderLikeBookmark(post) {
             // Like
             document.getElementById('likeCount').textContent = post.likes ? post.likes.length : 0;
@@ -213,6 +215,7 @@
                 }
             };
         }
+
         // Comments
         async function fetchAndRenderComments() {
             const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`);
@@ -226,10 +229,64 @@
             comments.forEach(comment => {
                 const div = document.createElement('div');
                 div.className = 'comment';
-                div.innerHTML = `<b>${comment.author?.username || 'User'}:</b> ${comment.content}`;
+                div.innerHTML = `
+                    <b>${comment.author?.username || 'User'}:</b> ${comment.content}
+                    <button class="reply-btn" data-comment-id="${comment._id}">Reply</button>
+                    <div class="reply-box" id="reply-box-${comment._id}" style="display:none; margin-top:8px;">
+                        <textarea id="reply-input-${comment._id}" placeholder="Write a reply..."></textarea>
+                        <button onclick="postReply('${comment._id}')">Post Reply</button>
+                    </div>
+                    <div class="replies" id="replies-${comment._id}">
+                        ${Array.isArray(comment.replies) && comment.replies.length > 0 ? comment.replies.map(reply => `
+                            <div class="reply"><b>${reply.author?.username || 'User'}:</b> ${reply.content}</div>
+                        `).join('') : ''}
+                    </div>
+                `;
                 commentsList.appendChild(div);
             });
         }
+
+        document.getElementById('commentsList').addEventListener('click', function(e) {
+            // Reply button
+            if (e.target.classList.contains('reply-btn')) {
+                const commentId = e.target.getAttribute('data-comment-id');
+                document.getElementById(`reply-box-${commentId}`).style.display = 'block';
+            }
+            // Post reply button
+            if (e.target.textContent.trim() === 'Post Reply' && e.target.parentElement.classList.contains('reply-box')) {
+                const commentId = e.target.parentElement.id.replace('reply-box-', '');
+                postReply(commentId);
+            }
+        });
+
+        // Post reply
+        window.postReply = async function(commentId) {
+            const token = localStorage.getItem('authToken');
+            const input = document.getElementById(`reply-input-${commentId}`);
+            const reply = input.value.trim();
+            if (!reply) return;
+            const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments/${commentId}/reply`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ content: reply })
+            });
+            if (response.ok) {
+                input.value = '';
+                document.getElementById(`reply-box-${commentId}`).style.display = 'none';
+                fetchAndRenderComments();
+            }
+        };
+
+        const commentInput = document.getElementById('commentInput');
+        const postCommentBtn = document.getElementById('commentSubmit');
+
+        commentInput.addEventListener('input', function() {
+            postCommentBtn.disabled = !commentInput.value.trim();
+        });
+
         document.getElementById('commentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const token = localStorage.getItem('authToken');
