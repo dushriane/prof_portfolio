@@ -19,6 +19,11 @@
             <a href="blog.html" class="active">BLOG</a>
             <a href="dashboard.html">DASHBOARD</a>
         </div>
+        <div class="hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <div class="profile-dropdown">
             <img src="./images/profiles/default.jpg" alt="Profile Picture" class="profile-picture">
             <div class="dropdown-content">
@@ -83,144 +88,153 @@
         </section>
     </main> 
     <script>
-    // Utility to get query param
-    function getQueryParam(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
-    }
 
-    //Global variables
-    let currentPost = null;
-    let postId = null;
-    let userLikedPost = false;
-    let userBookmarkedPost = false;
-
-    function isLoggedIn() {
-        return !!localStorage.getItem('authToken');
-    }
-    function getCurrentUser() {
-            return JSON.parse(localStorage.getItem('user') || '{}');
+        // Toggle profile dropdown on mobile
+        document.querySelector('.profile-picture').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.querySelector('.profile-dropdown').classList.toggle('active');
+        });
+        document.addEventListener('click', function() {
+            document.querySelector('.profile-dropdown').classList.remove('active');
+        });
+        // Utility to get query param
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
         }
 
-    function isAuthorOrAdmin(post) {
-            const user = getCurrentUser();
-            return user.id === post.author?.id || user.role === 'admin';
-        }
+        //Global variables
+        let currentPost = null;
+        let postId = null;
+        let userLikedPost = false;
+        let userBookmarkedPost = false;
 
-    function validateComment(text) {
-            return text && text.trim().length > 0;
+        function isLoggedIn() {
+            return !!localStorage.getItem('authToken');
         }
-    
-    async function incrementViewCount() {
+        function getCurrentUser() {
+                return JSON.parse(localStorage.getItem('user') || '{}');
+            }
+
+        function isAuthorOrAdmin(post) {
+                const user = getCurrentUser();
+                return user.id === post.author?.id || user.role === 'admin';
+            }
+
+        function validateComment(text) {
+                return text && text.trim().length > 0;
+            }
+        
+        async function incrementViewCount() {
+                try {
+                    await fetch(`http://localhost:3000/api/posts/${postId}/view`, {
+                        method: 'POST'
+                    });
+                } catch (error) {
+                    console.error('Error incrementing view count:', error);
+                }
+            }
+            
+        async function fetchAndRenderPost() {
+            postId = getQueryParam('id');
+            if (!postId) {
+                document.getElementById('postDetailContainer').innerHTML = '<div>Post not found.</div>';
+                return;
+            }
             try {
-                await fetch(`http://localhost:3000/api/posts/${postId}/view`, {
-                    method: 'POST'
-                });
+                await incrementViewCount();
+
+                const response = await fetch(`http://localhost:3000/api/posts/${postId}`);
+                if (!response.ok) throw new Error('Post not found');
+
+                const post = await response.json();
+                currentPost = post;
+                
+                document.getElementById('postDetailContainer').innerHTML = `
+                    <h1 class="post-title">${post.title}</h1>
+                    <div class="post-meta">
+                        <span>By ${post.author?.username || 'Unknown'}</span> |
+                        <span>${new Date(post.publishedAt || post.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <div class="post-image">
+                        <img src="${post.imageUrl || './images/blogone.jpeg'}" alt="Post image">
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                `;
+                if (isLoggedIn()) {
+                    document.getElementById('postInteractions').style.display = 'block';
+                    document.getElementById('commentsSection').style.display = 'block';
+                    renderLikeBookmark(post);
+                    fetchAndRenderComments();
+                }
             } catch (error) {
-                console.error('Error incrementing view count:', error);
+                document.getElementById('postDetailContainer').innerHTML = '<div>Error loading post.</div>';
             }
         }
-        
-    async function fetchAndRenderPost() {
-        postId = getQueryParam('id');
-        if (!postId) {
-            document.getElementById('postDetailContainer').innerHTML = '<div>Post not found.</div>';
-            return;
+        function renderLikeBookmark(post) {
+            // Like
+            document.getElementById('likeCount').textContent = post.likes ? post.likes.length : 0;
+            document.getElementById('likeBtn').onclick = async function() {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch(`http://localhost:3000/api/posts/${post._id}/like`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('likeCount').textContent = data.likesCount;
+                }
+            };
+            // Bookmark
+            document.getElementById('bookmarkBtn').onclick = async function() {
+                const token = localStorage.getItem('authToken');
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                if (!user || !user.id) return;
+                const response = await fetch(`http://localhost:3000/api/users/me/bookmarks/${post._id}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    alert('Bookmarked!');
+                }
+            };
         }
-        try {
-            await incrementViewCount();
-
-            const response = await fetch(`http://localhost:3000/api/posts/${postId}`);
-            if (!response.ok) throw new Error('Post not found');
-
-            const post = await response.json();
-            currentPost = post;
-            
-            document.getElementById('postDetailContainer').innerHTML = `
-                <h1 class="post-title">${post.title}</h1>
-                <div class="post-meta">
-                    <span>By ${post.author?.username || 'Unknown'}</span> |
-                    <span>${new Date(post.publishedAt || post.createdAt).toLocaleDateString()}</span>
-                </div>
-                <div class="post-image">
-                    <img src="${post.imageUrl || './images/blogone.jpeg'}" alt="Post image">
-                </div>
-                <div class="post-content">${post.content}</div>
-            `;
-            if (isLoggedIn()) {
-                document.getElementById('postInteractions').style.display = 'block';
-                document.getElementById('commentsSection').style.display = 'block';
-                renderLikeBookmark(post);
+        // Comments
+        async function fetchAndRenderComments() {
+            const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`);
+            const comments = await response.json();
+            const commentsList = document.getElementById('commentsList');
+            commentsList.innerHTML = '';
+            if (!Array.isArray(comments) || comments.length === 0) {
+                commentsList.innerHTML = '<div>No comments yet.</div>';
+                return;
+            }
+            comments.forEach(comment => {
+                const div = document.createElement('div');
+                div.className = 'comment';
+                div.innerHTML = `<b>${comment.author?.username || 'User'}:</b> ${comment.content}`;
+                commentsList.appendChild(div);
+            });
+        }
+        document.getElementById('commentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const token = localStorage.getItem('authToken');
+            const content = document.getElementById('commentInput').value;
+            if (!content) return;
+            const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ content })
+            });
+            if (response.ok) {
+                document.getElementById('commentInput').value = '';
                 fetchAndRenderComments();
             }
-        } catch (error) {
-            document.getElementById('postDetailContainer').innerHTML = '<div>Error loading post.</div>';
-        }
-    }
-    function renderLikeBookmark(post) {
-        // Like
-        document.getElementById('likeCount').textContent = post.likes ? post.likes.length : 0;
-        document.getElementById('likeBtn').onclick = async function() {
-            const token = localStorage.getItem('authToken');
-            const response = await fetch(`http://localhost:3000/api/posts/${post._id}/like`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (response.ok) {
-                const data = await response.json();
-                document.getElementById('likeCount').textContent = data.likesCount;
-            }
-        };
-        // Bookmark
-        document.getElementById('bookmarkBtn').onclick = async function() {
-            const token = localStorage.getItem('authToken');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            if (!user || !user.id) return;
-            const response = await fetch(`http://localhost:3000/api/users/me/bookmarks/${post._id}`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (response.ok) {
-                alert('Bookmarked!');
-            }
-        };
-    }
-    // Comments
-    async function fetchAndRenderComments() {
-        const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`);
-        const comments = await response.json();
-        const commentsList = document.getElementById('commentsList');
-        commentsList.innerHTML = '';
-        if (!Array.isArray(comments) || comments.length === 0) {
-            commentsList.innerHTML = '<div>No comments yet.</div>';
-            return;
-        }
-        comments.forEach(comment => {
-            const div = document.createElement('div');
-            div.className = 'comment';
-            div.innerHTML = `<b>${comment.author?.username || 'User'}:</b> ${comment.content}`;
-            commentsList.appendChild(div);
         });
-    }
-    document.getElementById('commentForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const token = localStorage.getItem('authToken');
-        const content = document.getElementById('commentInput').value;
-        if (!content) return;
-        const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ content })
-        });
-        if (response.ok) {
-            document.getElementById('commentInput').value = '';
-            fetchAndRenderComments();
-        }
-    });
-    document.addEventListener('DOMContentLoaded', fetchAndRenderPost);
+        document.addEventListener('DOMContentLoaded', fetchAndRenderPost);
     </script> 
 </body>
 </html> 

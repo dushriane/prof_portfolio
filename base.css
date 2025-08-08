@@ -389,14 +389,18 @@ button.register-btn, button.login-btn, button#resetBtn, .register-btn, .login-bt
 /* Profile Picture Navbar Logged in user */
   .profile-dropdown {
       position: relative;
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      padding: 0 0 0 8px;
   }
 
   .profile-picture {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       cursor: pointer;
+      object-fit: cover;
+      border: 2px solid var(--primary-purple);
   }
 
   .dropdown-content {

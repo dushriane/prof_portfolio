@@ -7,10 +7,7 @@
 .dashboard-container {
   min-height: 100vh;
   box-sizing: border-box;
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 32px;
-  align-items: flex-start;
+  display: block;
   width: 100%;
 }
 
@@ -92,16 +89,64 @@
 }
 
 .quick-actions {
-  flex-direction: column;
-  position: sticky;
-  top: 32px;
-  height: fit-content;
-  background: var(--card-bg);
-  padding: 32px 16px;
-  gap: 24px;
-  z-index: 2;
+  display: none;
+}
+
+.fab, .quick-actions-modal {
+      display: none;
+}
+
+.fab{
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  background: var(--primary-purple, #7B2CBF);
+  color: #fff;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  box-shadow: var(--shadow, 0 4px 24px rgba(123, 44, 191, 0.18));
   display: flex;
-  /* flex-wrap: wrap; */
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  z-index: 1001;
+  cursor: pointer;
+}
+
+/* Modal for quick actions */
+.quick-actions-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  z-index: 1002;
+}
+.quick-actions-modal.active {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+.quick-actions-modal-content {
+  background: var(--card-bg, #231a3a);
+  border-radius: 16px 16px 0 0;
+  padding: 24px 16px 16px 16px;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 0 0 auto;
+  box-shadow: var(--shadow, 0 4px 24px rgba(123, 44, 191, 0.18));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.quick-actions-modal .close-modal {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  align-self: flex-end;
+  margin-top: 8px;
+  cursor: pointer;
 }
 
 .dashboard-content {
@@ -571,15 +616,32 @@
         align-items: flex-start;
         gap: 1rem;
     }
-
+    
 }
 
 
 @media (min-width: 1024px) {
+  .dashboard-container {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 32px;
+      align-items: flex-start;
+    }
   .quick-actions{
-    position: sticky;
-    top: 16px;
-    height: 100vh;
+      position: sticky; 
+      top: 16px;
+      height: 100vh;
+      flex-direction: column;
+      top: 32px;
+      background: var(--card-bg);
+      padding: 32px 16px;
+      gap: 24px;
+      z-index: 2;
+      display: flex;
   }
-  
+
+  .fab, .quick-actions-modal {
+      display: none;
+  }
+
 }
