@@ -137,23 +137,11 @@
                 </div>
                 <div class="dashboard-posts" id="dashboardPosts">
                     <h2>Recent Posts</h2>
-                    <!-- <div class="dashboard-post">
-                        <h3>How to Build a Portfolio</h3>
-                        <p>Category: Tech</p>
-                        <p>Status: Published</p>
-                        <div class="admin-actions">
-                            <button class="delete-comment-btn" data-comment-id="COMMENT_ID">Delete Comment</button>
-                            <button class="hide-comment-btn" data-comment-id="COMMENT_ID">Hide Comment</button>
-                            <button class="delete-post-btn" data-post-id="POST_ID">Delete Post</button>
-                            <button class="hide-post-btn" data-post-id="POST_ID">Hide Post</button>
-                        </div>
-                    </div> -->
-                    <!-- More posts dynamically -->
+                    <!-- Posts dynamically appear here -->
                 </div>
             </main>
         </div>
 
-        
         <script>
             // Show/hide auth buttons based on login status
             document.addEventListener('DOMContentLoaded', function() {
@@ -175,6 +163,11 @@
                     authButtons.querySelector('.register').style.display = 'block';
                     authButtons.querySelector('.logout').style.display = 'none';
                 }
+
+                document.getElementById('dashboardSearchInput').addEventListener('input', renderUserPosts);
+                document.getElementById('dashboardCategoryFilter').addEventListener('change', renderUserPosts);
+                
+                loadUserPosts();
                 loadDashboardData();
             });
 
@@ -317,34 +310,44 @@
                 }
             }
 
-            async function createNewPost() {
-                const categories =  await loadCategories()
-                console.log('Fetced categories',categories)
+            async function createNewPost(postId = null) {
+                const categories =  await fetchCategories();
+                let postData = null;
+
+                if(postId) {
+                    // Fetch post data for editing
+                    const token = localStorage.getItem('authToken');
+                    const response = await fetch(`http://localhost:3000/api/posts/${postId}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    postData = await response.json();
+                }
+
                 document.querySelector('.dashboard').innerHTML = `
                     <div class="full-page-view">
-                        <h1>Create New Blog Post</h1>
+                        <h1>${postId ? 'Edit Blog Post' : 'Create New Blog Post'}</h1>
                         <form id="blog-form">
                             <div class="form-group">
                                 <label for="post-title">Title</label>
-                                <input type="text" id="post-title" name="title" required>
+                                <input type="text" id="post-title" name="title" required value="${postData ? postData.title : ''}">
                             </div>
 
                             <div class="form-group">
                                 <label for="excerpt">Excerpt</label>
-                                <textarea id="excerpt" name="excerpt" required></textarea>
+                                <textarea id="excerpt" name="excerpt" required>${postData ? postData.excerpt : ''}</textarea>
                             </div>
 
                             <div class="form-group">
                                 <label for="category">Category</label>
                                 <select id="category" name="category" required>
                                     <option value="">Select category</option>
-                                    ${categories.map(cat => `<option value="${cat.name}">${cat.name}</option>`).join('')}
+                                    ${categories.map(cat => `<option value="${cat.name}" ${postData && postData.category === cat.name ? 'selected' : ''}>${cat.name}</option>`).join('')}
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="tags">Tags (comma separated)</label>
-                                <input type="text" id="tags" name="tags">
+                                <input type="text" id="tags" name="tags" value="${postData ? postData.tags.join(', ') : ''}">
                             </div>
 
                             <div class="form-group">
@@ -354,8 +357,10 @@
                                     <button type="button" id="upload-btn" class="btn-upload">
                                         <i class="fas fa-image"></i> Choose Image
                                     </button>
-                                    <span id="file-name">No image selected</span>
-                                    <div id="image-preview" class="image-preview" ></div>
+                                    <span id="file-name">${postData && postData.imageUrl ? postData.imageUrl : 'No image selected'}</span>
+                                    <div id="image-preview" class="image-preview" >
+                                        ${postData && postData.imageUrl ? `<img src="${postData.imageUrl}" style="max-width:100px;max-height:100px;">` : ''}
+                                    </div>
                                 </div>
                             </div>
 
@@ -367,7 +372,7 @@
 
                             <div class="form-actions">
                                 <button type="submit" class="btn-submit">
-                                    <i class="fas fa-paper-plane"></i> Publish Post
+                                    <i class="fas fa-paper-plane"></i> ${postId ? 'Update Post' : 'Publish Post'}
                                 </button>
                                 <button type="button" id="save-draft" class="btn-draft">
                                     <i class="fas fa-save"></i> Save Draft
@@ -382,6 +387,9 @@
                     theme: 'snow',
                     placeholder: 'Write your blog content here...'
                 });
+                if (postData && postData.content) {
+                    quill.root.innerHTML = postData.content;
+                }
 
                 // Set up form submission
                 document.getElementById('blog-form').onsubmit = function(e) {
@@ -406,30 +414,30 @@
                         excerpt,
                         category,
                         tags,
-                        featuredImage: featuredImage ? featuredImage.name : null,
+                        featuredImage: featuredImage ? featuredImage.name : (postData ? postData.imageUrl : null),
                         published: true // Set to false if you want to save as draft
                     };
 
+                    const url = postId
+                        ? `http://localhost:3000/api/posts/${postId}`
+                        : 'http://localhost:3000/api/posts';
+                    const method = postId ? 'PUT' : 'POST';
+
                     // Send postData to your backend API
-                    fetch('http://localhost:3000/api/posts', {
-                        method: 'POST',
+                    fetch(url, {
+                        method,
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify(postData)
                     })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.json();
-                        }
-                        throw new Error('Network response was not ok.');
-                    })
+                    .then(response => response.json())
                     .then(data => {
-                        console.log('Post created successfully:', data);
-                        openPost(data.id);
+                        alert(postId ? 'Post updated!' : 'Post created!');
+                        openPost(data.id || data._id);
                     })
                     .catch(error => {
-                        console.error('There was a problem with the fetch operation:', error);
+                        alert('Error saving post.');
                     });
                 };
 
@@ -471,7 +479,55 @@
                         alert('Error saving draft.');
                     });
                 };
+
+                // Image upload logic
+                document.getElementById('upload-btn').onclick = function() {
+                    document.getElementById('featured-image').click();
+                };
+                let uploadedImageUrl = postData && postData.imageUrl ? postData.imageUrl : null;
+
+                document.getElementById('featured-image').onchange = async function() {
+                    const file = this.files[0];
+                    document.getElementById('file-name').textContent = file ? file.name : 'No image selected';
+                    if (file) {
+                        // Show preview
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            document.getElementById('image-preview').innerHTML = `<img src="${e.target.result}" style="max-width:100px;max-height:100px;">`;
+                        };
+                        reader.readAsDataURL(file);
+
+                        // Upload to backend
+                        const formData = new FormData();
+                        formData.append('image', file);
+                        try {
+                            const res = await fetch('http://localhost:3000/api/uploads/upload-image', {
+                                method: 'POST',
+                                body: formData
+                            });
+                            const data = await res.json();
+                            if (data.imageUrl) {
+                                uploadedImageUrl = data.imageUrl;
+                            } else {
+                                alert('Image upload failed.');
+                            }
+                        } catch (err) {
+                            alert('Image upload failed.');
+                        }
+                    } else {
+                        document.getElementById('image-preview').innerHTML = '';
+                        uploadedImageUrl = null;
+                    }
+                };
             }
+
+            async function renderDashboardCategoryFilter() {
+                const categories = await fetchCategories();
+                const select = document.getElementById('dashboardCategoryFilter');
+                select.innerHTML = `<option value="all">All</option>` +
+                    categories.map(cat => `<option value="${cat.name.toLowerCase()}">${cat.name}</option>`).join('');
+            }
+            document.addEventListener('DOMContentLoaded', renderDashboardCategoryFilter);
 
             function openPost(postId) {
                 window.location.href = `post-${postId}.html`;
@@ -987,13 +1043,9 @@
                 });
             }
 
-            document.getElementById('dashboardSearchInput').addEventListener('input', renderUserPosts);
-            document.getElementById('dashboardCategoryFilter').addEventListener('change', renderUserPosts);
-            document.addEventListener('DOMContentLoaded', loadUserPosts);
-
             // CRUD functions
-            window.editPost = function(postId) {
-                window.location.href = `createpost.html?edit=${postId}`;
+            window.editPost = async function(postId) {
+                await createNewPost(postId);
             };
 
             window.deletePost = async function(postId) {

@@ -72,14 +72,6 @@
                     <button type="submit">Search</button>
                 </form>
                 <div class="filter-tags">
-                    <span data-category="all">ALL</span>
-                    <span data-category="engineering">ENGINEERING</span>
-                    <span data-category="philosophy">PHILOSOPHY</span>
-                    <span data-category="systems">SYSTEMS</span>
-                    <span data-category="emotion">EMOTION</span>
-                    <span data-category="design">DESIGN</span>
-                    <span data-category="software">SOFTWARE</span>
-                    <span data-category="community">COMMUNITY</span>
                 </div>
             </section>
         
@@ -109,7 +101,53 @@
                 localStorage.removeItem('user');
                 showAuthButtons();
             }
+
+            // Render category filters
+            await renderCategoryFilters();
+
+            // Search form
+            const searchForm = document.getElementById('search-form');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const search = document.getElementById('search-input').value;
+                    fetchAndRenderPosts({search});
+                });
+            }
+
+            // Filter tags
+            const filterTags = document.querySelector('.filter-tags');
+            if (filterTags) {
+                filterTags.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'SPAN') {
+                        filterTags.querySelectorAll('span').forEach(t => t.classList.remove('active'));
+                        e.target.classList.add('active');
+                        const category = e.target.getAttribute('data-category');
+                        fetchAndRenderPosts({category});
+                    }
+                });
+            }
+
+            // Initial posts load
+            fetchAndRenderPosts();
         });
+
+        async function renderCategoryFilters() {
+            const categories = await fetchCategories();
+            const filterTags = document.querySelector('.filter-tags');
+            filterTags.innerHTML = `<span data-category="all" class="active">ALL</span>` +
+                categories.map(cat => `<span data-category="${cat.name.toLowerCase()}">${cat.name.toUpperCase()}</span>`).join('');
+            // Add event listeners
+            filterTags.querySelectorAll('span').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    filterTags.querySelectorAll('span').forEach(t => t.classList.remove('active'));
+                    tag.classList.add('active');
+                    const category = tag.getAttribute('data-category');
+                    fetchAndRenderPosts({category});
+                });
+            });
+        }
+        document.addEventListener('DOMContentLoaded', renderCategoryFilters);
 
         function showAuthButtons() {
             document.getElementById('authButtons').style.display = 'flex';
@@ -137,6 +175,18 @@
             localStorage.removeItem('user');
             showAuthButtons();
             window.location.href = 'login.html';
+        }
+
+        async function fetchCategories() {
+            try {
+                const token = localStorage.getItem('authToken');
+                const res = await fetch('http://localhost:3000/api/categories', {
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                });
+                return await res.json();
+            } catch {
+                return [];
+            }
         }
 
         function updateMobileAuthButtons(isLoggedIn) {
