@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="base.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@400;700&family=Poppins:wght@400;600&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
     <script src="main.js" defer></script>
+    <script src="config.js"></script>
 </head>
 <body>
     <div class="register-container">
@@ -73,7 +74,7 @@
             };
 
             try {
-                const response = await fetch('http://localhost:3000/api/auth/register', {
+                const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)

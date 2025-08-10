@@ -6,8 +6,9 @@
     <title>Blog Post</title>
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="blog.css">
-    <link rel="stylesheet" href="postStlye.css">
+    <link rel="stylesheet" href="postStyle.css">
     <script src="main.js" defer></script>
+    <script src="config.js"></script>
 </head>
 <body>
     <header>
@@ -141,7 +142,7 @@
         
         async function incrementViewCount() {
                 try {
-                    await fetch(`http://localhost:3000/api/posts/${postId}/view`, {
+                    await fetch(`${API_BASE_URL}/api/posts/${postId}/view`, {
                         method: 'POST'
                     });
                 } catch (error) {
@@ -158,7 +159,7 @@
             try {
                 await incrementViewCount();
 
-                const response = await fetch(`http://localhost:3000/api/posts/${postId}`);
+                const response = await fetch(`${API_BASE_URL}/api/posts/${postId}`);
                 if (!response.ok) throw new Error('Post not found');
 
                 const post = await response.json();
@@ -192,7 +193,7 @@
             document.getElementById('likeCount').textContent = post.likes ? post.likes.length : 0;
             document.getElementById('likeBtn').onclick = async function() {
                 const token = localStorage.getItem('authToken');
-                const response = await fetch(`http://localhost:3000/api/posts/${post._id}/like`, {
+                const response = await fetch(`${API_BASE_URL}/api/posts/${post._id}/like`, {
                     method: 'POST',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -206,7 +207,7 @@
                 const token = localStorage.getItem('authToken');
                 const user = JSON.parse(localStorage.getItem('user') || '{}');
                 if (!user || !user.id) return;
-                const response = await fetch(`http://localhost:3000/api/users/me/bookmarks/${post._id}`, {
+                const response = await fetch(`${API_BASE_URL}/api/users/me/bookmarks/${post._id}`, {
                     method: 'POST',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -218,7 +219,7 @@
 
         // Comments
         async function fetchAndRenderComments() {
-            const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`);
+            const response = await fetch(`${API_BASE_URL}/api/posts/${postId}/comments`);
             const comments = await response.json();
             const commentsList = document.getElementById('commentsList');
             commentsList.innerHTML = '';
@@ -265,7 +266,7 @@
             const input = document.getElementById(`reply-input-${commentId}`);
             const reply = input.value.trim();
             if (!reply) return;
-            const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments/${commentId}/reply`, {
+            const response = await fetch(`${API_BASE_URL}/api/posts/${postId}/comments/${commentId}/reply`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -292,7 +293,7 @@
             const token = localStorage.getItem('authToken');
             const content = document.getElementById('commentInput').value;
             if (!content) return;
-            const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`, {
+            const response = await fetch(`${API_BASE_URL}/api/posts/${postId}/comments`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

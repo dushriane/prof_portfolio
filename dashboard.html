@@ -10,6 +10,7 @@
         <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@400;700&family=Poppins:wght@400;600&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
         <script src="main.js" defer></script>
+        <script src="config.js"></script>
     </head>
     <body>
         <header>
@@ -244,7 +245,7 @@
                 try {
                     // Show stats only for admin
                     if (isAdmin()) {
-                        const statsResponse = await fetch('http://localhost:3000/api/admin/dashboard/stats', {
+                        const statsResponse = await fetch(`${API_BASE_URL}/api/admin/dashboard/stats`, {
                             headers: {
                                 'Authorization': `Bearer ${token}`
                             }
@@ -258,7 +259,7 @@
                         document.querySelector('.dashboard-stats').style.display = 'none';
                     }
                     // Load posts
-                    const postsResponse = await fetch('http://localhost:3000/api/posts', {
+                    const postsResponse = await fetch(`${API_BASE_URL}/api/posts`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
@@ -301,7 +302,7 @@
             async function fetchCategories() {
                 try {
                     const token = localStorage.getItem('authToken');
-                    const res = await fetch('http://localhost:3000/api/categories', {
+                    const res = await fetch(`${API_BASE_URL}/api/categories`, {
                         headers: token ? { 'Authorization': `Bearer ${token}` } : {}
                     });
                     return await res.json();
@@ -317,7 +318,7 @@
                 if(postId) {
                     // Fetch post data for editing
                     const token = localStorage.getItem('authToken');
-                    const response = await fetch(`http://localhost:3000/api/posts/${postId}`, {
+                    const response = await fetch(`${API_BASE_URL}/api/posts/${postId}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     postData = await response.json();
@@ -419,8 +420,8 @@
                     };
 
                     const url = postId
-                        ? `http://localhost:3000/api/posts/${postId}`
-                        : 'http://localhost:3000/api/posts';
+                        ? `${API_BASE_URL}/api/posts/${postId}`
+                        : `${API_BASE_URL}/api/posts`;
                     const method = postId ? 'PUT' : 'POST';
 
                     // Send postData to your backend API
@@ -465,7 +466,7 @@
                         published: false // Save as draft
                     };
 
-                    fetch('http://localhost:3000/api/posts', {
+                    fetch(`${API_BASE_URL}/api/posts`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(postData)
@@ -501,7 +502,7 @@
                         const formData = new FormData();
                         formData.append('image', file);
                         try {
-                            const res = await fetch('http://localhost:3000/api/uploads/upload-image', {
+                            const res = await fetch(`${API_BASE_URL}/api/uploads/upload-image`, {
                                 method: 'POST',
                                 body: formData
                             });
@@ -586,7 +587,7 @@
             async function loadAnalyticsData() {
                 try {
                     const token = localStorage.getItem('authToken');
-                    const response = await fetch('http://localhost:3000/api/analytics', {
+                    const response = await fetch(`${API_BASE_URL}/api/analytics`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     
@@ -649,7 +650,7 @@
                 }
                 const token = localStorage.getItem('authToken');
                 try {
-                    const response = await fetch('http://localhost:3000/api/categories', {
+                    const response = await fetch(`${API_BASE_URL}/api/categories`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -671,7 +672,7 @@
             async function loadCategories() {
                 try {
                     const token = localStorage.getItem('authToken');
-                    const response = await fetch('http://localhost:3000/api/categories', {
+                    const response = await fetch(`${API_BASE_URL}/api/categories`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     
@@ -842,7 +843,7 @@
                     exportBtn.disabled = true;
                     
                     // Call export API
-                    const response = await fetch('/api/export', {
+                    const response = await fetch(`${API_BASE_URL}/api/export`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -997,7 +998,7 @@
                 const postsContainer = document.getElementById('dashboardPosts');
                 postsContainer.innerHTML = '<div>Loading your posts...</div>';
                 try {
-                    const response = await fetch('http://localhost:3000/api/users/me/posts', {
+                    const response = await fetch(`${API_BASE_URL}/api/users/me/posts`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     const posts = await response.json();
@@ -1052,7 +1053,7 @@
                 if (!confirm('Are you sure you want to delete this post?')) return;
                 const token = localStorage.getItem('authToken');
                 try {
-                    const response = await fetch(`http://localhost:3000/api/posts/${postId}`, {
+                    const response = await fetch(`${API_BASE_URL}/api/posts/${postId}`, {
                         method: 'DELETE',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });

@@ -9,6 +9,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@400;700&family=Poppins:wght@400;600&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <script src="main.js" defer></script>
+        <script src="config.js"></script>
     </head>
     <body>
         <header>
@@ -89,7 +90,7 @@
             if(!token || !user) return showAuthButtons();
 
             try{
-                const response = await fetch('http://localhost:3000/api/auth/verify-auth', {
+                const response = await fetch(`${API_BASE_URL}/api/auth/verify-auth`, {
                     headers: {'Authorization': `Bearer ${token}`}
                 });
                 if(!response.ok) throw new Error('Invalid token');
@@ -180,7 +181,7 @@
         async function fetchCategories() {
             try {
                 const token = localStorage.getItem('authToken');
-                const res = await fetch('http://localhost:3000/api/categories', {
+                const res = await fetch(`${API_BASE_URL}/api/categories`, {
                     headers: token ? { 'Authorization': `Bearer ${token}` } : {}
                 });
                 return await res.json();
@@ -218,9 +219,9 @@
             const container = document.getElementById('blogPostsContainer');
             container.innerHTML = '<div>Loading posts...</div>';
             try {
-                let url = 'http://localhost:3000/api/posts';
+                let url = `${API_BASE_URL}/api/posts`;
                 if (search) {
-                    url = `http://localhost:3000/api/posts/search?q=${encodeURIComponent(search)}`;
+                    url = `${API_BASE_URL}/api/posts/search?q=${encodeURIComponent(search)}`;
                 }
                 if (category && category !== 'all') {
                     url += (url.includes('?') ? '&' : '?') + `category=${encodeURIComponent(category)}`;

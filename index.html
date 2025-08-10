@@ -8,6 +8,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@400;700&family=Poppins:wght@400;600&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
         <title>Portfolio</title>
         <script src="main.js" defer></script>
+        <script src="config.js"></script>
     </head>
     <body>
         <header>
@@ -240,7 +241,7 @@
                         message: form.message.value
                     };
 
-                    const response = await fetch('/api/messages', {
+                    const response = await fetch(`${API_BASE_URL}/api/messages`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(formData)
