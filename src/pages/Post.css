@@ -1,0 +1,386 @@
+.post-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 100px 1rem 3rem;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 3rem;
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.error h2 {
+  color: var(--primary-purple);
+  margin-bottom: 1rem;
+  font-family: 'Abril Fatface', serif;
+}
+
+.back-to-blog {
+  display: inline-flex;
+  align-items: center;
+  color: var(--accent-purple);
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  transition: color 0.3s ease;
+}
+
+.back-to-blog:hover {
+  color: var(--primary-purple);
+}
+
+.post-article {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.post-header {
+  padding: 2rem 2rem 1rem;
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.post-category {
+  background: linear-gradient(135deg, var(--primary-purple), var(--accent-purple));
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.post-date {
+  color: var(--text-gray);
+  font-size: 0.9rem;
+}
+
+.post-title {
+  font-family: 'Abril Fatface', serif;
+  font-size: 2.5rem;
+  color: var(--primary-purple);
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.author-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent-purple);
+}
+
+.author-name {
+  font-weight: 600;
+  color: var(--primary-purple);
+  font-size: 1rem;
+}
+
+.post-featured-image {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 15px;
+  margin-bottom: 1rem;
+}
+
+.post-featured-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-content {
+  padding: 0 2rem 2rem;
+}
+
+.post-excerpt {
+  font-size: 1.2rem;
+  color: var(--text-gray);
+  font-style: italic;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-left: 4px solid var(--accent-purple);
+  border-radius: 0 10px 10px 0;
+}
+
+.post-body {
+  line-height: 1.8;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.post-body h1,
+.post-body h2,
+.post-body h3,
+.post-body h4,
+.post-body h5,
+.post-body h6 {
+  color: var(--primary-purple);
+  margin: 2rem 0 1rem;
+  font-family: 'Abril Fatface', serif;
+}
+
+.post-body p {
+  margin-bottom: 1.5rem;
+}
+
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin: 1.5rem 0;
+}
+
+.post-body blockquote {
+  border-left: 4px solid var(--accent-purple);
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+  color: var(--text-gray);
+}
+
+.post-body code {
+  background: #f1f3f4;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.9rem;
+}
+
+.post-body pre {
+  background: #f1f3f4;
+  padding: 1rem;
+  border-radius: 10px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.post-tags {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #f1f3f4;
+}
+
+.post-tags h4 {
+  color: var(--primary-purple);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  background: linear-gradient(135deg, var(--light-purple), var(--accent-purple));
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.post-footer {
+  padding: 1.5rem 2rem;
+  border-top: 2px solid #f1f3f4;
+}
+
+.post-interactions {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.likes,
+.comments-count {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-gray);
+  font-size: 1rem;
+}
+
+.likes i,
+.comments-count i {
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.likes:hover i {
+  color: #e74c3c;
+}
+
+.comments-count:hover i {
+  color: var(--accent-purple);
+}
+
+.comments-section {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.comments-section h3 {
+  color: var(--primary-purple);
+  font-family: 'Abril Fatface', serif;
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.comment {
+  border: 2px solid #f1f3f4;
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: border-color 0.3s ease;
+}
+
+.comment:hover {
+  border-color: var(--accent-purple);
+}
+
+.comment-author {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.comment-author-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent-purple);
+}
+
+.comment-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.comment-author-name {
+  font-weight: 600;
+  color: var(--primary-purple);
+  font-size: 0.95rem;
+}
+
+.comment-date {
+  color: var(--text-gray);
+  font-size: 0.8rem;
+}
+
+.comment-content {
+  line-height: 1.6;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .post-page {
+    padding: 80px 1rem 2rem;
+  }
+  
+  .post-article {
+    border-radius: 15px;
+  }
+  
+  .post-header {
+    padding: 1.5rem;
+  }
+  
+  .post-title {
+    font-size: 2rem;
+  }
+  
+  .post-content {
+    padding: 0 1.5rem 1.5rem;
+  }
+  
+  .post-excerpt {
+    font-size: 1.1rem;
+    padding: 1rem;
+  }
+  
+  .post-body {
+    font-size: 1rem;
+  }
+  
+  .post-featured-image {
+    height: 250px;
+  }
+  
+  .post-footer {
+    padding: 1rem 1.5rem;
+  }
+  
+  .comments-section {
+    padding: 1.5rem;
+    border-radius: 15px;
+  }
+  
+  .comment {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-title {
+    font-size: 1.5rem;
+  }
+  
+  .post-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .author-info {
+    gap: 0.75rem;
+  }
+  
+  .author-pic {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .post-interactions {
+    gap: 1rem;
+  }
+}

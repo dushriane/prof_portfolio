@@ -11,7 +11,7 @@
 }
 
 .hero h1 {
-  font-family: 'Abril Fatface', cursive;/**/
+  font-family: 'Abril Fatface', cursive;
   font-size: 68px;
   color: var(--accent-purple);
   font-weight: 700;
@@ -57,7 +57,7 @@
 .hero-section-tags span:hover {
   background: var(--accent-purple);
   color: var(--text-color);
-  }
+}
 
 /* ===== PROJECTS SECTION ===== */
 .projects-section {
@@ -138,6 +138,7 @@
   background-color: var(--card-bg);
   gap: 10px;
 }
+
 .tech-category h3 {
   font-family: 'Montserrat', sans-serif;
   font-size: 17.6px;
@@ -265,7 +266,7 @@
   box-shadow: 0 8px 30px rgba(126, 75, 255, 0.15);
 }
 
-.company{
+.company {
   display: inline-block;
   background: rgba(126, 75, 255, 0.1);
   color: var(--accent-purple);
@@ -303,7 +304,7 @@
 }
 
 /* ===== EDUCATION GRID ===== */
-.education.section{
+.education.section {
   padding: 60px 20px;
   display: flex;
   flex-direction: column;
@@ -365,7 +366,7 @@
   display: block;
 }
 
-.education-details > .date{
+.education-details > .date {
   display: inline-block;
   background: rgba(126, 75, 255, 0.1);
   color: var(--accent-purple);
@@ -463,7 +464,7 @@ footer {
   border-radius: 3px;
 }
 
-.contact{
+.contact {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -583,22 +584,22 @@ footer {
     display: flex;
     flex-direction: row;
   }
-  .project-card{
+  .project-card {
     font-size: 17.6px;
     width: 33%;
   }
-  .project-image{
+  .project-image {
     overflow: hidden;
     border-radius: 12px;
     width: 100%;
   }
-  .project-image > img{
+  .project-image > img {
     height: 134px;
   }
   .timeline { 
     padding-left: 60px; 
   }
- .education-grid {
+  .education-grid {
     display: flex;
     gap: 24px;
   }
@@ -629,15 +630,15 @@ footer {
     width: 100%;
     max-width: 1000px;
   }
-  .tech-category{
+  .tech-category {
     width: 25%;
   }
-  .section-title{
+  .section-title {
     font-size: 48px;
   }
 
   /* Footer */
-   footer {
+  footer {
     padding: 50px 20px 25px;
   }
   
@@ -661,16 +662,16 @@ footer {
 
 /* MIN WIDTH 1024PX */
 @media (min-width: 1024px) {
-  .hero{
+  .hero {
     padding: 110px 14px;
   }
   .hero h1 {
     font-size: 90px;
   }
-  .hero p{
+  .hero p {
     font-size: 25px;
   }
-  .hero-section-tags span{
+  .hero-section-tags span {
     font-size: 25px;
   }
 
@@ -689,6 +690,4 @@ footer {
     font-size: 18px;
     padding: 17px 35px;
   }
-
 }
-

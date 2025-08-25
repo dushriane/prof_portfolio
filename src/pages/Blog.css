@@ -1,0 +1,315 @@
+.blog-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding-top: 100px;
+}
+
+.hero.section {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
+  color: white;
+  margin-bottom: 3rem;
+}
+
+.hero h1 {
+  font-family: 'Abril Fatface', serif;
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero .intro {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+#search-form {
+  display: flex;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  background: white;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+#search-input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  background: white;
+}
+
+#search-form button {
+  padding: 1rem 2rem;
+  border: none;
+  background: var(--accent-purple);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#search-form button:hover {
+  background: var(--primary-purple);
+}
+
+.filter-tags {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.filter-tags span {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+}
+
+.filter-tags span:hover,
+.filter-tags span.active {
+  background: white;
+  color: var(--primary-purple);
+  border-color: white;
+}
+
+.thoughts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem 3rem;
+}
+
+.thought-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.thought-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(123, 44, 191, 0.2);
+}
+
+.thought-date {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(123, 44, 191, 0.9);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  z-index: 2;
+}
+
+.post-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.post-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.thought-card:hover .post-image img {
+  transform: scale(1.05);
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem 0.5rem;
+}
+
+.author-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent-purple);
+}
+
+.author-name {
+  font-weight: 600;
+  color: var(--primary-purple);
+  font-size: 0.9rem;
+}
+
+.thought-title {
+  font-family: 'Abril Fatface', serif;
+  font-size: 1.4rem;
+  color: var(--primary-purple);
+  margin: 0.5rem 1.5rem;
+  line-height: 1.3;
+}
+
+.thought-description {
+  color: var(--text-gray);
+  margin: 0.5rem 1.5rem 1rem;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.thought-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 1.5rem 1rem;
+}
+
+.thought-tags span {
+  background: linear-gradient(135deg, var(--light-purple), var(--accent-purple));
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.blog-interactions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.likes,
+.comments {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-gray);
+  font-size: 0.9rem;
+}
+
+.likes i,
+.comments i {
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.likes:hover i {
+  color: #e74c3c;
+}
+
+.comments:hover i {
+  color: var(--accent-purple);
+}
+
+.read-more {
+  display: block;
+  text-align: center;
+  background: linear-gradient(135deg, var(--primary-purple), var(--accent-purple));
+  color: white;
+  padding: 1rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: auto;
+}
+
+.read-more:hover {
+  background: linear-gradient(135deg, var(--dark-purple), var(--primary-purple));
+  color: white;
+}
+
+.loading,
+.no-posts {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: var(--text-gray);
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hero .intro {
+    font-size: 1rem;
+    padding: 0 1rem;
+  }
+  
+  #search-form {
+    margin: 0 1rem 2rem;
+  }
+  
+  .filter-tags {
+    margin: 2rem 1rem 0;
+    gap: 0.5rem;
+  }
+  
+  .filter-tags span {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+  
+  .thoughts-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 1rem 2rem;
+  }
+  
+  .thought-card {
+    border-radius: 15px;
+  }
+  
+  .thought-title {
+    font-size: 1.2rem;
+  }
+  
+  .blog-page {
+    padding-top: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 2rem 0.5rem;
+  }
+  
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .thought-card {
+    margin: 0;
+  }
+  
+  .post-image {
+    height: 180px;
+  }
+}
