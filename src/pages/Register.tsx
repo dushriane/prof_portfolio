@@ -1,7 +1,21 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { 
+  Container, 
+  Paper, 
+  Title, 
+  Text, 
+  TextInput, 
+  PasswordInput, 
+  Button, 
+  Stack, 
+  Anchor, 
+  Alert,
+  LoadingOverlay,
+  Box
+} from '@mantine/core'
+import { IconAlertCircle, IconCheck, IconLock, IconUser, IconMail } from '@tabler/icons-react'
 import { AuthContextType } from '../App'
-import './Register.css'
 
 interface RegisterProps {
   authContext?: AuthContextType
@@ -83,79 +97,99 @@ const Register: React.FC<RegisterProps> = ({ authContext }) => {
   }
 
   return (
-    <div className="register-container">
-      <div className="register-card">
-        <div className="register-header">
-          <h1>User Registration</h1>
-          <p>Fill the form to create your account</p>
-        </div>
+    <Container size="sm" py={60}>
+      <Paper shadow="md" p={40} radius="md" withBorder pos="relative">
+        <LoadingOverlay visible={isLoading} />
         
-        <form className="register-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <button 
-            type="submit" 
-            className="register-btn" 
-            disabled={isLoading}
-          >
-            {isLoading ? 'Registering...' : 'Register'}
-          </button>
-        </form>
-        
-        {message && (
-          <div className={`message ${messageType}`}>
-            {message}
-          </div>
-        )}
-        
-        <div className="back-links">
-          <Link to="/login">Already have an account? Login</Link>
-          <Link to="/">← Back to Portfolio</Link>
-        </div>
-      </div>
-    </div>
+        <Stack gap="md">
+          <Box ta="center">
+            <Title order={2} c="violet.6">User Registration</Title>
+            <Text c="dimmed" size="sm" mt={5}>
+              Fill the form to create your account
+            </Text>
+          </Box>
+          
+          <form onSubmit={handleSubmit}>
+            <Stack gap="md">
+              <TextInput
+                label="Username"
+                placeholder="Enter your username"
+                leftSection={<IconUser size={16} />}
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                required
+                disabled={isLoading}
+              />
+              
+              <TextInput
+                label="Email"
+                placeholder="Enter your email"
+                leftSection={<IconMail size={16} />}
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                disabled={isLoading}
+              />
+              
+              <PasswordInput
+                label="Password"
+                placeholder="Enter your password"
+                leftSection={<IconLock size={16} />}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                disabled={isLoading}
+              />
+              
+              <PasswordInput
+                label="Confirm Password"
+                placeholder="Confirm your password"
+                leftSection={<IconLock size={16} />}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+                disabled={isLoading}
+              />
+              
+              <Button 
+                type="submit" 
+                variant="filled"
+                size="md"
+                fullWidth
+                disabled={isLoading}
+                loading={isLoading}
+              >
+                {isLoading ? 'Registering...' : 'Register'}
+              </Button>
+            </Stack>
+          </form>
+          
+          {message && (
+            <Alert 
+              icon={messageType === 'success' ? <IconCheck size={16} /> : <IconAlertCircle size={16} />}
+              color={messageType === 'success' ? 'green' : 'red'}
+              variant="light"
+            >
+              {message}
+            </Alert>
+          )}
+          
+          <Stack gap="xs" ta="center">
+            <Anchor component={Link} to="/login" size="sm" c="violet.6">
+              Already have an account? Login
+            </Anchor>
+            <Anchor component={Link} to="/" size="sm" c="gray.6">
+              ← Back to Portfolio
+            </Anchor>
+          </Stack>
+        </Stack>
+      </Paper>
+    </Container>
   )
 }
 

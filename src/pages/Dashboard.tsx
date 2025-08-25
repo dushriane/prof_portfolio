@@ -1,6 +1,36 @@
 import React, { useState, useEffect } from 'react'
+import { 
+  Container, 
+  Grid, 
+  Card, 
+  Title, 
+  Text, 
+  Group, 
+  Button, 
+  TextInput, 
+  Select, 
+  Loader, 
+  Stack, 
+  Paper,
+  SimpleGrid,
+  Badge,
+  ActionIcon,
+  Menu,
+  Tabs,
+  Alert
+} from '@mantine/core'
+import { 
+  IconDashboard, 
+  IconPlus, 
+  IconEdit, 
+  IconTrash, 
+  IconEye, 
+  IconDotsVertical,
+  IconSearch,
+  IconFilter,
+  IconAlertCircle
+} from '@tabler/icons-react'
 import { AuthContextType } from '../App'
-import './Dashboard.css'
 
 interface Post {
   _id: string
@@ -308,24 +338,63 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
             </div>
 
             {isAdmin() && stats && (
-              <div className="dashboard-stats section">
-                <div className="stat-card">
-                  <div className="stat-number">{stats.totalPosts}</div>
-                  <div className="stat-label">Total Posts</div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-number">{stats.totalViews}</div>
-                  <div className="stat-label">Total Views</div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-number">{stats.totalCategories}</div>
-                  <div className="stat-label">Categories</div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-number">{stats.engagementRate}</div>
-                  <div className="stat-label">Engagement Rate</div>
-                </div>
-              </div>
+              <SimpleGrid cols={{ base: 2, md: 4 }} spacing="lg" mb="xl">
+                <Paper withBorder p="md" radius="md">
+                  <Group justify="apart">
+                    <div>
+                      <Text c="dimmed" tt="uppercase" fw={700} fz="xs">
+                        Total Posts
+                      </Text>
+                      <Text fw={700} fz="xl">
+                        {stats.totalPosts}
+                      </Text>
+                    </div>
+                    <IconDashboard size={22} color="var(--mantine-color-violet-6)" />
+                  </Group>
+                </Paper>
+                
+                <Paper withBorder p="md" radius="md">
+                  <Group justify="apart">
+                    <div>
+                      <Text c="dimmed" tt="uppercase" fw={700} fz="xs">
+                        Total Views
+                      </Text>
+                      <Text fw={700} fz="xl">
+                        {stats.totalViews}
+                      </Text>
+                    </div>
+                    <IconEye size={22} color="var(--mantine-color-violet-6)" />
+                  </Group>
+                </Paper>
+                
+                <Paper withBorder p="md" radius="md">
+                  <Group justify="apart">
+                    <div>
+                      <Text c="dimmed" tt="uppercase" fw={700} fz="xs">
+                        Categories
+                      </Text>
+                      <Text fw={700} fz="xl">
+                        {stats.totalCategories}
+                      </Text>
+                    </div>
+                    <IconFilter size={22} color="var(--mantine-color-violet-6)" />
+                  </Group>
+                </Paper>
+                
+                <Paper withBorder p="md" radius="md">
+                  <Group justify="apart">
+                    <div>
+                      <Text c="dimmed" tt="uppercase" fw={700} fz="xs">
+                        Engagement Rate
+                      </Text>
+                      <Text fw={700} fz="xl">
+                        {stats.engagementRate}
+                      </Text>
+                    </div>
+                    <IconPlus size={22} color="var(--mantine-color-violet-6)" />
+                  </Group>
+                </Paper>
+              </SimpleGrid>
             )}
 
             <div className="dashboard-filter">

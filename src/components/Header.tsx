@@ -1,5 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { 
+  AppShell, 
+  Group, 
+  Button, 
+  Text, 
+  Burger, 
+  Box, 
+  Stack,
+  Anchor
+} from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import { IconLogout, IconDashboard, IconBook, IconUser } from '@tabler/icons-react'
 import { AuthContextType } from '../App'
 
 interface HeaderProps {
@@ -8,89 +20,137 @@ interface HeaderProps {
 
 const Header = ({ authContext }: HeaderProps) => {
   const navigate = useNavigate()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [opened, { toggle, close }] = useDisclosure()
 
   const handleLogout = () => {
     authContext.logout()
-    setMobileMenuOpen(false)
+    close()
     navigate('/')
   }
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen)
-  }
-
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false)
+  const handleNavClick = () => {
+    close()
   }
 
   return (
-    <>
-      <header className="header">
-        <nav className="nav">
-          <Link to="/" className="logo">
-            DUSH
-          </Link>
+    <AppShell.Header h={70}>
+      <Group h="100%" px="lg" justify="space-between">
+        {/* Logo */}
+        <Anchor component={Link} to="/" size="xl" fw={700} c="violet.6" td="none">
+          DUSH
+        </Anchor>
+        
+        {/* Desktop Navigation */}
+        <Group gap="md" visibleFrom="sm">
+          <Anchor component={Link} to="/blog" c="violet.6" fw={500} td="none">
+            BLOG
+          </Anchor>
           
-          <div className="nav-links">
-            <Link to="/blog">BLOG</Link>
+          {authContext.isAuthenticated ? (
+            <>
+              <Anchor component={Link} to="/dashboard" c="violet.6" fw={500} td="none">
+                DASHBOARD
+              </Anchor>
+              <Text size="sm" c="violet.6">
+                Welcome, {authContext.user?.username}
+              </Text>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                leftSection={<IconLogout size={16} />}
+                onClick={handleLogout}
+              >
+                LOGOUT
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button 
+                component={Link} 
+                to="/login" 
+                variant="filled" 
+                size="sm"
+                leftSection={<IconUser size={16} />}
+              >
+                LOGIN
+              </Button>
+              <Button 
+                component={Link} 
+                to="/register" 
+                variant="outline" 
+                size="sm"
+              >
+                REGISTER
+              </Button>
+            </>
+          )}
+        </Group>
+
+        {/* Mobile Menu Burger */}
+        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+      </Group>
+
+      {/* Mobile Navigation */}
+      {opened && (
+        <Box hiddenFrom="sm" p="md" bg="white" style={{ borderTop: '1px solid #e9ecef' }}>
+          <Stack gap="sm">
+            <Anchor component={Link} to="/blog" c="violet.6" fw={500} td="none" onClick={handleNavClick}>
+              <Group gap="xs">
+                <IconBook size={16} />
+                BLOG
+              </Group>
+            </Anchor>
+            
             {authContext.isAuthenticated ? (
               <>
-                <Link to="/dashboard">DASHBOARD</Link>
-                <span style={{ color: 'var(--accent-purple)', fontSize: '0.9rem' }}>
+                <Anchor component={Link} to="/dashboard" c="violet.6" fw={500} td="none" onClick={handleNavClick}>
+                  <Group gap="xs">
+                    <IconDashboard size={16} />
+                    DASHBOARD
+                  </Group>
+                </Anchor>
+                <Text size="sm" c="violet.6">
                   Welcome, {authContext.user?.username}
-                </span>
-                <button onClick={handleLogout} className="btn btn-secondary">
+                </Text>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  leftSection={<IconLogout size={16} />}
+                  onClick={handleLogout}
+                  fullWidth
+                >
                   LOGOUT
-                </button>
+                </Button>
               </>
             ) : (
               <>
-                <Link to="/login" className="btn btn-primary">
+                <Button 
+                  component={Link} 
+                  to="/login" 
+                  variant="filled" 
+                  size="sm"
+                  leftSection={<IconUser size={16} />}
+                  onClick={handleNavClick}
+                  fullWidth
+                >
                   LOGIN
-                </Link>
-                <Link to="/register" className="btn btn-secondary">
+                </Button>
+                <Button 
+                  component={Link} 
+                  to="/register" 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleNavClick}
+                  fullWidth
+                >
                   REGISTER
-                </Link>
+                </Button>
               </>
             )}
-          </div>
-
-          <div className="hamburger" onClick={toggleMobileMenu}>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </nav>
-      </header>
-
-      <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
-        <span className="close-menu" onClick={closeMobileMenu}>
-          &times;
-        </span>
-        <Link to="/blog" onClick={closeMobileMenu}>BLOG</Link>
-        {authContext.isAuthenticated ? (
-          <>
-            <Link to="/dashboard" onClick={closeMobileMenu}>DASHBOARD</Link>
-            <span style={{ color: 'var(--accent-purple)' }}>
-              Welcome, {authContext.user?.username}
-            </span>
-            <button onClick={handleLogout} className="btn btn-secondary">
-              LOGOUT
-            </button>
-          </>
-        ) : (
-          <>
-            <Link to="/login" className="btn btn-primary" onClick={closeMobileMenu}>
-              LOGIN
-            </Link>
-            <Link to="/register" className="btn btn-secondary" onClick={closeMobileMenu}>
-              REGISTER
-            </Link>
-          </>
-        )}
-      </div>
-    </>
+          </Stack>
+        </Box>
+      )}
+    </AppShell.Header>
   )
 }
 

@@ -1,7 +1,22 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { 
+  Container, 
+  Paper, 
+  Title, 
+  Text, 
+  TextInput, 
+  PasswordInput, 
+  Button, 
+  Stack, 
+  Anchor, 
+  Alert,
+  LoadingOverlay,
+  Group,
+  Box
+} from '@mantine/core'
+import { IconAlertCircle, IconCheck, IconLock, IconUser } from '@tabler/icons-react'
 import { AuthContextType } from '../App'
-import './Login.css'
 
 interface LoginProps {
   authContext?: AuthContextType
@@ -73,60 +88,82 @@ const Login: React.FC<LoginProps> = ({ authContext }) => {
   }
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <div className="login-header">
-          <h1>Login</h1>
-          <p>Enter your credentials to access the admin dashboard</p>
-        </div>
+    <Container size="sm" py={60}>
+      <Paper shadow="md" p={40} radius="md" withBorder pos="relative">
+        <LoadingOverlay visible={isLoading} />
         
-        <form className="login-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <Link to="/reset-password">Forgot your password?</Link>
-          </div>
-          <button 
-            type="submit" 
-            className="login-btn" 
-            disabled={isLoading}
-          >
-            {isLoading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-        
-        {message && (
-          <div className={`message ${messageType}`}>
-            {message}
-          </div>
-        )}
-        
-        <div className="back-links">
-          <Link to="/register">Don't have an account? Register</Link>
-          <Link to="/">← Back to Portfolio</Link>
-        </div>
-      </div>
-    </div>
+        <Stack gap="md">
+          <Box ta="center">
+            <Title order={2} c="violet.6">Login</Title>
+            <Text c="dimmed" size="sm" mt={5}>
+              Enter your credentials to access the admin dashboard
+            </Text>
+          </Box>
+          
+          <form onSubmit={handleSubmit}>
+            <Stack gap="md">
+              <TextInput
+                label="Username"
+                placeholder="Enter your username"
+                leftSection={<IconUser size={16} />}
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                required
+                disabled={isLoading}
+              />
+              
+              <PasswordInput
+                label="Password"
+                placeholder="Enter your password"
+                leftSection={<IconLock size={16} />}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                disabled={isLoading}
+              />
+              
+              <Group justify="flex-end">
+                <Anchor component={Link} to="/reset-password" size="sm" c="violet.6">
+                  Forgot your password?
+                </Anchor>
+              </Group>
+              
+              <Button 
+                type="submit" 
+                variant="filled"
+                size="md"
+                fullWidth
+                disabled={isLoading}
+                loading={isLoading}
+              >
+                {isLoading ? 'Logging in...' : 'Login'}
+              </Button>
+            </Stack>
+          </form>
+          
+          {message && (
+            <Alert 
+              icon={messageType === 'success' ? <IconCheck size={16} /> : <IconAlertCircle size={16} />}
+              color={messageType === 'success' ? 'green' : 'red'}
+              variant="light"
+            >
+              {message}
+            </Alert>
+          )}
+          
+          <Stack gap="xs" ta="center">
+            <Anchor component={Link} to="/register" size="sm" c="violet.6">
+              Don't have an account? Register
+            </Anchor>
+            <Anchor component={Link} to="/" size="sm" c="gray.6">
+              ← Back to Portfolio
+            </Anchor>
+          </Stack>
+        </Stack>
+      </Paper>
+    </Container>
   )
 }
 

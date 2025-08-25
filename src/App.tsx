@@ -1,5 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { MantineProvider, AppShell } from '@mantine/core'
+import { Notifications } from '@mantine/notifications'
+import { Toaster } from 'react-hot-toast'
+import { theme } from './theme/mantineTheme'
+import '@mantine/core/styles.css'
+import '@mantine/notifications/styles.css'
 import './App.css'
 
 // Components
@@ -74,19 +80,24 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="app">
-        <Header authContext={authContext} />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login authContext={authContext} />} />
-          <Route path="/register" element={<Register authContext={authContext} />} />
-          <Route path="/dashboard" element={<Dashboard authContext={authContext} />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/post/:id" element={<Post />} />
-        </Routes>
-      </div>
-    </Router>
+    <MantineProvider theme={theme}>
+      <Notifications />
+      <Router>
+        <AppShell header={{ height: 70 }} padding="md">
+          <Header authContext={authContext} />
+          <AppShell.Main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login authContext={authContext} />} />
+              <Route path="/register" element={<Register authContext={authContext} />} />
+              <Route path="/dashboard" element={<Dashboard authContext={authContext} />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/post/:id" element={<Post />} />
+            </Routes>
+          </AppShell.Main>
+        </AppShell>
+      </Router>
+    </MantineProvider>
   )
 }
 

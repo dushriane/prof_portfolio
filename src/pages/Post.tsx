@@ -57,8 +57,8 @@ const Post: React.FC = () => {
   const [isLiked, setIsLiked] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
 
-  const API_BASE_URL = 'https://arn-portfolio-backend.onrender.com'
-
+  //const API_BASE_URL = 'https://arn-portfolio-backend.onrender.com'
+  const API_BASE_URL = 'http://localhost:3000'
   const isLoggedIn = () => !!localStorage.getItem('authToken')
   
   const getCurrentUser = () => {
