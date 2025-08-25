@@ -31,7 +31,8 @@ const Login: React.FC<LoginProps> = ({ authContext }) => {
     setMessage('')
     
     try {
-      const API_BASE_URL = 'https://arn-portfolio-backend.onrender.com'
+      const API_BASE_URL = 'http://localhost:3000'
+      //const API_BASE_URL = 'https://arn-portfolio-backend.onrender.com'
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: {

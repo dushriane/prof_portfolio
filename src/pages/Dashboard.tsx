@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AuthContextType } from '../App'
 import './Dashboard.css'
 
@@ -57,8 +57,9 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
     imageUrl: ''
   })
 
-  const quillRef = useRef<any>(null)
-  const API_BASE_URL = 'https://arn-portfolio-backend.onrender.com'
+  //const quillRef = useRef<any>(null)
+  const API_BASE_URL = 'http://localhost:3000'
+  //const API_BASE_URL = 'https://arn-portfolio-backend.onrender.com'
 
   const isAdmin = () => {
     return authContext?.user?.role === 'admin'

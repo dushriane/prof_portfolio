@@ -8,8 +8,8 @@ const ResetPassword: React.FC = () => {
   const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('')
 
-  const API_BASE_URL = 'https://arn-portfolio-backend.onrender.com'
-
+  //const API_BASE_URL = 'https://arn-portfolio-backend.onrender.com'
+  const API_BASE_URL = 'http://localhost:3000'
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 // Custom hook for smooth scrolling
 export const useSmoothScroll = () => {
@@ -41,7 +41,9 @@ export const useIntersectionObserver = (callback: IntersectionObserverCallback, 
     observer.observe(element);
 
     return () => {
-      observer.unobserve(element);
+      if (element) {
+        observer.unobserve(element);
+      }
       observer.disconnect();
     };
   }, [callback, options]);
@@ -51,14 +53,15 @@ export const useIntersectionObserver = (callback: IntersectionObserverCallback, 
 
 // Custom hook for scroll animations
 export const useScrollAnimation = (animationClass: string = 'fade-in') => {
-  const elementRef = useIntersectionObserver((entries) => {
+  const animationCallback = useCallback((entries: IntersectionObserverEntry[]) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add(animationClass);
       }
     });
-  });
+  }, [animationClass]);
 
+  const elementRef = useIntersectionObserver(animationCallback);
   return elementRef;
 };
 
@@ -79,12 +82,12 @@ export const useHoverEffects = () => {
       }
     };
 
-    document.addEventListener('mouseenter', handleMouseEnter, true);
-    document.addEventListener('mouseleave', handleMouseLeave, true);
+    document.addEventListener('mouseover', handleMouseEnter, true);
+    document.addEventListener('mouseout', handleMouseLeave, true);
 
     return () => {
-      document.removeEventListener('mouseenter', handleMouseEnter, true);
-      document.removeEventListener('mouseleave', handleMouseLeave, true);
+      document.removeEventListener('mouseover', handleMouseEnter, true);
+      document.removeEventListener('mouseout  ', handleMouseLeave, true);
     };
   }, []);
 };
@@ -109,16 +112,18 @@ export const usePageLoading = () => {
 export const useOutsideClick = (callback: () => void) => {
   const ref = useRef<HTMLElement>(null);
 
+  const memoizedCallback = useCallback(callback, [callback]);
+
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        callback();
+      if (ref.current && event.target && !ref.current.contains(event.target as Node)) {
+        memoizedCallback();
       }
     };
 
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
-  }, [callback]);
+  }, [memoizedCallback]);
 
   return ref;
 };
