@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { MantineProvider, AppShell } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
-import { Toaster } from 'react-hot-toast'
 import { theme } from './theme/mantineTheme'
 import '@mantine/core/styles.css'
 import '@mantine/notifications/styles.css'
@@ -28,6 +27,8 @@ export interface User {
   bio?: string
   profilePicture?: string
   role: string
+  phone: string
+  gender: string
 }
 
 export interface AuthContextType {
