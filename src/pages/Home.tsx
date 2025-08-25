@@ -84,7 +84,7 @@ const Home: React.FC = () => {
       {/* Tech Stack */}
       <section className="tech">
         <div className="container">
-          <h2 className="section-title">TECH STACK</h2>
+          {/* <h2 className="section-title">TECH STACK</h2> */}
           <TechStack categories={techCategories} />
         </div>
       </section>
