@@ -1,20 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Lato:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&display=swap');
-
-:root {
-  --primary-purple: #7B2CBF; 
-  --dark-purple: #050609; 
-  --accent-purple: #C77DFF;
-  --text-color: #FFFCF2; 
-  --card-bg: #231a3a; 
-  --danger: #E63946; 
-  --shadow: 0 4px 24px rgba(199, 125, 255, 0.28); 
-  --light-purple: #FCBF49;
-  
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import './theme/design-system.css';
 
 * {
   margin: 0;
@@ -23,55 +8,16 @@
 }
 
 body {
-  font-family: 'Lato', sans-serif;
-  background-color: var(--dark-purple);
-  color: var(--text-color);
+  font-family: var(--font-family-body);
+  background-color: var(--background-primary);
+  color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-/* Typography */
-h1, h2, h3 {
-  font-family: 'Abril Fatface', serif;
-}
-
-.section {
-  padding: 4rem 1rem;
-}
-
-.section-title {
-  font-size: 2.5rem;
-  text-align: center;
-  margin-bottom: 3rem;
-  color: var(--accent-purple);
-  letter-spacing: 2px;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-/* Responsive */
-@media (min-width: 768px) {
-  .section {
-    padding: 6rem 2rem;
-  }
-  
-  .section-title {
-    font-size: 3rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .section {
-    padding: 8rem 2rem;
-  }
 }

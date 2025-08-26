@@ -5,6 +5,7 @@ import { Notifications } from '@mantine/notifications'
 import { theme } from './theme/mantineTheme'
 import '@mantine/core/styles.css'
 import '@mantine/notifications/styles.css'
+import './theme/design-system.css'
 import './App.css'
 
 // Components
@@ -18,6 +19,7 @@ import Post from './pages/Post'
 
 // Hooks
 import { useSmoothScroll, usePageLoading, useHoverEffects } from './hooks/useAnimations'
+import { ThemeProvider } from './contexts/ThemeContext'
 
 // Context for authentication
 export interface User {
@@ -81,24 +83,26 @@ function App() {
   }
 
   return (
-    <MantineProvider theme={theme}>
-      <Notifications />
-      <Router>
-        <AppShell header={{ height: 70 }} padding="md">
-          <Header authContext={authContext} />
-          <AppShell.Main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login authContext={authContext} />} />
-              <Route path="/register" element={<Register authContext={authContext} />} />
-              <Route path="/dashboard" element={<Dashboard authContext={authContext} />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/post/:id" element={<Post />} />
-            </Routes>
-          </AppShell.Main>
-        </AppShell>
-      </Router>
-    </MantineProvider>
+    <ThemeProvider>
+      <MantineProvider theme={theme}>
+        <Notifications />
+        <Router>
+          <AppShell header={{ height: 70 }} padding="md">
+            <Header authContext={authContext} />
+            <AppShell.Main>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login authContext={authContext} />} />
+                <Route path="/register" element={<Register authContext={authContext} />} />
+                <Route path="/dashboard" element={<Dashboard authContext={authContext} />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/post/:id" element={<Post />} />
+              </Routes>
+            </AppShell.Main>
+          </AppShell>
+        </Router>
+      </MantineProvider>
+    </ThemeProvider>
   )
 }
 
