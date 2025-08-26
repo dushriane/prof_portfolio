@@ -110,22 +110,55 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
   })
   const [exportFormat, setExportFormat] = useState('json')
   
+  const handleExportData = () => {
+    let dataToExport: any = {}
+    if (exportOptions.posts) dataToExport.posts = posts
+    if (exportOptions.analytics) dataToExport.analytics = analyticsData
+    // Comments export can be added if you fetch comments
+
+    let fileContent = ''
+    let mimeType = ''
+    if (exportFormat === 'json') {
+      fileContent = JSON.stringify(dataToExport, null, 2)
+      mimeType = 'application/json'
+    } else if (exportFormat === 'csv') {
+      // Simple CSV for posts only
+      if (exportOptions.posts) {
+        fileContent = 'Title,Category,Views,Published\n' +
+          posts.map(p => `"${p.title}","${p.category}",${p.views},${p.published}`).join('\n')
+        mimeType = 'text/csv'
+      }
+      // Add more CSV logic for analytics/comments if needed
+    }
+
+    const blob = new Blob([fileContent], { type: mimeType })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `export.${exportFormat}`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   // Profile State
   const [profileForm, setProfileForm] = useState({
     username: '',
     email: '',
     bio: '',
     phone: '',
-    gender: 'male'
+    gender: 'male',
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
   })
   const [profileImage, setProfileImage] = useState<File | null>(null)
   
   // Add time range state
   const [timeRange, setTimeRange] = useState('30')
   const [analyticsData, setAnalyticsData] = useState({
-    totalViews: 2847,
-    engagementRate: 68,
-    newReaders: 124,
+    totalViews: 0,
+    engagementRate: 0,
+    newReaders: 0,
     topPosts: []
   })
 
@@ -141,7 +174,8 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       loadDashboardData()
       loadUserPosts()
       loadCategories()
-      
+      loadAnalyticsData()
+
       // Initialize profile form with user data
       if (authContext.user) {
         setProfileForm({
@@ -149,11 +183,15 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
           email: authContext.user.email || '',
           bio: authContext.user.bio || '',
           phone: authContext.user.phone || '',
-          gender: authContext.user.gender || 'male'
+          gender: authContext.user.gender || 'male',
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: ''
         })
       }
     }
   }, [authContext])
+
 
   const loadDashboardData = async () => {
     if (!isAdmin()) return
@@ -189,6 +227,39 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       console.error('Error loading posts:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    // Example: Update analytics data when timeRange changes
+    if (authContext?.isAuthenticated) {
+      loadAnalyticsData()
+    }
+  }, [timeRange, authContext])
+
+  const loadAnalyticsData = async () => {
+    const token = localStorage.getItem('authToken')
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/analytics?timeRange=${timeRange}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        setAnalyticsData({
+          totalViews: data.totalViews || 0,
+          engagementRate: data.engagementRate || 0,
+          newReaders: data.newReaders || 0,
+          topPosts: data.topPosts || []
+        })
+      }
+    } catch (error) {
+      setAnalyticsData({
+        totalViews: 0,
+        engagementRate: 0,
+        newReaders: 0,
+        topPosts: []
+      })
     }
   }
 
@@ -296,6 +367,82 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       authContext.logout()
     }
     window.location.href = '/login'
+  }
+
+  const handleAddCategory = async () => {
+    if (!newCategoryName.trim()) return
+    const token = localStorage.getItem('authToken')
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/categories`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: newCategoryName })
+      })
+      if (response.ok) {
+        setNewCategoryName('')
+        loadCategories()
+      } else {
+        alert('Failed to add category')
+      }
+    } catch (error) {
+      alert('Error adding category')
+    }
+  }
+
+  const handleUpdateProfile = async () => {
+    const token = localStorage.getItem('authToken')
+    try {
+      const formData = new FormData()
+      formData.append('bio', profileForm.bio)
+      if (profileImage) {
+        formData.append('profilePic', profileImage)
+      }
+      const response = await fetch(`${API_BASE_URL}/api/users/me/profile`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData
+      })
+      if (response.ok) {
+        alert('Profile updated!')
+      } else {
+        alert('Failed to update profile')
+      }
+    } catch (error) {
+      alert('Error updating profile')
+    }
+  }
+
+  const handleChangePassword = async () => {
+    const token = localStorage.getItem('authToken')
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/users/me/password`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          currentPassword: profileForm.currentPassword,
+          newPassword: profileForm.newPassword
+        })
+      })
+      if (response.ok) {
+        alert('Password changed successfully!')
+        setProfileForm(prev => ({
+          ...prev,
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: ''
+        }))
+      } else {
+        alert('Failed to change password')
+      }
+    } catch (error) {
+      alert('Error changing password')
+    }
   }
 
   const handleDeleteCategory = async (categoryName: string) => {
@@ -955,22 +1102,67 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
           </Stack>
         )}
         
-        {(currentView === 'export' && !isAdmin()) || (currentView === 'categories' && !isAdmin()) ? (
-          <Alert color="yellow" title="Access Restricted">
-            This feature is only available for administrators.
-          </Alert>
-        ) : currentView === 'export' && isAdmin() && (
+        {currentView === 'export' && isAdmin() && (
           <Paper p="lg" withBorder>
             <Stack gap="md">
               <Title order={4} mb="md">Export Data</Title>
-              <Group>
-                <Button leftSection={<IconFileExport size={16} />}>
-                  Export Posts (JSON)
-                </Button>
-                <Button leftSection={<IconFileExport size={16} />} variant="outline">
-                  Export Analytics (CSV)
-                </Button>
-              </Group>
+              {/* Step 1: Choose what to export */}
+              {exportStep === 0 && (
+                <>
+                  <Text fw={500}>Select Data to Export:</Text>
+                  <Group>
+                    <Button
+                      variant={exportOptions.posts ? 'filled' : 'outline'}
+                      onClick={() => setExportOptions(prev => ({ ...prev, posts: !prev.posts }))}
+                    >
+                      Posts
+                    </Button>
+                    <Button
+                      variant={exportOptions.comments ? 'filled' : 'outline'}
+                      onClick={() => setExportOptions(prev => ({ ...prev, comments: !prev.comments }))}
+                    >
+                      Comments
+                    </Button>
+                    <Button
+                      variant={exportOptions.analytics ? 'filled' : 'outline'}
+                      onClick={() => setExportOptions(prev => ({ ...prev, analytics: !prev.analytics }))}
+                    >
+                      Analytics
+                    </Button>
+                  </Group>
+                  <Button mt="md" onClick={() => setExportStep(1)}>
+                    Next
+                  </Button>
+                </>
+              )}
+              {/* Step 2: Choose format */}
+              {exportStep === 1 && (
+                <>
+                  <Text fw={500}>Select Export Format:</Text>
+                  <Group>
+                    <Button
+                      variant={exportFormat === 'json' ? 'filled' : 'outline'}
+                      onClick={() => setExportFormat('json')}
+                    >
+                      JSON
+                    </Button>
+                    <Button
+                      variant={exportFormat === 'csv' ? 'filled' : 'outline'}
+                      onClick={() => setExportFormat('csv')}
+                    >
+                      CSV
+                    </Button>
+                  </Group>
+                  <Group mt="md">
+                    <Button variant="default" onClick={() => setExportStep(0)}>
+                      Back
+                    </Button>
+                    <Button color="violet" onClick={handleExportData}>
+                      Export
+                    </Button>
+                  </Group>
+                </>
+              )}
             </Stack>
           </Paper>
         )}
