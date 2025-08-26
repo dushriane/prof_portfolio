@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import './Dashboard.css'
 import { 
   Container,  
   Card, 
@@ -22,7 +23,10 @@ import {
   ScrollArea,
   Textarea,
   FileInput,
-  PasswordInput
+  PasswordInput,
+  Pagination,
+  LoadingOverlay,
+  Notification as MantineNotification
 } from '@mantine/core'
 import { 
   IconDashboard, 
@@ -39,9 +43,37 @@ import {
   IconFileExport,
   IconUser,
   IconPhoto,
-  IconUpload
+  IconUpload,
+  IconCheck,
+  IconX
 } from '@tabler/icons-react'
 import { AuthContextType } from '../App'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title as ChartTitle,
+  Tooltip,
+  Legend,
+  BarElement,
+} from 'chart.js'
+import { Line } from 'react-chartjs-2'
+import Resizer from 'react-image-file-resizer'
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  ChartTitle,
+  Tooltip,
+  Legend,
+  BarElement
+)
 
 interface Post {
   _id: string
@@ -82,9 +114,31 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
   const [posts, setPosts] = useState<Post[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [stats, setStats] = useState<DashboardStats | null>(null)
-  const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [postsPerPage] = useState(6)
+  
+  // Loading states
+  const [loadingStates, setLoadingStates] = useState({
+    posts: false,
+    categories: false,
+    analytics: false,
+    creating: false,
+    updating: false,
+    deleting: false,
+    exporting: false
+  })
+  
+  // Notification state
+  const [notification, setNotification] = useState<{
+    type: 'success' | 'error' | 'info'
+    message: string
+    show: boolean
+  }>({ type: 'info', message: '', show: false })
   
   // Create Post Form State
   const [postForm, setPostForm] = useState({
@@ -110,34 +164,41 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
   })
   const [exportFormat, setExportFormat] = useState('json')
   
-  const handleExportData = () => {
-    let dataToExport: any = {}
-    if (exportOptions.posts) dataToExport.posts = posts
-    if (exportOptions.analytics) dataToExport.analytics = analyticsData
-    // Comments export can be added if you fetch comments
+  const handleExportData = async () => {
+    setLoadingStates(prev => ({ ...prev, exporting: true }))
+    try {
+      let dataToExport: any = {}
+      if (exportOptions.posts) dataToExport.posts = posts
+      if (exportOptions.analytics) dataToExport.analytics = analyticsData
 
-    let fileContent = ''
-    let mimeType = ''
-    if (exportFormat === 'json') {
-      fileContent = JSON.stringify(dataToExport, null, 2)
-      mimeType = 'application/json'
-    } else if (exportFormat === 'csv') {
-      // Simple CSV for posts only
-      if (exportOptions.posts) {
-        fileContent = 'Title,Category,Views,Published\n' +
-          posts.map(p => `"${p.title}","${p.category}",${p.views},${p.published}`).join('\n')
-        mimeType = 'text/csv'
+      let fileContent = ''
+      let mimeType = ''
+      if (exportFormat === 'json') {
+        fileContent = JSON.stringify(dataToExport, null, 2)
+        mimeType = 'application/json'
+      } else if (exportFormat === 'csv') {
+        if (exportOptions.posts) {
+          fileContent = 'Title,Category,Views,Published\n' +
+            posts.map(p => `"${p.title}","${p.category}",${p.views},${p.published}`).join('\n')
+          mimeType = 'text/csv'
+        }
       }
-      // Add more CSV logic for analytics/comments if needed
-    }
 
-    const blob = new Blob([fileContent], { type: mimeType })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `export.${exportFormat}`
-    a.click()
-    URL.revokeObjectURL(url)
+      const blob = new Blob([fileContent], { type: mimeType })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `export.${exportFormat}`
+      a.click()
+      URL.revokeObjectURL(url)
+
+      showNotification('success', 'Data exported successfully!')
+      setExportStep(0)
+    } catch (error) {
+      handleApiError(error, 'Error exporting data')
+    } finally {
+      setLoadingStates(prev => ({ ...prev, exporting: false }))
+    }
   }
 
   // Profile State
@@ -153,20 +214,90 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
   })
   const [profileImage, setProfileImage] = useState<File | null>(null)
   
-  // Add time range state
+  // Analytics state
   const [timeRange, setTimeRange] = useState('30')
-  const [analyticsData, setAnalyticsData] = useState({
+  const [analyticsData, setAnalyticsData] = useState<{
+    totalViews: number
+    engagementRate: number
+    newReaders: number
+    topPosts: any[]
+    chartData: {
+      labels: string[]
+      datasets: {
+        label: string
+        data: number[]
+        borderColor: string
+        backgroundColor: string
+      }[]
+    }
+  }>({
     totalViews: 0,
     engagementRate: 0,
     newReaders: 0,
-    topPosts: []
+    topPosts: [],
+    chartData: {
+      labels: [],
+      datasets: []
+    }
   })
 
   const API_BASE_URL = 'http://localhost:3000'
   //const API_BASE_URL = 'https://arn-portfolio-backend.onrender.com'
 
+  // Rich Text Editor modules
+  const quillModules = {
+    toolbar: [
+      [{ 'header': [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+      ['link', 'image'],
+      ['clean']
+    ],
+  }
+
+  const quillFormats = [
+    'header', 'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent', 'link', 'image'
+  ]
+
   const isAdmin = () => {
     return authContext?.user?.role === 'admin'
+  }
+
+  // Show notification helper
+  const showNotification = (type: 'success' | 'error' | 'info', message: string) => {
+    setNotification({ type, message, show: true })
+    setTimeout(() => {
+      setNotification(prev => ({ ...prev, show: false }))
+    }, 5000)
+  }
+
+  // Error handling wrapper
+  const handleApiError = (error: any, defaultMessage: string) => {
+    console.error(error)
+    const message = error?.message || defaultMessage
+    showNotification('error', message)
+  }
+
+  // Image optimization function
+  const resizeImage = (file: File): Promise<File> => {
+    return new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        800, // maxWidth
+        600, // maxHeight
+        'JPEG', // compressFormat
+        80, // quality
+        0, // rotation
+        (uri) => {
+          const resizedFile = new File([uri as Blob], file.name, {
+            type: 'image/jpeg',
+          })
+          resolve(resizedFile)
+        },
+        'blob'
+      )
+    })
   }
 
   useEffect(() => {
@@ -196,6 +327,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
   const loadDashboardData = async () => {
     if (!isAdmin()) return
     
+    setLoadingStates(prev => ({ ...prev, posts: true }))
     const token = localStorage.getItem('authToken')
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/dashboard/stats`, {
@@ -205,28 +337,37 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       if (response.ok) {
         const data = await response.json()
         setStats(data)
+      } else {
+        throw new Error('Failed to load dashboard stats')
       }
     } catch (error) {
-      console.error('Error loading dashboard stats:', error)
+      handleApiError(error, 'Error loading dashboard stats')
+    } finally {
+      setLoadingStates(prev => ({ ...prev, posts: false }))
     }
   }
 
-  const loadUserPosts = async () => {
-    setLoading(true)
+  const loadUserPosts = async (page = 1) => {
+    setLoadingStates(prev => ({ ...prev, posts: true }))
     const token = localStorage.getItem('authToken')
     try {
-      const response = await fetch(`${API_BASE_URL}/api/users/me/posts`, {
+      const response = await fetch(`${API_BASE_URL}/api/users/me/posts?page=${page}&limit=${postsPerPage}&search=${searchTerm}&category=${selectedCategory}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       
       if (response.ok) {
         const data = await response.json()
-        setPosts(Array.isArray(data) ? data : [])
+        setPosts(Array.isArray(data.posts) ? data.posts : [])
+        setTotalPages(Math.ceil(data.total / postsPerPage))
+        setCurrentPage(page)
+      } else {
+        throw new Error('Failed to load posts')
       }
     } catch (error) {
-      console.error('Error loading posts:', error)
+      handleApiError(error, 'Error loading posts')
+      setPosts([])
     } finally {
-      setLoading(false)
+      setLoadingStates(prev => ({ ...prev, posts: false }))
     }
   }
 
@@ -238,6 +379,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
   }, [timeRange, authContext])
 
   const loadAnalyticsData = async () => {
+    setLoadingStates(prev => ({ ...prev, analytics: true }))
     const token = localStorage.getItem('authToken')
     try {
       const response = await fetch(`${API_BASE_URL}/api/analytics?timeRange=${timeRange}`, {
@@ -250,20 +392,45 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
           totalViews: data.totalViews || 0,
           engagementRate: data.engagementRate || 0,
           newReaders: data.newReaders || 0,
-          topPosts: data.topPosts || []
+          topPosts: data.topPosts || [],
+          chartData: {
+            labels: data.chartLabels || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+              label: 'Views',
+              data: data.chartData || [65, 59, 80, 81, 56, 55, 40],
+              borderColor: 'rgb(139, 69, 19)',
+              backgroundColor: 'rgba(139, 69, 19, 0.2)',
+            }]
+          }
         })
+      } else {
+        throw new Error('Failed to load analytics')
       }
     } catch (error) {
+      handleApiError(error, 'Error loading analytics')
+      // Set fallback data
       setAnalyticsData({
         totalViews: 0,
         engagementRate: 0,
         newReaders: 0,
-        topPosts: []
+        topPosts: [],
+        chartData: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Views',
+            data: [0, 0, 0, 0, 0, 0, 0],
+            borderColor: 'rgb(139, 69, 19)',
+            backgroundColor: 'rgba(139, 69, 19, 0.2)',
+          }]
+        }
       })
+    } finally {
+      setLoadingStates(prev => ({ ...prev, analytics: false }))
     }
   }
 
   const loadCategories = async () => {
+    setLoadingStates(prev => ({ ...prev, categories: true }))
     try {
       const token = localStorage.getItem('authToken')
       const response = await fetch(`${API_BASE_URL}/api/categories`, {
@@ -273,15 +440,20 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       if (response.ok) {
         const data = await response.json()
         setCategories(data)
+      } else {
+        throw new Error('Failed to load categories')
       }
     } catch (error) {
-      console.error('Error loading categories:', error)
+      handleApiError(error, 'Error loading categories')
+    } finally {
+      setLoadingStates(prev => ({ ...prev, categories: false }))
     }
   }
 
   const handleDeletePost = async (postId: string) => {
     if (!confirm('Are you sure you want to delete this post?')) return
     
+    setLoadingStates(prev => ({ ...prev, deleting: true }))
     const token = localStorage.getItem('authToken')
     try {
       const response = await fetch(`${API_BASE_URL}/api/posts/${postId}`, {
@@ -290,10 +462,15 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       })
       
       if (response.ok) {
-        loadUserPosts()
+        showNotification('success', 'Post deleted successfully')
+        loadUserPosts(currentPage)
+      } else {
+        throw new Error('Failed to delete post')
       }
     } catch (error) {
-      console.error('Error deleting post:', error)
+      handleApiError(error, 'Error deleting post')
+    } finally {
+      setLoadingStates(prev => ({ ...prev, deleting: false }))
     }
   }
 
@@ -311,6 +488,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
   }
 
   const handleCreatePost = async (isDraft = false) => {
+    setLoadingStates(prev => ({ ...prev, creating: true }))
     const token = localStorage.getItem('authToken')
     const url = editingPostId 
       ? `${API_BASE_URL}/api/posts/${editingPostId}`
@@ -327,7 +505,8 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       formData.append('published', (!isDraft).toString())
       
       if (selectedFile) {
-        formData.append('image', selectedFile)
+        const optimizedFile = await resizeImage(selectedFile)
+        formData.append('image', optimizedFile)
       }
       
       const response = await fetch(url, {
@@ -340,7 +519,8 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       })
       
       if (response.ok) {
-        alert(editingPostId ? 'Post updated!' : (isDraft ? 'Draft saved!' : 'Post published!'))
+        const message = editingPostId ? 'Post updated!' : (isDraft ? 'Draft saved!' : 'Post published!')
+        showNotification('success', message)
         setPostForm({
           title: '',
           content: '',
@@ -352,11 +532,14 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
         setSelectedFile(null)
         setEditingPostId(null)
         setCurrentView('dashboard')
-        loadUserPosts()
+        loadUserPosts(currentPage)
+      }else{
+        throw new Error('Failed to save post')
       }
     } catch (error) {
-      console.error('Error saving post:', error)
-      alert('Error saving post')
+      handleApiError(error, 'Error saving post')
+    } finally {
+      setLoadingStates(prev => ({ ...prev, creating: false }))
     }
   }
 
@@ -371,6 +554,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
 
   const handleAddCategory = async () => {
     if (!newCategoryName.trim()) return
+    setLoadingStates(prev => ({ ...prev, categories: true }))
     const token = localStorage.getItem('authToken')
     try {
       const response = await fetch(`${API_BASE_URL}/api/categories`, {
@@ -384,21 +568,26 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       if (response.ok) {
         setNewCategoryName('')
         loadCategories()
+        showNotification('success', 'Category added successfully!')
       } else {
-        alert('Failed to add category')
+        throw new Error('Failed to add category')
       }
     } catch (error) {
-      alert('Error adding category')
+      handleApiError(error, 'Error adding category')
+    } finally {
+      setLoadingStates(prev => ({ ...prev, categories: false }))
     }
   }
 
   const handleUpdateProfile = async () => {
+    setLoadingStates(prev => ({ ...prev, updating: true }))
     const token = localStorage.getItem('authToken')
     try {
       const formData = new FormData()
       formData.append('bio', profileForm.bio)
       if (profileImage) {
-        formData.append('profilePic', profileImage)
+        const optimizedImage = await resizeImage(profileImage)
+        formData.append('profilePic', optimizedImage)
       }
       const response = await fetch(`${API_BASE_URL}/api/users/me/profile`, {
         method: 'PUT',
@@ -406,16 +595,24 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
         body: formData
       })
       if (response.ok) {
-        alert('Profile updated!')
+        showNotification('success', 'Profile updated successfully!')
       } else {
-        alert('Failed to update profile')
+        throw new Error('Failed to update profile')
       }
     } catch (error) {
-      alert('Error updating profile')
+      handleApiError(error, 'Error updating profile')
+    } finally {
+      setLoadingStates(prev => ({ ...prev, updating: false }))
     }
   }
 
   const handleChangePassword = async () => {
+    if (profileForm.newPassword !== profileForm.confirmPassword) {
+      showNotification('error', 'Passwords do not match')
+      return
+    }
+    
+    setLoadingStates(prev => ({ ...prev, updating: true }))
     const token = localStorage.getItem('authToken')
     try {
       const response = await fetch(`${API_BASE_URL}/api/users/me/password`, {
@@ -430,7 +627,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
         })
       })
       if (response.ok) {
-        alert('Password changed successfully!')
+        showNotification('success', 'Password changed successfully!')
         setProfileForm(prev => ({
           ...prev,
           currentPassword: '',
@@ -438,10 +635,12 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
           confirmPassword: ''
         }))
       } else {
-        alert('Failed to change password')
+        throw new Error('Failed to change password')
       }
     } catch (error) {
-      alert('Error changing password')
+      handleApiError(error, 'Error changing password')
+    } finally {
+      setLoadingStates(prev => ({ ...prev, updating: false }))
     }
   }
 
@@ -457,22 +656,23 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       
       if (response.ok) {
         loadCategories()
-        alert('Category deleted successfully!')
+        showNotification('success', 'Category deleted successfully!')
       } else {
-        alert('Failed to delete category. It may have posts associated with it.')
+        throw new Error('Failed to delete category. It may have posts associated with it.')
       }
     } catch (error) {
-      console.error('Error deleting category:', error)
-      alert('Error deleting category')
+      handleApiError(error, 'Error deleting category')
+    } finally {
+      setLoadingStates(prev => ({ ...prev, categories: false }))
     }
   }
 
-  const filteredPosts = posts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.content.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === 'all' || post.category.toLowerCase() === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+  // Handle search and filter changes
+  useEffect(() => {
+    if (authContext?.isAuthenticated) {
+      loadUserPosts(1) // Reset to page 1 when search/filter changes
+    }
+  }, [searchTerm, selectedCategory])
 
   // Redirect if not authenticated
   if (!authContext?.isAuthenticated) {
@@ -494,6 +694,24 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       }}
       padding="md"
     >
+      {/* Notification */}
+      {notification.show && (
+      <MantineNotification
+        icon={notification.type === 'success' ? <IconCheck size={18} /> : <IconX size={18} />}
+        color={notification.type === 'success' ? 'green' : 'red'}
+        title={notification.type === 'success' ? 'Success' : 'Error'}
+        onClose={() => setNotification(prev => ({ ...prev, show: false }))}
+        style={{
+          position: 'fixed',
+          top: 20,
+          right: 20,
+          zIndex: 1000
+        }}
+      >
+        {notification.message}
+      </MantineNotification>
+      )}
+
       <AppShell.Navbar p="md">
         <AppShell.Section>
           <Title order={3} c="violet.6" mb="md">Dashboard</Title>
@@ -574,7 +792,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
           </Stack>
         </AppShell.Section>
 
-        {/* Update the sidebar user section */}
+        {/* the sidebar user section */}
         <AppShell.Section>
           <Box p="sm" style={{ borderTop: '1px solid var(--mantine-color-gray-3)' }}>
             <Group justify="space-between">
@@ -604,11 +822,12 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
             <Title order={2} c="violet.6">
               {currentView === 'dashboard' ? 'Dashboard Overview' :
                currentView === 'create' ? 'Create New Post' :
+               currentView === 'edit' ? 'Edit Post' :
                currentView === 'analytics' ? 'Analytics' :
                currentView === 'categories' ? 'Manage Categories' :
                currentView === 'export' ? 'Export Data' :
                currentView === 'profile' ? 'Profile Settings' : 
-               currentView.charAt(0).toUpperCase() + currentView.slice(1)}
+               'Dashboard'}
             </Title>
             {currentView === 'dashboard' && (
               <Button 
@@ -624,156 +843,169 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
           {/* Dashboard Content */}
           {currentView === 'dashboard' && (
             <Stack gap="lg">
-            {isAdmin() && stats && (
-              <SimpleGrid cols={{ base: 2, md: 4 }} spacing="lg">
-                <Paper withBorder p="md" radius="md">
-                  <Group justify="apart">
-                    <div>
-                      <Text c="dimmed" tt="uppercase" fw={700} fz="xs">
-                        Total Posts
-                      </Text>
-                      <Text fw={700} fz="xl">
-                        {stats.totalPosts}
-                      </Text>
-                    </div>
-                    <IconDashboard size={22} color="var(--mantine-color-violet-6)" />
-                  </Group>
-                </Paper>
-                
-                <Paper withBorder p="md" radius="md">
-                  <Group justify="apart">
-                    <div>
-                      <Text c="dimmed" tt="uppercase" fw={700} fz="xs">
-                        Total Views
-                      </Text>
-                      <Text fw={700} fz="xl">
-                        {stats.totalViews}
-                      </Text>
-                    </div>
-                    <IconEye size={22} color="var(--mantine-color-violet-6)" />
-                  </Group>
-                </Paper>
-                
-                <Paper withBorder p="md" radius="md">
-                  <Group justify="apart">
-                    <div>
-                      <Text c="dimmed" tt="uppercase" fw={700} fz="xs">
-                        Categories
-                      </Text>
-                      <Text fw={700} fz="xl">
-                        {stats.totalCategories}
-                      </Text>
-                    </div>
-                    <IconFilter size={22} color="var(--mantine-color-violet-6)" />
-                  </Group>
-                </Paper>
-                
-                <Paper withBorder p="md" radius="md">
-                  <Group justify="apart">
-                    <div>
-                      <Text c="dimmed" tt="uppercase" fw={700} fz="xs">
-                        Engagement Rate
-                      </Text>
-                      <Text fw={700} fz="xl">
-                        {stats.engagementRate}
-                      </Text>
-                    </div>
-                    <IconPlus size={22} color="var(--mantine-color-violet-6)" />
-                  </Group>
-                </Paper>
-              </SimpleGrid>
-            )}
+              {isAdmin() && stats && (
+                <SimpleGrid cols={{ base: 2, md: 4 }} spacing="lg">
+                  <Paper withBorder p="md" radius="md">
+                    <Group justify="apart">
+                      <div>
+                        <Text c="dimmed" tt="uppercase" fw={700} fz="xs">
+                          Total Posts
+                        </Text>
+                        <Text fw={700} fz="xl">
+                          {stats.totalPosts}
+                        </Text>
+                      </div>
+                      <IconDashboard size={22} color="var(--mantine-color-violet-6)" />
+                    </Group>
+                  </Paper>
+                  
+                  <Paper withBorder p="md" radius="md">
+                    <Group justify="apart">
+                      <div>
+                        <Text c="dimmed" tt="uppercase" fw={700} fz="xs">
+                          Total Views
+                        </Text>
+                        <Text fw={700} fz="xl">
+                          {stats.totalViews}
+                        </Text>
+                      </div>
+                      <IconEye size={22} color="var(--mantine-color-violet-6)" />
+                    </Group>
+                  </Paper>
+                  
+                  <Paper withBorder p="md" radius="md">
+                    <Group justify="apart">
+                      <div>
+                        <Text c="dimmed" tt="uppercase" fw={700} fz="xs">
+                          Categories
+                        </Text>
+                        <Text fw={700} fz="xl">
+                          {stats.totalCategories}
+                        </Text>
+                      </div>
+                      <IconFilter size={22} color="var(--mantine-color-violet-6)" />
+                    </Group>
+                  </Paper>
+                  
+                  <Paper withBorder p="md" radius="md">
+                    <Group justify="apart">
+                      <div>
+                        <Text c="dimmed" tt="uppercase" fw={700} fz="xs">
+                          Engagement Rate
+                        </Text>
+                        <Text fw={700} fz="xl">
+                          {stats.engagementRate}
+                        </Text>
+                      </div>
+                      <IconPlus size={22} color="var(--mantine-color-violet-6)" />
+                    </Group>
+                  </Paper>
+                </SimpleGrid>
+              )}
 
-            {/* Search and Filter */}
-            <Group grow>
-              <TextInput
-                placeholder="Search posts..."
-                leftSection={<IconSearch size={16} />}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.currentTarget.value)}
-              />
-              <Select
-                placeholder="Filter by category"
-                data={[
-                  { value: 'all', label: 'All Categories' },
-                  ...categories.map(cat => ({ value: cat.name.toLowerCase(), label: cat.name }))
-                ]}
-                value={selectedCategory}
-                onChange={(value) => setSelectedCategory(value || 'all')}
-              />
-            </Group>
-
-            {/* Posts Grid */}
-            {loading ? (
-              <Group justify="center" p="xl">
-                <Loader size="lg" />
+              {/* Search and Filter */}
+              <Group grow>
+                <TextInput
+                  placeholder="Search posts..."
+                  leftSection={<IconSearch size={16} />}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.currentTarget.value)}
+                />
+                <Select
+                  placeholder="Filter by category"
+                  data={[
+                    { value: 'all', label: 'All Categories' },
+                    ...categories.map(cat => ({ value: cat.name.toLowerCase(), label: cat.name }))
+                  ]}
+                  value={selectedCategory}
+                  onChange={(value) => setSelectedCategory(value || 'all')}
+                />
               </Group>
-            ) : filteredPosts.length === 0 ? (
-              <Paper p="xl" ta="center" c="dimmed">
-                <Text>No posts found.</Text>
-              </Paper>
-            ) : (
-              <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }} spacing="lg">
-                {filteredPosts.map((post) => (
-                  <Card key={post._id} shadow="sm" padding="lg" radius="md" withBorder>
-                    <Stack gap="sm">
-                      <Group justify="space-between" align="flex-start">
-                        <Title order={4} lineClamp={2}>{post.title}</Title>
-                        <Menu shadow="md" width={200}>
-                          <Menu.Target>
-                            <ActionIcon variant="subtle" size="sm">
-                              <IconDotsVertical size={16} />
-                            </ActionIcon>
-                          </Menu.Target>
-                          <Menu.Dropdown>
-                            <Menu.Item 
-                              leftSection={<IconEdit size={14} />}
-                              onClick={() => handleEditPost(post)}
-                            >
-                              Edit
-                            </Menu.Item>
-                            <Menu.Item 
-                              leftSection={<IconTrash size={14} />}
-                              color="red"
-                              onClick={() => handleDeletePost(post._id)}
-                            >
-                              Delete
-                            </Menu.Item>
-                          </Menu.Dropdown>
-                        </Menu>
-                      </Group>
-                      
-                      <Text size="sm" c="dimmed" lineClamp={3}>
-                        {post.excerpt || post.content.substring(0, 100) + '...'}
-                      </Text>
-                      
-                      <Text size="sm" c="dimmed">
-                        Category: {post.category}
-                      </Text>
-                      
-                      <Group justify="space-between">
-                        <Badge color={post.published ? 'green' : 'yellow'} variant="light">
-                          {post.published ? 'Published' : 'Draft'}
-                        </Badge>
-                        <Group gap="xs">
-                          <IconEye size={14} />
-                          <Text size="sm">{post.views || 0}</Text>
-                        </Group>
-                      </Group>
-                      
-                      <Text size="xs" c="dimmed">
-                        {new Date(post.createdAt).toLocaleDateString()}
-                      </Text>
-                    </Stack>
-                  </Card>
-                ))}
-              </SimpleGrid>
-            )}
-          </Stack>
-        )}
-        
+
+              {/* Posts Grid */}
+              {loadingStates.posts ? (
+                <Group justify="center" p="xl">
+                  <Loader size="lg" />
+                </Group>
+              ) : posts.length === 0 ? (
+                <Paper p="xl" ta="center" c="dimmed">
+                  <Text>No posts found.</Text>
+                </Paper>
+              ) : (
+                <>
+                  <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }} spacing="lg">
+                    {posts.map((post) => (
+                      <Card key={post._id} shadow="sm" padding="lg" radius="md" withBorder>
+                        <Stack gap="sm">
+                          <Group justify="space-between" align="flex-start">
+                            <Title order={4} lineClamp={2}>{post.title}</Title>
+                            <Menu shadow="md" width={200}>
+                              <Menu.Target>
+                                <ActionIcon variant="subtle" size="sm">
+                                  <IconDotsVertical size={16} />
+                                </ActionIcon>
+                              </Menu.Target>
+                              <Menu.Dropdown>
+                                <Menu.Item 
+                                  leftSection={<IconEdit size={14} />}
+                                  onClick={() => handleEditPost(post)}
+                                >
+                                  Edit
+                                </Menu.Item>
+                                <Menu.Item 
+                                  leftSection={<IconTrash size={14} />}
+                                  color="red"
+                                  onClick={() => handleDeletePost(post._id)}
+                                >
+                                  Delete
+                                </Menu.Item>
+                              </Menu.Dropdown>
+                            </Menu>
+                          </Group>
+                          
+                          <Text size="sm" c="dimmed" lineClamp={3}>
+                            {post.excerpt || post.content.substring(0, 100) + '...'}
+                          </Text>
+                          
+                          <Text size="sm" c="dimmed">
+                            Category: {post.category}
+                          </Text>
+                          
+                          <Group justify="space-between">
+                            <Badge color={post.published ? 'green' : 'yellow'} variant="light">
+                              {post.published ? 'Published' : 'Draft'}
+                            </Badge>
+                            <Group gap="xs">
+                              <IconEye size={14} />
+                              <Text size="sm">{post.views || 0}</Text>
+                            </Group>
+                          </Group>
+                          
+                          <Text size="xs" c="dimmed">
+                            {new Date(post.createdAt).toLocaleDateString()}
+                          </Text>
+                        </Stack>
+                      </Card>
+                    ))}
+                  </SimpleGrid>
+                  
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <Group justify="center" mt="lg">
+                      <Pagination
+                        total={totalPages}
+                        value={currentPage}
+                        onChange={(page) => loadUserPosts(page)}
+                      />
+                    </Group>
+                  )}
+                </>
+              )}
+            </Stack>
+          )}
+
         {/* Other views */}
-        {currentView === 'create' && (
+        {(currentView === 'create' || currentView === 'edit') && (
           <Paper p="lg" withBorder>
             <Stack gap="md">
               <TextInput
@@ -828,33 +1060,37 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
               {/* Rich Text Content Area */}
               <div>
                 <Text size="sm" fw={500} mb="xs">Content</Text>
-                <Textarea
-                  placeholder="Write your post content here..."
-                  minRows={12}
+                <ReactQuill
+                  theme="snow"
                   value={postForm.content}
-                  onChange={(e) => setPostForm(prev => ({ ...prev, content: e.currentTarget.value }))}
-                  description="Rich text editor can be integrated here (Quill, TinyMCE, etc.)"
-                />
+                  onChange={(content) => setPostForm(prev => ({ ...prev, content }))}
+                  modules={quillModules}
+                  formats={quillFormats}
+                  style={{ minHeight: '300px' }}
+                /> 
               </div>
 
               <Group justify="flex-end">
                 <Button 
                   variant="outline" 
                   onClick={() => handleCreatePost(true)}
+                  loading={loadingStates.creating}
                 >
                   Save as Draft
                 </Button>
                 <Button 
                   leftSection={<IconUpload size={16} />}
                   onClick={() => handleCreatePost(false)}
+                  loading={loadingStates.creating}
                 >
-                  Publish Post
+                  {editingPostId ? 'Update Post' : 'Publish Post'}
                 </Button>
               </Group>
             </Stack>
           </Paper>
         )}
         
+        {/* Analytics view */}
         {currentView === 'analytics' && (
           <Stack gap="lg">
             <Group justify="space-between" align="center">
@@ -918,13 +1154,34 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
               </Card>
             </SimpleGrid>
             
-            {/* Charts Placeholder */}
+            {/* Charts */}
             <SimpleGrid cols={{ base: 1, lg: 2 }} spacing="lg">
               <Paper p="lg" withBorder>
                 <Title order={4} mb="md">Views Over Time</Title>
-                <Box h={300} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--mantine-color-gray-1)' }}>
-                  <Text c="dimmed">Chart will be implemented with Chart.js or Recharts</Text>
-                </Box>
+                {loadingStates.analytics ? (
+                    <Group justify="center" h={300}>
+                      <Loader />
+                    </Group>
+                  ) : (
+                    <Box h={300}>
+                      <Line 
+                        data={analyticsData.chartData}
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          plugins: {
+                            legend: {
+                              position: 'top' as const,
+                            },
+                            title: {
+                              display: true,
+                              text: 'Daily Views'
+                            },
+                          },
+                        }}
+                      />
+                    </Box>
+                  )}
               </Paper>
               
               <Paper p="lg" withBorder>
@@ -933,7 +1190,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                   {posts.slice(0, 5).map((post, index) => (
                     <Group key={post._id} justify="space-between" p="sm" style={{ borderBottom: '1px solid var(--mantine-color-gray-2)' }}>
                       <div>
-                        <Text size="sm" fw={500}>{post.title}</Text>
+                        <Text size="sm" fw={500}>{index + 1}. {post.title}</Text>
                         <Text size="xs" c="dimmed">{post.category}</Text>
                       </div>
                       <Group gap="xs">
@@ -948,6 +1205,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
           </Stack>
         )}
         
+        {/* Categories view */}
         {currentView === 'categories' && isAdmin() && (
           <Stack gap="lg">
             <Paper p="lg" withBorder>
@@ -964,6 +1222,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                   onClick={handleAddCategory}
                   disabled={!newCategoryName.trim()}
                   leftSection={<IconPlus size={16} />}
+                  loading={loadingStates.categories}
                 >
                   Add Category
                 </Button>
@@ -972,37 +1231,44 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
             
             <Paper p="lg" withBorder>
               <Title order={4} mb="md">Existing Categories ({categories.length})</Title>
-              <Stack gap="sm">
-                {categories.length === 0 ? (
-                  <Text c="dimmed" ta="center" py="xl">No categories found</Text>
+              {loadingStates.categories ? (
+                  <Group justify="center" py="xl">
+                    <Loader />
+                  </Group>
                 ) : (
-                  categories.map((category) => (
-                    <Group key={category.name} justify="space-between" p="sm" style={{ borderBottom: '1px solid var(--mantine-color-gray-2)' }}>
-                      <Group gap="sm">
-                        <IconCategory size={16} color="var(--mantine-color-violet-6)" />
-                        <Text>{category.name}</Text>
-                      </Group>
-                      <Group gap="sm">
-                        <Badge variant="light" size="sm">
-                          {category.postCount || posts.filter(p => p.category === category.name).length} posts
-                        </Badge>
-                        <ActionIcon 
-                          variant="subtle" 
-                          color="red" 
-                          size="sm"
-                          onClick={() => handleDeleteCategory(category.name)}
-                        >
-                          <IconTrash size={14} />
-                        </ActionIcon>
-                      </Group>
-                    </Group>
-                  ))
+                  <Stack gap="sm">
+                    {categories.length === 0 ? (
+                      <Text c="dimmed" ta="center" py="xl">No categories found</Text>
+                    ) : (
+                      categories.map((category) => (
+                        <Group key={category.name} justify="space-between" p="sm" style={{ borderBottom: '1px solid var(--mantine-color-gray-2)' }}>
+                          <Group gap="sm">
+                            <IconCategory size={16} color="var(--mantine-color-violet-6)" />
+                            <Text>{category.name}</Text>
+                          </Group>
+                          <Group gap="sm">
+                            <Badge variant="light" size="sm">
+                              {category.postCount || posts.filter(p => p.category === category.name).length} posts
+                            </Badge>
+                            <ActionIcon 
+                              variant="subtle" 
+                              color="red" 
+                              size="sm"
+                              onClick={() => handleDeleteCategory(category.name)}
+                            >
+                              <IconTrash size={14} />
+                            </ActionIcon>
+                          </Group>
+                        </Group>
+                      ))
+                    )}
+                  </Stack>
                 )}
-              </Stack>
             </Paper>
           </Stack>
         )}
-        
+
+        {/* Profile view */}
         {currentView === 'profile' && (
           <Stack gap="lg">
             <Paper p="lg" withBorder>
@@ -1063,6 +1329,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                 <Button 
                   onClick={handleUpdateProfile}
                   leftSection={<IconUser size={16} />}
+                  loading={loadingStates.updating}
                 >
                   Update Profile
                 </Button>
@@ -1094,6 +1361,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                   onClick={handleChangePassword}
                   color="orange"
                   disabled={!profileForm.currentPassword || !profileForm.newPassword || profileForm.newPassword !== profileForm.confirmPassword}
+                  loading={loadingStates.updating}
                 >
                   Change Password
                 </Button>
@@ -1101,9 +1369,11 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
             </Paper>
           </Stack>
         )}
-        
+
+        {/* Export view */}
         {currentView === 'export' && isAdmin() && (
           <Paper p="lg" withBorder>
+            <LoadingOverlay visible={loadingStates.exporting} />
             <Stack gap="md">
               <Title order={4} mb="md">Export Data</Title>
               {/* Step 1: Choose what to export */}
@@ -1157,7 +1427,11 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                     <Button variant="default" onClick={() => setExportStep(0)}>
                       Back
                     </Button>
-                    <Button color="violet" onClick={handleExportData}>
+                    <Button 
+                      color="violet" 
+                      onClick={handleExportData}
+                      loading={loadingStates.exporting}
+                    >
                       Export
                     </Button>
                   </Group>

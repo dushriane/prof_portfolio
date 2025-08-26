@@ -437,6 +437,23 @@
   background: var(--primary-purple);
 }
 
+.ql-editor {
+  min-height: 300px;
+  font-family: var(--mantine-font-family);
+}
+
+.ql-toolbar {
+  border-top: 1px solid var(--mantine-color-gray-3);
+  border-left: 1px solid var(--mantine-color-gray-3);
+  border-right: 1px solid var(--mantine-color-gray-3);
+}
+
+.ql-container {
+  border-bottom: 1px solid var(--mantine-color-gray-3);
+  border-left: 1px solid var(--mantine-color-gray-3);
+  border-right: 1px solid var(--mantine-color-gray-3);
+}
+
 @media (max-width: 768px) {
   .dashboard-container {
     padding-top: 80px;
@@ -499,3 +516,5 @@
     padding: 1rem;
   }
 }
+
+
