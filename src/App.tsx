@@ -16,6 +16,7 @@ import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import Blog from './pages/Blog'
 import Post from './pages/Post'
+import ResetPassword from './pages/ResetPassword'
 
 // Hooks
 import { useSmoothScroll, usePageLoading, useHoverEffects } from './hooks/useAnimations'
@@ -104,6 +105,7 @@ function App() {
                   <Route path="/dashboard" element={<Dashboard authContext={authContext} />} />
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/post/:id" element={<Post />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
                 </Routes>
               </AppShell.Main>
             </AppShell>

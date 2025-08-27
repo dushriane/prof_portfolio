@@ -3,18 +3,24 @@ import { useEffect, useRef, useCallback } from 'react';
 // Custom hook for smooth scrolling
 export const useSmoothScroll = () => {
   useEffect(() => {
-    const handleSmoothScroll = (e: Event) => {
-      const target = e.target as HTMLAnchorElement;
-      if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('#')) {
-        e.preventDefault();
-        const targetId = target.getAttribute('href');
-        const targetElement = document.querySelector(targetId!);
-        
-        if (targetElement) {
-          targetElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
+    const handleSmoothScroll = (event: Event) => {
+      const target = event.target as HTMLElement
+      const href = target.getAttribute('href')
+      
+      // Fix: Check if href exists and is a valid selector before using querySelector
+      if (href && href.startsWith('#') && href.length > 1) {
+        try {
+          const targetElement = document.querySelector(href)
+          if (targetElement) {
+            event.preventDefault()
+            targetElement.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'start'
+            })
+          }
+        } catch (error) {
+          // Silently handle invalid selectors
+          console.warn('Invalid selector:', href)
         }
       }
     };
