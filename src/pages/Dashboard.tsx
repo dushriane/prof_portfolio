@@ -26,7 +26,8 @@ import {
   PasswordInput,
   Pagination,
   LoadingOverlay,
-  Notification as MantineNotification
+  Notification as MantineNotification,
+  useMantineColorScheme
 } from '@mantine/core'
 import { 
   IconDashboard, 
@@ -45,7 +46,9 @@ import {
   IconPhoto,
   IconUpload,
   IconCheck,
-  IconX
+  IconX,
+  IconSun,
+  IconMoon
 } from '@tabler/icons-react'
 import { AuthContextType } from '../App'
 import ReactQuill from 'react-quill'
@@ -117,6 +120,8 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
 
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme()
+  
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -173,14 +178,36 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
 
       let fileContent = ''
       let mimeType = ''
+      let fileName = ''
+      
       if (exportFormat === 'json') {
-        fileContent = JSON.stringify(dataToExport, null, 2)
-        mimeType = 'application/json'
+          fileContent = JSON.stringify(dataToExport, null, 2)
+          mimeType = 'application/json'
       } else if (exportFormat === 'csv') {
-        if (exportOptions.posts) {
-          fileContent = 'Title,Category,Views,Published\n' +
-            posts.map(p => `"${p.title}","${p.category}",${p.views},${p.published}`).join('\n')
+          if (exportOptions.posts && posts.length > 0) {
+          // Create proper CSV headers
+          const headers = ['Title', 'Category', 'Author', 'Views', 'Published', 'Created Date', 'Tags']
+          const csvRows = [headers.join(',')]
+          
+          // Add data rows
+          posts.forEach(post => {
+            const row = [
+              `"${post.title.replace(/"/g, '""')}"`, // Escape quotes in title
+              `"${post.category}"`,
+              `"${post.author.username}"`,
+              post.views || 0,
+              post.published ? 'Yes' : 'No',
+              `"${new Date(post.createdAt).toLocaleDateString()}"`,
+              `"${post.tags.join('; ')}"`
+            ]
+            csvRows.push(row.join(','))
+          })
+          
+          fileContent = csvRows.join('\n')
           mimeType = 'text/csv'
+          fileName = `blog-posts-${new Date().toISOString().split('T')[0]}.csv`
+        } else {
+          throw new Error('No posts data available for CSV export')
         }
       }
 
@@ -188,8 +215,10 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `export.${exportFormat}`
+      a.download = fileName
+      document.body.appendChild(a) // Add to DOM
       a.click()
+      document.body.removeChild(a) // Remove from DOM
       URL.revokeObjectURL(url)
 
       showNotification('success', 'Data exported successfully!')
@@ -404,13 +433,33 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
           }
         })
       } else {
-        throw new Error('Failed to load analytics')
+        // If analytics endpoint doesn't exist, calculate from posts
+      const totalViews = posts.reduce((sum, post) => sum + (post.views || 0), 0)
+      const publishedPosts = posts.filter(p => p.published)
+      
+      setAnalyticsData({
+        totalViews,
+        engagementRate: publishedPosts.length > 0 ? Math.round((totalViews / publishedPosts.length) * 100) / 100 : 0,
+        newReaders: Math.floor(totalViews * 0.3), // Estimate
+        topPosts: posts.sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, 5),
+        chartData: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Views',
+            data: generateMockChartData(totalViews),
+            borderColor: 'rgb(139, 69, 19)',
+            backgroundColor: 'rgba(139, 69, 19, 0.2)',
+          }]
+        }
+      })
       }
     } catch (error) {
       handleApiError(error, 'Error loading analytics')
+      // Generate analytics from existing posts data
+      const totalViews = posts.reduce((sum, post) => sum + (post.views || 0), 0)
       // Set fallback data
       setAnalyticsData({
-        totalViews: 0,
+        totalViews,
         engagementRate: 0,
         newReaders: 0,
         topPosts: [],
@@ -428,6 +477,11 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       setLoadingStates(prev => ({ ...prev, analytics: false }))
     }
   }
+    // Helper function for mock chart data
+    const generateMockChartData = (totalViews: number) => {
+      const base = Math.floor(totalViews / 7)
+      return Array.from({ length: 7 }, () => base + Math.floor(Math.random() * base))
+    }
 
   const loadCategories = async () => {
     setLoadingStates(prev => ({ ...prev, categories: true }))
@@ -541,6 +595,14 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
     } finally {
       setLoadingStates(prev => ({ ...prev, creating: false }))
     }
+  }
+
+  const getDisplayAuthorName = (post: Post) => {
+    // If the author is admin, show the portfolio owner's name
+    if (post.author.username === 'admin' ) {
+      return 'Ariane Dushime'
+    }
+    return post.author.username
   }
 
   const handleLogout = () => {
@@ -692,7 +754,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
         width: 300,
         breakpoint: 'sm',
       }}
-      padding="md"
+      padding={0}
     >
       {/* Notification */}
       {notification.show && (
@@ -789,6 +851,16 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                 setCurrentView('profile')
               }}
             />
+
+            <NavLink
+              href="#"
+              label={`${colorScheme === 'dark' ? 'Light' : 'Dark'} Mode`}
+              leftSection={colorScheme === 'dark' ? <IconSun size="1rem" /> : <IconMoon size="1rem" />}
+              onClick={(e) => {
+                e.preventDefault()
+                toggleColorScheme()
+              }}
+            />
           </Stack>
         </AppShell.Section>
 
@@ -815,8 +887,8 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
         </AppShell.Section>
       </AppShell.Navbar>
 
-      <AppShell.Main>
-        <Container size="xl">
+      <AppShell.Main style={{paddingLeft: 0}}>
+        <Container size="100%" px="md" py="md">
           {/* Header */}
           <Group justify="space-between" align="center" mb="lg">
             <Title order={2} c="violet.6">
@@ -965,6 +1037,10 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                           
                           <Text size="sm" c="dimmed" lineClamp={3}>
                             {post.excerpt || post.content.substring(0, 100) + '...'}
+                          </Text>
+
+                          <Text size="sm" c="gray.6" mt="xs">
+                            By: {getDisplayAuthorName(post)}
                           </Text>
                           
                           <Text size="sm" c="dimmed">

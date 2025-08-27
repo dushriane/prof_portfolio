@@ -24,7 +24,12 @@ interface Post {
 interface Category {
   name: string
 }
-
+const getDisplayAuthorName = (author: any) => {
+  if (author.username === 'admin') {
+    return 'Ariane Dushime'
+  }
+  return author.username
+}
 const Blog: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -145,34 +150,37 @@ const Blog: React.FC = () => {
                 <img src={post.imageUrl || '/images/blogone.jpeg'} alt={post.title} />
               </div>
               
-              <div className="author-info">
-                <img 
-                  src={post.author?.profilePic || '/images/profiles/default.jpg'} 
-                  className="author-pic" 
-                  alt="Author" 
-                />
-                <span className="author-name">
-                  {post.author?.username || 'Unknown'}
-                </span>
-              </div>
-              
-              <h2 className="thought-title">{post.title}</h2>
-              <p className="thought-description">{post.excerpt}</p>
-              
-              <div className="thought-tags">
-                {post.tags.map((tag, index) => (
-                  <span key={index}>{tag}</span>
-                ))}
-              </div>
-              
-              <div className="blog-interactions visible">
-                <div className="likes">
-                  <i className="far fa-heart"></i>
-                  <span>{post.likes ? post.likes.length : 0}</span>
+              <div className="card-content">
+                <div className="author-info">
+                  <img 
+                    src={post.author?.profilePic || '/images/profiles/default.jpg'} 
+                    className="author-pic" 
+                    alt="Author" 
+                  />
+                  <span className="author-name">
+                    {/* {post.author?.username || 'Unknown'} */}
+                    {getDisplayAuthorName(post.author)}
+                  </span>
                 </div>
-                <div className="comments">
-                  <i className="far fa-comment"></i>
-                  <span>{post.commentsCount || 0}</span>
+                
+                <h2 className="thought-title">{post.title}</h2>
+                <p className="thought-description">{post.excerpt}</p>
+                
+                <div className="thought-tags">
+                  {post.tags.map((tag, index) => (
+                    <span key={index}>{tag}</span>
+                  ))}
+                </div>
+                
+                <div className="blog-interactions">
+                  <div className="likes">
+                    <i className="far fa-heart"></i>
+                    <span>{post.likes ? post.likes.length : 0}</span>
+                  </div>
+                  <div className="comments">
+                    <i className="far fa-comment"></i>
+                    <span>{post.commentsCount || 0}</span>
+                  </div>
                 </div>
               </div>
               

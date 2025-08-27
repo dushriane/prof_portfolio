@@ -20,6 +20,7 @@ import Post from './pages/Post'
 // Hooks
 import { useSmoothScroll, usePageLoading, useHoverEffects } from './hooks/useAnimations'
 import { ThemeProvider } from './contexts/ThemeContext'
+import { ErrorBoundary } from './components/ErrorBoundary'
 
 // Context for authentication
 export interface User {
@@ -84,24 +85,26 @@ function App() {
 
   return (
     <ThemeProvider>
-      <MantineProvider theme={theme}>
-        <Notifications />
-        <Router>
-          <AppShell header={{ height: 70 }} padding="md">
-            <Header authContext={authContext} />
-            <AppShell.Main>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login authContext={authContext} />} />
-                <Route path="/register" element={<Register authContext={authContext} />} />
-                <Route path="/dashboard" element={<Dashboard authContext={authContext} />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/post/:id" element={<Post />} />
-              </Routes>
-            </AppShell.Main>
-          </AppShell>
-        </Router>
-      </MantineProvider>
+      <ErrorBoundary>
+        <MantineProvider theme={theme}>
+          <Notifications />
+          <Router>
+            <AppShell header={{ height: 70 }} padding="md">
+              <Header authContext={authContext} />
+              <AppShell.Main>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/login" element={<Login authContext={authContext} />} />
+                  <Route path="/register" element={<Register authContext={authContext} />} />
+                  <Route path="/dashboard" element={<Dashboard authContext={authContext} />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/post/:id" element={<Post />} />
+                </Routes>
+              </AppShell.Main>
+            </AppShell>
+          </Router>
+        </MantineProvider>
+      </ErrorBoundary>
     </ThemeProvider>
   )
 }
