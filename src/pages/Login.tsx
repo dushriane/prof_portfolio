@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { formatDate, truncateText, filterPosts } from '../utils/helpers'
 import { Link, useNavigate } from 'react-router-dom'
 import { 
   Container, 
@@ -17,6 +18,7 @@ import {
 } from '@mantine/core'
 import { IconAlertCircle, IconCheck, IconLock, IconUser } from '@tabler/icons-react'
 import { AuthContextType } from '../App'
+import { apiRequest, API_ENDPOINTS } from '../config/api'
 
 interface LoginProps {
   authContext?: AuthContextType
@@ -56,7 +58,11 @@ const Login: React.FC<LoginProps> = ({ authContext }) => {
         body: JSON.stringify(formData)
       })
       
-      const data = await response.json()
+      // const data = await response.json()
+      const data = await apiRequest(API_ENDPOINTS.login, {
+        method: 'POST',
+        body: JSON.stringify(formData)
+      })
       
       if (response.ok) {
         // Store token and user data

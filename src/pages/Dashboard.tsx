@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './Dashboard.css'
+import { API_BASE_URL, API_ENDPOINTS, apiRequest } from '../config/api'
+import { formatDate, timeAgo, validateEmail, handleApiError, truncateText, getAuthToken, clearAuthData } from '../utils/helpers'
 import { 
   Container,  
   Card, 
@@ -197,7 +199,8 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
               `"${post.author.username}"`,
               post.views || 0,
               post.published ? 'Yes' : 'No',
-              `"${new Date(post.createdAt).toLocaleDateString()}"`,
+              // `"${new Date(post.createdAt).toLocaleDateString()}"`,
+              `"${formatDate(post.createdAt)}"`,
               `"${post.tags.join('; ')}"`
             ]
             csvRows.push(row.join(','))
@@ -270,7 +273,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
     }
   })
 
-  const API_BASE_URL = 'http://localhost:3000'
+  //const API_BASE_URL = 'http://localhost:3000'
   //const API_BASE_URL = 'https://arn-portfolio-backend.onrender.com'
 
   // Rich Text Editor modules
@@ -330,13 +333,14 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
   }
 
   useEffect(() => {
+    console.log('Auth context:', authContext?.isAuthenticated, authContext?.user)
     if (authContext?.isAuthenticated) {
+      console.log('Loading dashboard data...')
       loadDashboardData()
       loadUserPosts()
       loadCategories()
       loadAnalyticsData()
 
-      // Initialize profile form with user data
       if (authContext.user) {
         setProfileForm({
           username: authContext.user.username || '',
@@ -357,20 +361,12 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
     if (!isAdmin()) return
     
     setLoadingStates(prev => ({ ...prev, posts: true }))
-    const token = localStorage.getItem('authToken')
     try {
-      const response = await fetch(`${API_BASE_URL}/api/admin/dashboard/stats`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
-      
-      if (response.ok) {
-        const data = await response.json()
-        setStats(data)
-      } else {
-        throw new Error('Failed to load dashboard stats')
-      }
+      const data = await apiRequest(`${API_BASE_URL}/api/admin/dashboard/stats`)
+      setStats(data)
     } catch (error) {
-      handleApiError(error, 'Error loading dashboard stats')
+      console.error('Dashboard stats error:', error)
+      showNotification('error', handleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, posts: false }))
     }
@@ -378,22 +374,39 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
 
   const loadUserPosts = async (page = 1) => {
     setLoadingStates(prev => ({ ...prev, posts: true }))
-    const token = localStorage.getItem('authToken')
     try {
-      const response = await fetch(`${API_BASE_URL}/api/users/me/posts?page=${page}&limit=${postsPerPage}&search=${searchTerm}&category=${selectedCategory}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+      console.log('Loading posts - page:', page, 'search:', searchTerm, 'category:', selectedCategory)
+      
+      // Build query parameters
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: postsPerPage.toString(),
+        search: searchTerm,
+        category: selectedCategory
       })
       
-      if (response.ok) {
-        const data = await response.json()
+      const url = `${API_BASE_URL}/api/users/me/posts?${params}`
+      console.log('Request URL:', url)
+      
+      const data = await apiRequest(url)
+      console.log('Posts response:', data)
+      
+      if (data && data.posts) {
         setPosts(Array.isArray(data.posts) ? data.posts : [])
-        setTotalPages(Math.ceil(data.total / postsPerPage))
+        setTotalPages(Math.ceil((data.total || 0) / postsPerPage))
         setCurrentPage(page)
+      } else if (Array.isArray(data)) {
+        // Handle case where API returns posts directly
+        setPosts(data)
+        setTotalPages(1)
+        setCurrentPage(1)
       } else {
-        throw new Error('Failed to load posts')
+        console.warn('Unexpected posts response format:', data)
+        setPosts([])
       }
     } catch (error) {
-      handleApiError(error, 'Error loading posts')
+      console.error('Load posts error:', error)
+      showNotification('error', handleApiError(error))
       setPosts([])
     } finally {
       setLoadingStates(prev => ({ ...prev, posts: false }))
@@ -409,39 +422,32 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
 
   const loadAnalyticsData = async () => {
     setLoadingStates(prev => ({ ...prev, analytics: true }))
-    const token = localStorage.getItem('authToken')
     try {
-      const response = await fetch(`${API_BASE_URL}/api/analytics?timeRange=${timeRange}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+      const data = await apiRequest(`${API_BASE_URL}/api/analytics?timeRange=${timeRange}`)
+      setAnalyticsData({
+        totalViews: data.totalViews || 0,
+        engagementRate: data.engagementRate || 0,
+        newReaders: data.newReaders || 0,
+        topPosts: data.topPosts || [],
+        chartData: {
+          labels: data.chartLabels || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Views',
+            data: data.chartData || [65, 59, 80, 81, 56, 55, 40],
+            borderColor: 'rgb(139, 69, 19)',
+            backgroundColor: 'rgba(139, 69, 19, 0.2)',
+          }]
+        }
       })
-      
-      if (response.ok) {
-        const data = await response.json()
-        setAnalyticsData({
-          totalViews: data.totalViews || 0,
-          engagementRate: data.engagementRate || 0,
-          newReaders: data.newReaders || 0,
-          topPosts: data.topPosts || [],
-          chartData: {
-            labels: data.chartLabels || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            datasets: [{
-              label: 'Views',
-              data: data.chartData || [65, 59, 80, 81, 56, 55, 40],
-              borderColor: 'rgb(139, 69, 19)',
-              backgroundColor: 'rgba(139, 69, 19, 0.2)',
-            }]
-          }
-        })
-      } else {
-        // If analytics endpoint doesn't exist, calculate from posts
+    } catch (error) {
+      console.error('Analytics error:', error)
+      // Generate analytics from existing posts data as fallback
       const totalViews = posts.reduce((sum, post) => sum + (post.views || 0), 0)
-      const publishedPosts = posts.filter(p => p.published)
-      
       setAnalyticsData({
         totalViews,
-        engagementRate: publishedPosts.length > 0 ? Math.round((totalViews / publishedPosts.length) * 100) / 100 : 0,
-        newReaders: Math.floor(totalViews * 0.3), // Estimate
-        topPosts: posts.sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, 5),
+        engagementRate: 0,
+        newReaders: 0,
+        topPosts: posts.slice(0, 5),
         chartData: {
           labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
           datasets: [{
@@ -452,32 +458,12 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
           }]
         }
       })
-      }
-    } catch (error) {
-      handleApiError(error, 'Error loading analytics')
-      // Generate analytics from existing posts data
-      const totalViews = posts.reduce((sum, post) => sum + (post.views || 0), 0)
-      // Set fallback data
-      setAnalyticsData({
-        totalViews,
-        engagementRate: 0,
-        newReaders: 0,
-        topPosts: [],
-        chartData: {
-          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          datasets: [{
-            label: 'Views',
-            data: [0, 0, 0, 0, 0, 0, 0],
-            borderColor: 'rgb(139, 69, 19)',
-            backgroundColor: 'rgba(139, 69, 19, 0.2)',
-          }]
-        }
-      })
     } finally {
       setLoadingStates(prev => ({ ...prev, analytics: false }))
     }
   }
-    // Helper function for mock chart data
+  
+  // Helper function for mock chart data
   const generateMockChartData = (totalViews: number) => {
     const base = Math.floor(totalViews / 7)
     return Array.from({ length: 7 }, () => base + Math.floor(Math.random() * base))
@@ -486,19 +472,13 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
   const loadCategories = async () => {
     setLoadingStates(prev => ({ ...prev, categories: true }))
     try {
-      const token = localStorage.getItem('authToken')
-      const response = await fetch(`${API_BASE_URL}/api/categories`, {
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-      })
-      
-      if (response.ok) {
-        const data = await response.json()
-        setCategories(data)
-      } else {
-        throw new Error('Failed to load categories')
-      }
+      const data = await apiRequest(API_ENDPOINTS.categories)
+      console.log('Categories loaded:', data)
+      setCategories(Array.isArray(data) ? data : [])
     } catch (error) {
-      handleApiError(error, 'Error loading categories')
+      console.error('Categories error:', error)
+      showNotification('error', handleApiError(error))
+      setCategories([])
     } finally {
       setLoadingStates(prev => ({ ...prev, categories: false }))
     }
@@ -508,21 +488,15 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
     if (!confirm('Are you sure you want to delete this post?')) return
     
     setLoadingStates(prev => ({ ...prev, deleting: true }))
-    const token = localStorage.getItem('authToken')
     try {
-      const response = await fetch(`${API_BASE_URL}/api/posts/${postId}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
+      await apiRequest(`${API_BASE_URL}/api/posts/${postId}`, {
+        method: 'DELETE'
       })
-      
-      if (response.ok) {
-        showNotification('success', 'Post deleted successfully')
-        loadUserPosts(currentPage)
-      } else {
-        throw new Error('Failed to delete post')
-      }
+      showNotification('success', 'Post deleted successfully')
+      loadUserPosts(currentPage)
     } catch (error) {
-      handleApiError(error, 'Error deleting post')
+      console.error('Delete post error:', error)
+      showNotification('error', handleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, deleting: false }))
     }
@@ -543,20 +517,26 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
 
   const handleCreatePost = async (isDraft = false) => {
     setLoadingStates(prev => ({ ...prev, creating: true }))
-    const token = localStorage.getItem('authToken')
-    const url = editingPostId 
-      ? `${API_BASE_URL}/api/posts/${editingPostId}`
-      : `${API_BASE_URL}/api/posts`
-    const method = editingPostId ? 'PUT' : 'POST'
     
     try {
-      const formData = new FormData()
-      formData.append('title', postForm.title)
-      formData.append('content', postForm.content)
-      formData.append('excerpt', postForm.excerpt)
-      formData.append('category', postForm.category)
+      // Validate required fields
+      if (!postForm.title.trim()) {
+        throw new Error('Post title is required')
+      }
+      if (!postForm.content.trim()) {
+        throw new Error('Post content is required')
+      }
+      if (!postForm.category.trim()) {
+        throw new Error('Post category is required')
+      }
 
-      // Handle tags - ensure it's a valid JSON array
+      const formData = new FormData()
+      formData.append('title', postForm.title.trim())
+      formData.append('content', postForm.content)
+      formData.append('excerpt', postForm.excerpt.trim())
+      formData.append('category', postForm.category.trim())
+      
+      // Handle tags
       const tagsArray = postForm.tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
       formData.append('tags', JSON.stringify(tagsArray))
       formData.append('published', (!isDraft).toString())
@@ -566,36 +546,47 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
         formData.append('image', optimizedFile)
       }
       
+      const url = editingPostId 
+        ? `${API_BASE_URL}/api/posts/${editingPostId}`
+        : API_ENDPOINTS.posts
+      
+      const method = editingPostId ? 'PUT' : 'POST'
+      
+      console.log('Creating/updating post:', { url, method, isDraft })
+      
       const response = await fetch(url, {
         method,
         headers: {
-          'Authorization': `Bearer ${token}`
-          // Don't set Content-Type for FormData
+          'Authorization': `Bearer ${getAuthToken()}`
         },
         body: formData
       })
       
-      if (response.ok) {
-        const message = editingPostId ? 'Post updated!' : (isDraft ? 'Draft saved!' : 'Post published!')
-        showNotification('success', message)
-        setPostForm({
-          title: '',
-          content: '',
-          excerpt: '',
-          category: '',
-          tags: '',
-          published: false
-        })
-        setSelectedFile(null)
-        setEditingPostId(null)
-        setCurrentView('dashboard')
-        loadUserPosts(currentPage)
-      } else {
+      if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.message || 'Failed to save post')
+        throw new Error(errorData.message || errorData.error || 'Failed to save post')
       }
+      
+      const message = editingPostId ? 'Post updated!' : (isDraft ? 'Draft saved!' : 'Post published!')
+      showNotification('success', message)
+      
+      // Reset form
+      setPostForm({
+        title: '',
+        content: '',
+        excerpt: '',
+        category: '',
+        tags: '',
+        published: false
+      })
+      setSelectedFile(null)
+      setEditingPostId(null)
+      setCurrentView('dashboard')
+      loadUserPosts(currentPage)
+      
     } catch (error) {
-      handleApiError(error, 'Error saving post')
+      console.error('Create post error:', error)
+      showNotification('error', handleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, creating: false }))
     }
@@ -610,8 +601,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
   }
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken')
-    localStorage.removeItem('user')
+    clearAuthData()
     if (authContext?.logout) {
       authContext.logout()
     }
@@ -620,26 +610,20 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
 
   const handleAddCategory = async () => {
     if (!newCategoryName.trim()) return
+    
     setLoadingStates(prev => ({ ...prev, categories: true }))
-    const token = localStorage.getItem('authToken')
     try {
-      const response = await fetch(`${API_BASE_URL}/api/categories`, {
+      await apiRequest(API_ENDPOINTS.categories, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ name: newCategoryName })
+        body: JSON.stringify({ name: newCategoryName.trim() })
       })
-      if (response.ok) {
-        setNewCategoryName('')
-        loadCategories()
-        showNotification('success', 'Category added successfully!')
-      } else {
-        throw new Error('Failed to add category')
-      }
+      
+      setNewCategoryName('')
+      loadCategories()
+      showNotification('success', 'Category added successfully!')
     } catch (error) {
-      handleApiError(error, 'Error adding category')
+      console.error('Add category error:', error)
+      showNotification('error', handleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, categories: false }))
     }
@@ -647,7 +631,6 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
 
   const handleUpdateProfile = async () => {
     setLoadingStates(prev => ({ ...prev, updating: true }))
-    const token = localStorage.getItem('authToken')
     try {
       const formData = new FormData()
       formData.append('bio', profileForm.bio)
@@ -655,18 +638,21 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
         const optimizedImage = await resizeImage(profileImage)
         formData.append('profilePic', optimizedImage)
       }
+      
       const response = await fetch(`${API_BASE_URL}/api/users/me/profile`, {
         method: 'PUT',
-        headers: { 'Authorization': `Bearer ${token}` },
+        headers: { 'Authorization': `Bearer ${getAuthToken()}` },
         body: formData
       })
-      if (response.ok) {
-        showNotification('success', 'Profile updated successfully!')
-      } else {
+      
+      if (!response.ok) {
         throw new Error('Failed to update profile')
       }
+      
+      showNotification('success', 'Profile updated successfully!')
     } catch (error) {
-      handleApiError(error, 'Error updating profile')
+      console.error('Update profile error:', error)
+      showNotification('error', handleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, updating: false }))
     }
@@ -679,32 +665,25 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
     }
     
     setLoadingStates(prev => ({ ...prev, updating: true }))
-    const token = localStorage.getItem('authToken')
     try {
-      const response = await fetch(`${API_BASE_URL}/api/users/me/password`, {
+      await apiRequest(`${API_BASE_URL}/api/users/me/password`, {
         method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({
           currentPassword: profileForm.currentPassword,
           newPassword: profileForm.newPassword
         })
       })
-      if (response.ok) {
-        showNotification('success', 'Password changed successfully!')
-        setProfileForm(prev => ({
-          ...prev,
-          currentPassword: '',
-          newPassword: '',
-          confirmPassword: ''
-        }))
-      } else {
-        throw new Error('Failed to change password')
-      }
+      
+      showNotification('success', 'Password changed successfully!')
+      setProfileForm(prev => ({
+        ...prev,
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      }))
     } catch (error) {
-      handleApiError(error, 'Error changing password')
+      console.error('Change password error:', error)
+      showNotification('error', handleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, updating: false }))
     }
@@ -713,21 +692,17 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
   const handleDeleteCategory = async (categoryName: string) => {
     if (!confirm(`Are you sure you want to delete the "${categoryName}" category?`)) return
     
-    const token = localStorage.getItem('authToken')
+    setLoadingStates(prev => ({ ...prev, categories: true }))
     try {
-      const response = await fetch(`${API_BASE_URL}/api/categories/${categoryName}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
+      await apiRequest(`${API_BASE_URL}/api/categories/${categoryName}`, {
+        method: 'DELETE'
       })
       
-      if (response.ok) {
-        loadCategories()
-        showNotification('success', 'Category deleted successfully!')
-      } else {
-        throw new Error('Failed to delete category. It may have posts associated with it.')
-      }
+      loadCategories()
+      showNotification('success', 'Category deleted successfully!')
     } catch (error) {
-      handleApiError(error, 'Error deleting category')
+      console.error('Delete category error:', error)
+      showNotification('error', handleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, categories: false }))
     }
@@ -759,6 +734,11 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       loadUserPosts(1) // Reset to page 1 when search/filter changes
     }
   }, [searchTerm, selectedCategory])
+
+  // Add debugging useEffect
+  useEffect(() => {
+    console.log('Posts state updated:', posts)
+  }, [posts])
 
   // Redirect if not authenticated
   if (!authContext?.isAuthenticated) {
@@ -1028,10 +1008,25 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
               {loadingStates.posts ? (
                 <Group justify="center" p="xl">
                   <Loader size="lg" />
+                  <Text>Loading posts...</Text>
                 </Group>
               ) : posts.length === 0 ? (
                 <Paper p="xl" ta="center" c="dimmed">
                   <Text>No posts found.</Text>
+                  <Text size="sm" c="dimmed" mt="xs">
+                    Search: "{searchTerm}" | Category: "{selectedCategory}" | User: {authContext?.user?.username}
+                  </Text>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    mt="md"
+                    onClick={() => {
+                      console.log('Retry loading posts...')
+                      loadUserPosts(1)
+                    }}
+                  >
+                    Retry Loading Posts
+                  </Button>
                 </Paper>
               ) : (
                 <>
@@ -1088,7 +1083,8 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                           </Group>
                           
                           <Text size="xs" c="dimmed">
-                            {new Date(post.createdAt).toLocaleDateString()}
+                            {/* {new Date(post.createdAt).toLocaleDateString()} */}
+                            {formatDate(post.createdAt)}
                           </Text>
                         </Stack>
                       </Card>

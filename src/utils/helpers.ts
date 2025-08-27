@@ -2,7 +2,9 @@
 
 // Authentication utilities
 export const isLoggedIn = (): boolean => {
-  return !!localStorage.getItem('authToken');
+  const token = localStorage.getItem('authToken');
+  const user = localStorage.getItem('user');
+  return !!(token && user);
 };
 
 export const getAuthToken = (): string | null => {
@@ -11,7 +13,11 @@ export const getAuthToken = (): string | null => {
 
 export const getUserData = (): any | null => {
   const userData = localStorage.getItem('user');
-  return userData ? JSON.parse(userData) : null;
+  try {
+    return userData ? JSON.parse(userData) : null;
+  } catch {
+    return null;
+  }
 };
 
 export const clearAuthData = (): void => {
@@ -37,8 +43,9 @@ export const validateEmail = (email: string): boolean => {
 };
 
 export const validatePassword = (password: string): boolean => {
-  // At least 6 characters
-  return password.length >= 6;
+  // At least 6 characters, 1 uppercase, 1 lowercase, 1 number
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{6,}$/;
+  return passwordRegex.test(password);
 };
 
 export const validateRequired = (value: string): boolean => {
@@ -59,21 +66,24 @@ export const timeAgo = (dateString: string): string => {
   const date = new Date(dateString);
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-  if (diffInSeconds < 60) {
-    return 'just now';
-  } else if (diffInSeconds < 3600) {
-    const minutes = Math.floor(diffInSeconds / 60);
-    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-  } else if (diffInSeconds < 86400) {
-    const hours = Math.floor(diffInSeconds / 3600);
-    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-  } else if (diffInSeconds < 2592000) {
-    const days = Math.floor(diffInSeconds / 86400);
-    return `${days} day${days > 1 ? 's' : ''} ago`;
-  } else {
-    return formatDate(dateString);
+  
+  const intervals = [
+    { label: 'year', seconds: 31536000 },
+    { label: 'month', seconds: 2592000 },
+    { label: 'week', seconds: 604800 },
+    { label: 'day', seconds: 86400 },
+    { label: 'hour', seconds: 3600 },
+    { label: 'minute', seconds: 60 },
+  ];
+  
+  for (const interval of intervals) {
+    const count = Math.floor(diffInSeconds / interval.seconds);
+    if (count >= 1) {
+      return `${count} ${interval.label}${count > 1 ? 's' : ''} ago`;
+    }
   }
+  
+  return 'Just now';
 };
 
 // Text utilities
@@ -98,22 +108,32 @@ export const filterPosts = (posts: any[], searchTerm: string, category: string):
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
       post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesCategory = category === 'all' || post.category === category;
-    
+
+    const matchesCategory = category === 'all' || post.category.toLowerCase() === category.toLowerCase();
+
     return matchesSearch && matchesCategory;
   });
 };
 
 // Error handling utilities
 export const handleApiError = (error: any): string => {
-  if (error.message) {
+  if (error?.message) {
     return error.message;
-  } else if (typeof error === 'string') {
-    return error;
-  } else {
-    return 'An unexpected error occurred. Please try again.';
   }
+  
+  if (typeof error === 'string') {
+    return error;
+  }
+  
+  if (error?.response?.data?.message) {
+    return error.response.data.message;
+  }
+  
+  if (error?.response?.data?.error) {
+    return error.response.data.error;
+  }
+  
+  return 'An unexpected error occurred. Please try again.';
 };
 
 // Local storage utilities
@@ -133,6 +153,40 @@ export const getLocalStorageItem = (key: string): any => {
     console.error('Error reading from localStorage:', error);
     return null;
   }
+};
+
+// URL helpers
+export const buildQueryString = (params: Record<string, any>): string => {
+  const searchParams = new URLSearchParams();
+  
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== null && value !== undefined && value !== '') {
+      searchParams.append(key, String(value));
+    }
+  });
+  
+  return searchParams.toString();
+};
+
+// Image helpers
+export const getImageUrl = (path: string): string => {
+  if (!path) return '/images/default-blog.jpg';
+  if (path.startsWith('http')) return path;
+  if (path.startsWith('/')) return path;
+  return `/images/${path}`;
+};
+
+// Form helpers
+export const resetForm = (formSetter: (prev: any) => void, initialState: any): void => {
+  formSetter(initialState);
+};
+
+export const updateFormField = (
+  formSetter: (prev: any) => void, 
+  fieldName: string, 
+  value: any
+): void => {
+  formSetter((prev: any) => ({ ...prev, [fieldName]: value }));
 };
 
 // Theme utilities

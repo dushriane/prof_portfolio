@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { apiRequest, API_ENDPOINTS } from '../config/api'
+import { validateEmail, validateRequired } from '../utils/helpers'
 
 const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState({
