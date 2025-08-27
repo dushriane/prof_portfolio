@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './Dashboard.css'
 import { 
   Container,  
@@ -179,7 +179,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       let fileContent = ''
       let mimeType = ''
       let fileName = ''
-      
+
       if (exportFormat === 'json') {
           fileContent = JSON.stringify(dataToExport, null, 2)
           mimeType = 'application/json'
@@ -478,10 +478,10 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
     }
   }
     // Helper function for mock chart data
-    const generateMockChartData = (totalViews: number) => {
-      const base = Math.floor(totalViews / 7)
-      return Array.from({ length: 7 }, () => base + Math.floor(Math.random() * base))
-    }
+  const generateMockChartData = (totalViews: number) => {
+    const base = Math.floor(totalViews / 7)
+    return Array.from({ length: 7 }, () => base + Math.floor(Math.random() * base))
+  }
 
   const loadCategories = async () => {
     setLoadingStates(prev => ({ ...prev, categories: true }))
@@ -555,7 +555,10 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       formData.append('content', postForm.content)
       formData.append('excerpt', postForm.excerpt)
       formData.append('category', postForm.category)
-      formData.append('tags', JSON.stringify(postForm.tags.split(',').map(tag => tag.trim())))
+
+      // Handle tags - ensure it's a valid JSON array
+      const tagsArray = postForm.tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
+      formData.append('tags', JSON.stringify(tagsArray))
       formData.append('published', (!isDraft).toString())
       
       if (selectedFile) {
@@ -587,8 +590,9 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
         setEditingPostId(null)
         setCurrentView('dashboard')
         loadUserPosts(currentPage)
-      }else{
-        throw new Error('Failed to save post')
+      } else {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Failed to save post')
       }
     } catch (error) {
       handleApiError(error, 'Error saving post')
@@ -729,6 +733,26 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
     }
   }
 
+  // Or if you don't have dynamic imports, wrap ReactQuill:
+  const QuillWrapper = ({ value, onChange, ...props }: { 
+    value: string; 
+    onChange: (content: string) => void; 
+    [key: string]: any 
+  }) => {
+    const quillRef = useRef<any>(null)
+    
+    return (
+      <div>
+        <ReactQuill
+          ref={quillRef}
+          value={value}
+          onChange={onChange}
+          {...props}
+        />
+      </div>
+    )
+  }
+
   // Handle search and filter changes
   useEffect(() => {
     if (authContext?.isAuthenticated) {
@@ -802,6 +826,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                 e.preventDefault()
                 setCurrentView('create')
               }}
+              className="dashboard-nav-link"
             />
             
             <NavLink
@@ -813,6 +838,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                 e.preventDefault()
                 setCurrentView('analytics')
               }}
+              className="dashboard-nav-link"
             />
             
             {isAdmin() && (
@@ -826,6 +852,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                     e.preventDefault()
                     setCurrentView('categories')
                   }}
+                  className="dashboard-nav-link"
                 />
                 
                 <NavLink
@@ -837,6 +864,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                     e.preventDefault()
                     setCurrentView('export')
                   }}
+                  className="dashboard-nav-link"
                 />
               </>
             )}
@@ -850,6 +878,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                 e.preventDefault()
                 setCurrentView('profile')
               }}
+              className="dashboard-nav-link"
             />
 
             <NavLink
@@ -860,13 +889,14 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                 e.preventDefault()
                 toggleColorScheme()
               }}
+              className="dashboard-nav-link"
             />
           </Stack>
         </AppShell.Section>
 
         {/* the sidebar user section */}
         <AppShell.Section>
-          <Box p="sm" style={{ borderTop: '1px solid var(--mantine-color-gray-3)' }}>
+          <Box p="sm" className='dashboard-user-section'>
             <Group justify="space-between">
               <Group gap="xs">
                 <IconUser size="1rem" />
@@ -1104,6 +1134,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
                 data={categories.map(cat => ({ value: cat.name, label: cat.name }))}
                 value={postForm.category}
                 onChange={(value) => setPostForm(prev => ({ ...prev, category: value || '' }))}
+                required
               />
               <TextInput
                 label="Tags"
@@ -1136,7 +1167,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
               {/* Rich Text Content Area */}
               <div>
                 <Text size="sm" fw={500} mb="xs">Content</Text>
-                <ReactQuill
+                <QuillWrapper
                   theme="snow"
                   value={postForm.content}
                   onChange={(content) => setPostForm(prev => ({ ...prev, content }))}

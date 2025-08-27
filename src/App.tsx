@@ -88,7 +88,12 @@ function App() {
       <ErrorBoundary>
         <MantineProvider theme={theme}>
           <Notifications />
-          <Router>
+          <Router 
+            future={{
+              v7_startTransition: true,
+              v7_relativeSplatPath: true
+            }}
+          >
             <AppShell header={{ height: 70 }} padding="md">
               <Header authContext={authContext} />
               <AppShell.Main>

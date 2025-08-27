@@ -19,6 +19,110 @@
   font-family: var(--font-family-heading);
 }
 
+/* User section styling */
+.dashboard-user-section {
+  border-top: 1px solid var(--mantine-color-gray-3);
+  background: var(--mantine-color-gray-0);
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+[data-mantine-color-scheme="dark"] .dashboard-user-section {
+  border-top: 1px solid var(--mantine-color-dark-4);
+  background: var(--mantine-color-dark-7);
+}
+
+/* Paper/Card visibility fixes */
+.mantine-Paper-root {
+  background: var(--mantine-color-white);
+  border: 1px solid var(--mantine-color-gray-3);
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Paper-root {
+  background: var(--mantine-color-dark-7);
+  border: 1px solid var(--mantine-color-dark-4);
+}
+
+/* Text visibility fixes */
+.mantine-Text-root {
+  color: var(--mantine-color-gray-8);
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Text-root {
+  color: var(--mantine-color-gray-3);
+}
+
+/* Title visibility fixes */
+.mantine-Title-root {
+  color: var(--mantine-color-violet-6);
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Title-root {
+  color: var(--mantine-color-violet-4);
+}
+
+/* Input visibility fixes */
+.mantine-TextInput-input,
+.mantine-Select-input,
+.mantine-Textarea-input,
+.mantine-PasswordInput-input {
+  background: var(--mantine-color-white);
+  border: 1px solid var(--mantine-color-gray-4);
+  color: var(--mantine-color-gray-9);
+}
+
+[data-mantine-color-scheme="dark"] .mantine-TextInput-input,
+[data-mantine-color-scheme="dark"] .mantine-Select-input,
+[data-mantine-color-scheme="dark"] .mantine-Textarea-input,
+[data-mantine-color-scheme="dark"] .mantine-PasswordInput-input {
+  background: var(--mantine-color-dark-6);
+  border: 1px solid var(--mantine-color-dark-4);
+  color: var(--mantine-color-gray-1);
+}
+
+/* Button visibility fixes */
+.mantine-Button-root {
+  background: var(--mantine-color-violet-6);
+  color: white;
+}
+
+.mantine-Button-root:hover {
+  background: var(--mantine-color-violet-7);
+}
+
+/* Badge visibility fixes */
+.mantine-Badge-root {
+  color: white;
+}
+
+/* ActionIcon visibility fixes */
+.mantine-ActionIcon-root {
+  color: var(--mantine-color-gray-6);
+}
+
+[data-mantine-color-scheme="dark"] .mantine-ActionIcon-root {
+  color: var(--mantine-color-gray-4);
+}
+
+/* Menu visibility fixes */
+.mantine-Menu-dropdown {
+  background: var(--mantine-color-white);
+  border: 1px solid var(--mantine-color-gray-3);
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Menu-dropdown {
+  background: var(--mantine-color-dark-6);
+  border: 1px solid var(--mantine-color-dark-4);
+}
+
+.mantine-Menu-item {
+  color: var(--mantine-color-gray-8);
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Menu-item {
+  color: var(--mantine-color-gray-2);
+}
+
 .quick-actions {
   display: flex;
   gap: var(--space-4);
@@ -481,6 +585,13 @@
 .ql-editor {
   min-height: 300px;
   font-family: var(--font-family-body);
+  background: var(--mantine-color-white);
+  color: var(--mantine-color-gray-9);
+}
+
+[data-mantine-color-scheme="dark"] .ql-editor {
+  background: var(--mantine-color-dark-6);
+  color: var(--mantine-color-gray-1);
 }
 
 .ql-toolbar {
@@ -488,6 +599,11 @@
   border-left: 1px solid var(--border-default);
   border-right: 1px solid var(--border-default);
   border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: var(--mantine-color-white);
+}
+
+[data-mantine-color-scheme="dark"] .ql-toolbar {
+  background: var(--mantine-color-dark-7);
 }
 
 .ql-container {
