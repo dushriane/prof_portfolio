@@ -582,6 +582,54 @@
 }
 
 /* Quill Editor Styles */
+/* Add this to your existing Dashboard.css */
+
+.quill-wrapper {
+  background: var(--mantine-color-white);
+  border-radius: 8px;
+  border: 1px solid var(--mantine-color-gray-4);
+  overflow: hidden;
+}
+
+[data-mantine-color-scheme="dark"] .quill-wrapper {
+  background: var(--mantine-color-dark-6);
+  border-color: var(--mantine-color-dark-4);
+}
+
+.quill-wrapper .ql-editor {
+  min-height: 300px;
+  background: transparent !important;
+  color: var(--mantine-color-gray-9) !important;
+}
+
+[data-mantine-color-scheme="dark"] .quill-wrapper .ql-editor {
+  color: var(--mantine-color-gray-1) !important;
+}
+
+.quill-wrapper .ql-toolbar {
+  border-bottom: 1px solid var(--mantine-color-gray-4);
+  background: var(--mantine-color-gray-0);
+}
+
+[data-mantine-color-scheme="dark"] .quill-wrapper .ql-toolbar {
+  border-bottom-color: var(--mantine-color-dark-4);
+  background: var(--mantine-color-dark-7);
+}
+
+.quill-wrapper .ql-toolbar .ql-picker,
+.quill-wrapper .ql-toolbar button {
+  color: var(--mantine-color-gray-7) !important;
+}
+
+[data-mantine-color-scheme="dark"] .quill-wrapper .ql-toolbar .ql-picker,
+[data-mantine-color-scheme="dark"] .quill-wrapper .ql-toolbar button {
+  color: var(--mantine-color-gray-3) !important;
+}
+
+/* Hide ReactQuill error overlays in production */
+.ql-tooltip {
+  z-index: 1000 !important;
+}
 .ql-editor {
   min-height: 300px;
   font-family: var(--font-family-body);

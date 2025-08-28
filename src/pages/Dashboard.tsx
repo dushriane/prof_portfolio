@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './Dashboard.css'
 import { API_BASE_URL, API_ENDPOINTS, apiRequest } from '../config/api'
-import { formatDate, timeAgo, validateEmail, handleApiError, truncateText, getAuthToken, clearAuthData } from '../utils/helpers'
+import { formatDate, handleApiError as utilsHandleApiError, getAuthToken, clearAuthData } from '../utils/helpers'
 import { 
   Container,  
   Card, 
@@ -199,7 +199,6 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
               `"${post.author.username}"`,
               post.views || 0,
               post.published ? 'Yes' : 'No',
-              // `"${new Date(post.createdAt).toLocaleDateString()}"`,
               `"${formatDate(post.createdAt)}"`,
               `"${post.tags.join('; ')}"`
             ]
@@ -227,7 +226,8 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       showNotification('success', 'Data exported successfully!')
       setExportStep(0)
     } catch (error) {
-      handleApiError(error, 'Error exporting data')
+      console.error('Export error:', error)
+      showNotification('error', utilsHandleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, exporting: false }))
     }
@@ -273,9 +273,6 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
     }
   })
 
-  //const API_BASE_URL = 'http://localhost:3000'
-  //const API_BASE_URL = 'https://arn-portfolio-backend.onrender.com'
-
   // Rich Text Editor modules
   const quillModules = {
     toolbar: [
@@ -302,13 +299,6 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
     setTimeout(() => {
       setNotification(prev => ({ ...prev, show: false }))
     }, 5000)
-  }
-
-  // Error handling wrapper
-  const handleApiError = (error: any, defaultMessage: string) => {
-    console.error(error)
-    const message = error?.message || defaultMessage
-    showNotification('error', message)
   }
 
   // Image optimization function
@@ -366,7 +356,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       setStats(data)
     } catch (error) {
       console.error('Dashboard stats error:', error)
-      showNotification('error', handleApiError(error))
+      showNotification('error', utilsHandleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, posts: false }))
     }
@@ -406,7 +396,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       }
     } catch (error) {
       console.error('Load posts error:', error)
-      showNotification('error', handleApiError(error))
+      showNotification('error', utilsHandleApiError(error))
       setPosts([])
     } finally {
       setLoadingStates(prev => ({ ...prev, posts: false }))
@@ -477,7 +467,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       setCategories(Array.isArray(data) ? data : [])
     } catch (error) {
       console.error('Categories error:', error)
-      showNotification('error', handleApiError(error))
+      showNotification('error', utilsHandleApiError(error))
       setCategories([])
     } finally {
       setLoadingStates(prev => ({ ...prev, categories: false }))
@@ -496,7 +486,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       loadUserPosts(currentPage)
     } catch (error) {
       console.error('Delete post error:', error)
-      showNotification('error', handleApiError(error))
+      showNotification('error', utilsHandleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, deleting: false }))
     }
@@ -552,20 +542,37 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       
       const method = editingPostId ? 'PUT' : 'POST'
       
-      console.log('Creating/updating post:', { url, method, isDraft })
+      console.log('Creating/updating post:', { url, method, isDraft, formDataKeys: Array.from(formData.keys()) })
       
+      // Use fetch for FormData (apiRequest expects JSON)
       const response = await fetch(url, {
         method,
         headers: {
           'Authorization': `Bearer ${getAuthToken()}`
+          // Don't set Content-Type for FormData - let browser set it with boundary
         },
         body: formData
       })
       
+      console.log('Response status:', response.status)
+      console.log('Response headers:', response.headers)
+      
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || errorData.error || 'Failed to save post')
+        const errorText = await response.text()
+        console.log('Error response body:', errorText)
+        
+        let errorData
+        try {
+          errorData = JSON.parse(errorText)
+        } catch {
+          errorData = { message: errorText || `HTTP ${response.status}` }
+        }
+        
+        throw new Error(errorData.message || errorData.error || `Server error: ${response.status}`)
       }
+      
+      const responseData = await response.json()
+      console.log('Success response:', responseData)
       
       const message = editingPostId ? 'Post updated!' : (isDraft ? 'Draft saved!' : 'Post published!')
       showNotification('success', message)
@@ -586,7 +593,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       
     } catch (error) {
       console.error('Create post error:', error)
-      showNotification('error', handleApiError(error))
+      showNotification('error', utilsHandleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, creating: false }))
     }
@@ -623,7 +630,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       showNotification('success', 'Category added successfully!')
     } catch (error) {
       console.error('Add category error:', error)
-      showNotification('error', handleApiError(error))
+      showNotification('error', utilsHandleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, categories: false }))
     }
@@ -652,7 +659,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       showNotification('success', 'Profile updated successfully!')
     } catch (error) {
       console.error('Update profile error:', error)
-      showNotification('error', handleApiError(error))
+      showNotification('error', utilsHandleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, updating: false }))
     }
@@ -683,7 +690,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       }))
     } catch (error) {
       console.error('Change password error:', error)
-      showNotification('error', handleApiError(error))
+      showNotification('error', utilsHandleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, updating: false }))
     }
@@ -702,7 +709,7 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
       showNotification('success', 'Category deleted successfully!')
     } catch (error) {
       console.error('Delete category error:', error)
-      showNotification('error', handleApiError(error))
+      showNotification('error', utilsHandleApiError(error))
     } finally {
       setLoadingStates(prev => ({ ...prev, categories: false }))
     }
@@ -716,8 +723,23 @@ const Dashboard: React.FC<DashboardProps> = ({ authContext }) => {
   }) => {
     const quillRef = useRef<any>(null)
     
+    useEffect(() => {
+      // Suppress findDOMNode warnings for ReactQuill
+      const originalError = console.error
+      console.error = (...args) => {
+        if (typeof args[0] === 'string' && args[0].includes('findDOMNode')) {
+          return
+        }
+        originalError(...args)
+      }
+      
+      return () => {
+        console.error = originalError
+      }
+    }, [])
+    
     return (
-      <div>
+      <div className="quill-wrapper">
         <ReactQuill
           ref={quillRef}
           value={value}
